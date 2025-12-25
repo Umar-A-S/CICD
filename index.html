@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Layanan Administrasi Kependudukan Terintegrasi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .hidden-section { display: none; }
+        .active-nav { background-color: #1e40af; border-left: 4px solid #60a5fa; }
+    </style>
+</head>
+<body class="flex h-screen">
+
+    <aside class="w-64 bg-slate-900 text-white flex flex-col">
+        <div class="p-4 text-center font-bold text-xl border-b border-slate-700">
+            <i class="fa-solid fa-building-columns mr-2"></i> E-Layanan
+        </div>
+        
+        <div class="p-4 bg-slate-800">
+            <label class="text-xs text-slate-400 uppercase">Simulasi Login Sebagai:</label>
+            <select id="roleSelector" onchange="switchRole()" class="w-full mt-1 p-2 bg-slate-700 rounded text-sm focus:outline-none">
+                <option value="domisili">Petugas Domisili</option>
+                <option value="provinsi">Admin Provinsi</option>
+                <option value="penerbit">Petugas Penerbit</option>
+            </select>
+        </div>
+
+        <nav class="flex-1 mt-4">
+            <a href="#" class="block p-3 hover:bg-slate-800 active-nav text-sm">
+                <i class="fa-solid fa-table-columns w-6"></i> Dashboard
+            </a>
+            <a href="#" class="block p-3 hover:bg-slate-800 text-sm">
+                <i class="fa-solid fa-folder-open w-6"></i> Arsip Data
+            </a>
+            <a href="#" class="block p-3 hover:bg-slate-800 text-sm">
+                <i class="fa-solid fa-gear w-6"></i> Pengaturan
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="bg-white shadow p-4 flex justify-between items-center">
+            <h2 id="pageTitle" class="text-lg font-semibold text-slate-700">Dashboard Petugas Domisili</h2>
+            <div class="flex items-center gap-3">
+                <span class="text-sm text-slate-500">Selamat Datang, User</span>
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-auto p-6">
+
+            <div id="viewDomisili" class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">Input Permohonan Baru</h3>
+                    <form id="formInput" onsubmit="submitData(event)" class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600">NIK Penduduk</label>
+                            <input type="text" id="inputNIK" class="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-200" placeholder="Contoh: 3301..." required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-600">Nama Lengkap</label>
+                            <input type="text" id="inputNama" class="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-200" placeholder="Nama Penduduk" required>
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-sm font-medium text-slate-600">Unggah Berkas (PDF/JPG)</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-md bg-slate-50">
+                                <div class="space-y-1 text-center">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400"></i>
+                                    <div class="flex text-sm text-slate-600">
+                                        <label class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
+                                            <span>Upload file</span>
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-slate-500">Simulasi Upload (Tidak ada file asli yang dikirim)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-span-2 text-right">
+                            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 shadow">
+                                <i class="fa-solid fa-paper-plane mr-2"></i> Kirim ke Provinsi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4">Riwayat Pengajuan</h3>
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-100 uppercase text-xs font-bold">
+                            <tr>
+                                <th class="px-4 py-3">NIK</th>
+                                <th class="px-4 py-3">Nama</th>
+                                <th class="px-4 py-3">Status</th>
+                                <th class="px-4 py-3">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableDomisili">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="viewProvinsi" class="hidden-section space-y-6">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-orange-100 p-4 rounded border-l-4 border-orange-500">
+                        <div class="text-xs text-orange-600 font-bold uppercase">Perlu Verifikasi</div>
+                        <div class="text-2xl font-bold text-orange-800" id="countPending">0</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4">Daftar Antrean Verifikasi Berkas</h3>
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-100 uppercase text-xs font-bold">
+                            <tr>
+                                <th class="px-4 py-3">Tanggal</th>
+                                <th class="px-4 py-3">NIK & Nama</th>
+                                <th class="px-4 py-3">Berkas</th>
+                                <th class="px-4 py-3 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableProvinsi">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="viewPenerbit" class="hidden-section space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4">Pencarian & Penerbitan Dokumen</h3>
+                    <p class="text-sm text-slate-500 mb-4">Data di bawah ini sudah divalidasi oleh provinsi. Silakan cek database pusat dan terbitkan dokumen.</p>
+                    
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-100 uppercase text-xs font-bold">
+                            <tr>
+                                <th class="px-4 py-3">NIK</th>
+                                <th class="px-4 py-3">Nama</th>
+                                <th class="px-4 py-3">Status Database</th>
+                                <th class="px-4 py-3 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablePenerbit">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Simulasi Database Sederhana (Array of Objects)
+        let submissions = [
+            { id: 1, date: '2024-05-20', nik: '3302150001', nama: 'Budi Santoso', status: 'pending', note: '-' },
+            { id: 2, date: '2024-05-21', nik: '3302150002', nama: 'Siti Aminah', status: 'valid', note: 'Menunggu Penerbitan' },
+            { id: 3, date: '2024-05-22', nik: '3302150003', nama: 'Joko Widodo', status: 'rejected', note: 'Berkas KTP Buram' }
+        ];
+
+        // Fungsi Ganti Role (View)
+        function switchRole() {
+            const role = document.getElementById('roleSelector').value;
+            const title = document.getElementById('pageTitle');
+            
+            // Sembunyikan semua view
+            document.getElementById('viewDomisili').classList.add('hidden-section');
+            document.getElementById('viewProvinsi').classList.add('hidden-section');
+            document.getElementById('viewPenerbit').classList.add('hidden-section');
+
+            // Tampilkan view sesuai role
+            if (role === 'domisili') {
+                document.getElementById('viewDomisili').classList.remove('hidden-section');
+                title.innerText = 'Dashboard Petugas Domisili';
+                renderTableDomisili();
+            } else if (role === 'provinsi') {
+                document.getElementById('viewProvinsi').classList.remove('hidden-section');
+                title.innerText = 'Verifikasi Admin Provinsi';
+                renderTableProvinsi();
+            } else if (role === 'penerbit') {
+                document.getElementById('viewPenerbit').classList.remove('hidden-section');
+                title.innerText = 'Penerbitan Dokumen (Disdukcapil)';
+                renderTablePenerbit();
+            }
+        }
+
+        // Logic 1: Submit Data (Domisili)
+        function submitData(e) {
+            e.preventDefault();
+            const nik = document.getElementById('inputNIK').value;
+            const nama = document.getElementById('inputNama').value;
+            
+            // Tambah ke array
+            submissions.push({
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                nik: nik,
+                nama: nama,
+                status: 'pending',
+                note: '-'
+            });
+
+            document.getElementById('formInput').reset();
+            alert('Data berhasil dikirim ke Admin Provinsi!');
+            renderTableDomisili();
+        }
+
+        // Render Tabel Domisili
+        function renderTableDomisili() {
+            const tbody = document.getElementById('tableDomisili');
+            tbody.innerHTML = '';
+            submissions.forEach(item => {
+                let badgeColor = item.status === 'valid' ? 'bg-green-100 text-green-700' : 
+                                 item.status === 'rejected' ? 'bg-red-100 text-red-700' : 
+                                 item.status === 'completed' ? 'bg-blue-100 text-blue-700' : 
+                                 'bg-yellow-100 text-yellow-700';
+                
+                let statusLabel = item.status === 'completed' ? 'Selesai' : item.status.toUpperCase();
+
+                tbody.innerHTML += `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="px-4 py-3 font-mono">${item.nik}</td>
+                        <td class="px-4 py-3">${item.nama}</td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 rounded text-xs font-bold ${badgeColor}">${statusLabel}</span></td>
+                        <td class="px-4 py-3 text-xs italic">${item.note}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Render Tabel Provinsi (Hanya yang Pending)
+        function renderTableProvinsi() {
+            const tbody = document.getElementById('tableProvinsi');
+            tbody.innerHTML = '';
+            const pendingItems = submissions.filter(i => i.status === 'pending');
+            document.getElementById('countPending').innerText = pendingItems.length;
+
+            if(pendingItems.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400">Tidak ada antrean verifikasi.</td></tr>';
+                return;
+            }
+
+            pendingItems.forEach(item => {
+                tbody.innerHTML += `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="px-4 py-3 text-xs">${item.date}</td>
+                        <td class="px-4 py-3">
+                            <div class="font-bold">${item.nama}</div>
+                            <div class="text-xs text-slate-500 font-mono">${item.nik}</div>
+                        </td>
+                        <td class="px-4 py-3"><button class="text-blue-600 text-xs hover:underline"><i class="fa-solid fa-file-pdf"></i> Lihat Berkas</button></td>
+                        <td class="px-4 py-3 text-center space-x-2">
+                            <button onclick="verifAction(${item.id}, 'valid')" class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">Terima</button>
+                            <button onclick="verifAction(${item.id}, 'rejected')" class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600">Tolak</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Logic 2: Verifikasi (Provinsi)
+        function verifAction(id, action) {
+            const itemIndex = submissions.findIndex(i => i.id === id);
+            if (action === 'valid') {
+                submissions[itemIndex].status = 'valid';
+                submissions[itemIndex].note = 'Berkas Valid, Lanjut ke Penerbit';
+            } else {
+                let reason = prompt("Masukkan alasan penolakan:", "Berkas tidak lengkap");
+                if (!reason) return; // Batal jika kosong
+                submissions[itemIndex].status = 'rejected';
+                submissions[itemIndex].note = reason;
+            }
+            renderTableProvinsi();
+        }
+
+        // Render Tabel Penerbit (Hanya yang Valid)
+        function renderTablePenerbit() {
+            const tbody = document.getElementById('tablePenerbit');
+            tbody.innerHTML = '';
+            const validItems = submissions.filter(i => i.status === 'valid');
+
+            if(validItems.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400">Tidak ada data untuk diterbitkan.</td></tr>';
+                return;
+            }
+
+            validItems.forEach(item => {
+                tbody.innerHTML += `
+                    <tr class="border-b hover:bg-slate-50">
+                        <td class="px-4 py-3 font-mono">${item.nik}</td>
+                        <td class="px-4 py-3 font-bold">${item.nama}</td>
+                        <td class="px-4 py-3"><span class="text-green-600 text-xs"><i class="fa-solid fa-check-circle"></i> Data Ditemukan di SIAK</span></td>
+                        <td class="px-4 py-3 text-right">
+                            <button onclick="issueDoc(${item.id})" class="bg-indigo-600 text-white px-3 py-1 rounded text-xs hover:bg-indigo-700 shadow">
+                                <i class="fa-solid fa-print"></i> Terbitkan & Kirim
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Logic 3: Terbitkan (Penerbit)
+        function issueDoc(id) {
+            if(confirm('Terbitkan dokumen dan serahkan ke Admin Domisili?')) {
+                const itemIndex = submissions.findIndex(i => i.id === id);
+                submissions[itemIndex].status = 'completed';
+                submissions[itemIndex].note = 'Dokumen Selesai Dicetak';
+                alert('Dokumen berhasil diterbitkan! Status diperbarui.');
+                renderTablePenerbit();
+            }
+        }
+
+        // Init pertama kali
+        renderTableDomisili();
+
+    </script>
+</body>
+</html>
