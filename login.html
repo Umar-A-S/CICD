@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login SELAKSA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preload" as="image" href="login.jpg">
     
     <style>
         /* =========================================
@@ -18,16 +19,19 @@
             /* Background: Gradient Hitam Transparan + Gambar */
             background-image: 
                 linear-gradient(to right, 
+                    rgba(0, 0, 0, 2), 
                     rgba(0, 0, 0, 1), 
-                    rgba(0, 0, 0, 1), 
-                    rgba(0, 0, 0, 0.85), 
-                    rgba(0, 0, 0, 0.41), 
+                    rgba(0, 0, 0, 0.9), 
+                    rgba(0, 0, 0, 0.75), 
+                    rgba(0, 0, 0, 0.45),
                     rgba(0, 0, 0, 0)
                 ),
                 url('login.jpg');
             background-size: cover;
             background-position: top;
             background-repeat: no-repeat;
+            background-attachment: fixed;
+
         }
 
         /* Wrapper utama untuk membagi area (Form vs Gambar) */
@@ -46,12 +50,13 @@
             width: 100%;
             z-index: 1000;
             /* 1. Berikan warna latar belakang transparan (wajib) */
-            background-color: rgba(255, 255, 255, 0.005); 
+            background-color: rgba(0, 0, 0, 0.01); 
             
             /* 2. Berikan efek blur pada elemen di belakangnya */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px); /* Dukungan untuk Safari */
-            border-bottom: 1px solid rgba(63, 63, 63, 0.2); /* Opsional: border tipis agar terlihat */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px); /* Dukungan untuk Safari */
+            border-bottom: 1px solid rgba(63, 63, 63, 0.); /* Opsional: border tipis agar terlihat */
+            padding-top: 20px;
 
         }
 
@@ -132,7 +137,7 @@
             background-color: transparent;
             color: white;
             width: 90%; /* Disesuaikan agar tidak overflow */
-            border-bottom: 2px solid #555555;
+            border-bottom: 2px solid #1a2642;
             letter-spacing: 1px;
             transition: border-bottom 0.4s ease, background-color 0.3s;
         }
@@ -200,6 +205,12 @@
             margin-left: 450px; /* Jarak layout dari form */
             width: 250px;
             height: 350px;
+            flex-shrink: 0;
+            perspective: 1000px; /* Untuk efek 3D */
+            cursor: pointer;
+            /* agar tidak terlihat */
+            /* opacity: 0; */
+
         }
 
         /* Style Dasar Kartu */
@@ -302,7 +313,7 @@
             height: 100px; /* Sesuaikan tinggi */
             
             /* 1. Berikan warna latar belakang transparan (wajib) */
-            background-color: rgba(255, 255, 255, 0.008); 
+            background-color: rgba(0, 0, 0, 0.438); 
             
             /* 2. Berikan efek blur pada elemen di belakangnya */
             backdrop-filter: blur(5px);
@@ -374,7 +385,7 @@
                     <span class="dot yellow"></span>
                     <span class="dot green"></span>
                 </div>
-                <img src="Kota Lama Semarang, Jawa Tengah.jpeg" alt="Kota Lama">
+                <img src="Kota Lama Semarang, Jawa Tengah.jpeg" alt="Kota Lama" loading="lazy">
             </div>
 
             <div class="card-mid">
@@ -383,7 +394,7 @@
                     <span class="dot yellow"></span>
                     <span class="dot green"></span>
                 </div>
-                <img src="5.jpg" alt="Gambar 2">
+                <img src="5.jpg" alt="Gambar 2" loading="lazy">
             </div>
 
             <div class="card-front">
@@ -392,12 +403,12 @@
                     <span class="dot yellow"></span>
                     <span class="dot green"></span>
                 </div>
-                <img src="4.jpeg" alt="Gambar 3">
+                <img src="4.jpeg" alt="Gambar 3" loading="lazy"">
             </div>
         </div>
 
     </div>
-    <a href="index.html">Go to Index.html for test</a>
+    <a href="dashboard-selaksa/index.html">Go to Index.html for test</a>
     <!-- Footer -->
     <footer>
         <div style="text-align: center; color: rgba(255,255,255,0.6); font-size: 12px;">
