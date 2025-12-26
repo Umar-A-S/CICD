@@ -13,21 +13,21 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            overflow: hidden; /* Mencegah scrollbar muncul */
-            height: 100vh;
+            overflow-x: hidden;
             
             /* Background: Gradient Hitam Transparan + Gambar */
             background-image: 
                 linear-gradient(to right, 
                     rgba(0, 0, 0, 1), 
-                    rgb(0, 0, 1), 
-                    rgba(0, 0, 0, 0.65), 
-                    rgba(0, 0, 0, 0.31), 
+                    rgba(0, 0, 0, 1), 
+                    rgba(0, 0, 0, 0.85), 
+                    rgba(0, 0, 0, 0.41), 
                     rgba(0, 0, 0, 0)
                 ),
                 url('login.jpg');
             background-size: cover;
-            background-position: center;
+            background-position: top;
+            background-repeat: no-repeat;
         }
 
         /* Wrapper utama untuk membagi area (Form vs Gambar) */
@@ -40,16 +40,25 @@
            2. HEADER / LOGO (KIRI ATAS)
            ========================================= */
         .judul {
-            margin-top: 20px;
-            margin-left: 50px;
             display: flex;
             align-items: center;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            /* 1. Berikan warna latar belakang transparan (wajib) */
+            background-color: rgba(255, 255, 255, 0.005); 
+            
+            /* 2. Berikan efek blur pada elemen di belakangnya */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Dukungan untuk Safari */
+            border-bottom: 1px solid rgba(63, 63, 63, 0.2); /* Opsional: border tipis agar terlihat */
+
         }
 
         .judul img {
-            width: 35px;
+            width: 40px;
             height: auto;
-            margin: 10px;
+            margin: 10px 0 10px 60px;
             display: block;
             /* Filter untuk mengubah warna icon hitam menjadi spesifik */
             filter: brightness(0) saturate(100%) invert(45%) sepia(97%) saturate(267%) hue-rotate(167deg) brightness(92%) contrast(102%);
@@ -59,7 +68,7 @@
             margin: auto 10px;
             color: #ffffff;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 25px;
             letter-spacing: 2px;
         }
 
@@ -70,14 +79,14 @@
             padding: 20px;
             border-radius: 8px;
             width: 300px;
-            margin-top: 100px;
+            margin-top: 170px;
             margin-left: 50px;
         }
 
         /* Tipografi Form */
         .container h1 {
             color: white;
-            font-size: 36px;
+            font-size: 34px;
             font-weight: bold;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -112,6 +121,7 @@
             padding-left: 15px;
             padding-top: 10px;
             display: block;
+            letter-spacing: 1px;
         }
 
         input[type="text"], 
@@ -123,12 +133,16 @@
             color: white;
             width: 90%; /* Disesuaikan agar tidak overflow */
             border-bottom: 2px solid #555555;
+            letter-spacing: 1px;
+            transition: border-bottom 0.4s ease, background-color 0.3s;
         }
 
         input[type="text"]:focus, 
         input[type="password"]:focus {
             outline: none;
             border-bottom: 2px solid #1A2A4F;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 3px 3px 0 0;
         }
 
         ::placeholder {
@@ -142,6 +156,7 @@
             width: 100%;
             padding: 10px;
             background-color: #1e66aa;
+            border: solid 1px #0759a5;
             color: white;
             border: none;
             border-radius: 30px;
@@ -150,6 +165,7 @@
             font-weight: bold;
             margin-top: 20px;
             margin-left: 10px;
+            letter-spacing: 1px;
             transition: background 0.3s;
         }
 
@@ -180,8 +196,8 @@
            ========================================= */
         .card-stacked {
             position: relative;
-            margin-top: 100px; 
-            margin-left: 500px; /* Jarak layout dari form */
+            margin-top: 140px; 
+            margin-left: 450px; /* Jarak layout dari form */
             width: 250px;
             height: 350px;
         }
@@ -227,11 +243,16 @@
         }
 
         /* Efek Hover pada Kartu */
-        .card-back:hover,
-        .card-mid:hover,
         .card-front:hover {
             transform: scale(1.05); /* Membesar sedikit saat disentuh mouse */
-            z-index: 10; /* Agar muncul paling depan saat di-hover (opsional) */
+            transition: transform 0.5s ease-in-out;
+        }
+        .card-back:hover {
+            transform: scale(1.05) rotate(15deg);
+            transition: transform 0.5s ease-in-out;
+        }
+        .card-mid:hover {
+            transform: scale(1.05) rotate(-15deg);
             transition: transform 0.5s ease-in-out;
         }
 
@@ -260,6 +281,57 @@
             margin: 0 auto 1px auto;/* Jarak 1px di bawah */
             object-fit: cover;
             border-radius: 0 0 7px 7px;
+            image-rendering: optimizeQuality;
+        }
+
+        .container, .card-stacked {
+            animation: fadeInUp 1s ease-out;
+        }
+        a {
+            color: white;
+            margin-left: 50px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        /* =========================================
+           5. FOOTER
+           ========================================= */
+        footer {
+            margin-top: 100px; /* Dorong footer ke bawah */
+            width: 100%;
+            height: 100px; /* Sesuaikan tinggi */
+            
+            /* 1. Berikan warna latar belakang transparan (wajib) */
+            background-color: rgba(255, 255, 255, 0.008); 
+            
+            /* 2. Berikan efek blur pada elemen di belakangnya */
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(10px); /* Dukungan untuk Safari */
+            
+            /* Tambahan agar terlihat lebih jelas */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+                align-items: center;
+            }
+            .container {
+                margin-left: 0;
+                width: 80%;
+                margin-top: 120px;
+            }
+            .card-stacked {
+                display: none; /* Sembunyikan tumpukan kartu di layar kecil agar fokus ke login */
+            }
+            .judul img { margin-left: 20px; }
         }
     </style>
 </head>
@@ -291,7 +363,7 @@
                     </div>
                 </div>
 
-                <input type="submit" value="Login">
+                <input type="submit" value="Login" label="Login Button">
             </form>
         </div>
         
@@ -325,7 +397,20 @@
         </div>
 
     </div>
+    <a href="index.html">Go to Index.html for test</a>
+    <!-- Footer -->
+    <footer>
+        <div style="text-align: center; color: rgba(255,255,255,0.6); font-size: 12px;">
+            <p>&copy; 2024 SELAKSA Team. All Rights Reserved.</p>
+            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 10px;">
+                <a href="#" style="color: white; opacity: 0.5;"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" style="color: white; opacity: 0.5;"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" style="color: white; opacity: 0.5;"><i class="fa-solid fa-globe"></i></a>
+            </div>
+        </div>
+    </footer>
 
+    <!-- script js -->
     <script>
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById("password");

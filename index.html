@@ -11,13 +11,21 @@
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .hidden-section { display: none; }
         .active-nav { background-color: #1e40af; border-left: 4px solid #60a5fa; }
+
+        .img_selaksa {
+            width: 40px;
+            height: auto;
+            display: block;
+            /* Filter untuk mengubah warna icon hitam menjadi spesifik */
+            filter: brightness(0) saturate(100%) invert(45%) sepia(97%) saturate(267%) hue-rotate(167deg) brightness(92%) contrast(102%);
+        }
     </style>
 </head>
 <body class="flex h-screen">
 
     <aside class="w-64 bg-slate-900 text-white flex flex-col">
-        <div class="p-4 text-center font-bold text-xl border-b border-slate-700">
-            <i class="fa-solid fa-building-columns mr-2"></i> E-Layanan
+        <div class="p-4 text-center font-bold text-xl border-b border-slate-700" style="display: flex; gap: 10px; text-align: center; justify-content: center;">
+            <img class="img_selaksa" src="team.png" alt=""> <span style="margin: auto 0;">Selaksa</span>
         </div>
         
         <div class="p-4 bg-slate-800">
@@ -38,6 +46,9 @@
             </a>
             <a href="#" class="block p-3 hover:bg-slate-800 text-sm">
                 <i class="fa-solid fa-gear w-6"></i> Pengaturan
+            </a>
+            <a href="login.html" class="block p-3 hover:bg-slate-800 text-sm">
+                <i class="fa-solid fa-right-from-bracket w-6"></i> Logout
             </a>
         </nav>
     </aside>
