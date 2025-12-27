@@ -1,25 +1,18 @@
-name: CI PHP Project
+name: CI/CD PHP Project (Self Hosted)
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: self-hosted
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.3'
-
-    - name: Check PHP version
-      run: php -v
-
-    - name: Lint PHP files
+    - name: Deploy (local)
       run: |
-        find . -name "*.php" -print0 | xargs -0 -n1 php -l
+        cd /var/www/html/project-ci
+        git pull origin main
