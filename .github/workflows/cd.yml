@@ -7,24 +7,8 @@ on:
 
 jobs:
   deploy:
+    if: false   # ⛔ CD DIMATIKAN SEMENTARA
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Setup env
-        run: |
-          cp .env.production .env
-          php artisan key:generate
-
-      - name: Migrate
-        run: php artisan migrate --force
-
-      - name: Optimize
-        run: |
-          php artisan config:clear
-          php artisan route:clear
-          php artisan view:clear
+      - run: echo "CD disabled for now"
