@@ -1,13 +1,37 @@
-name: Test Self Hosted Runner
+name: Laravel 11 CI
 
 on:
   push:
     branches: [main]
 
 jobs:
-  test-runner:
+  laravel-ci:
     runs-on: self-hosted
 
     steps:
-      - name: Say hello
-        run: echo "Runner berhasil menerima job 🎉"
+      # 1. Ambil source code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Cek PHP
+      - name: Check PHP version
+        run: php -v
+
+      # 3. Install dependency
+      - name: Install Composer dependencies
+        run: |
+          composer install \
+            --no-interaction \
+            --prefer-dist
+
+      # 4. Setup env
+      - name: Setup Laravel env
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      # 5. Basic Laravel check
+      - name: Laravel basic check
+        run: |
+          php artisan config:clear
+          php artisan route:list > /dev/null
