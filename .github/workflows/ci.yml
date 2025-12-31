@@ -13,14 +13,15 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # 1. Ambil source code
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # 2. Cek PHP
       - name: Check PHP version
         run: php -v
 
-      # 3. Install dependency
+      - name: Validate composer.json
+        run: composer validate --strict
+
       - name: Install Composer dependencies
         run: |
           composer install \
@@ -28,16 +29,19 @@ jobs:
             --prefer-dist \
             --no-progress
 
-      # 4. Setup env untuk CI
-      - name: Prepare environment
+      - name: Prepare Laravel environment
         run: |
           cp .env.example .env
           mkdir -p database
           touch database/database.sqlite
           php artisan key:generate
 
-      # 5. Basic Laravel sanity check
-      - name: Laravel basic check
+      - name: PHP syntax check
+        run: |
+          find app routes -type f -name "*.php" -print0 \
+          | xargs -0 -n1 php -l
+
+      - name: Laravel sanity check
         run: |
           php artisan config:clear
           php artisan route:list > /dev/null
