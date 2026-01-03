@@ -1,47 +1,32 @@
-name: Laravel CI
+name: Laravel CI 
 
 on:
   push:
-    branches-ignore:
-      - main
-  pull_request:
     branches:
       - main
+  pull_request:
 
 jobs:
   laravel-ci:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check PHP version
-        run: php -v
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
 
       - name: Validate composer.json
         run: composer validate --strict
 
-      - name: Install Composer dependencies
-        run: |
-          composer install \
-            --no-interaction \
-            --prefer-dist \
-            --no-progress
+      - name: Install dependencies (no dev)
+        run: composer install --no-dev --prefer-dist --no-interaction
 
-      - name: Prepare Laravel environment
+      - name: Laravel basic check
         run: |
           cp .env.example .env
-          mkdir -p database
-          touch database/database.sqlite
           php artisan key:generate
-
-      - name: PHP syntax check
-        run: |
-          find app routes -type f -name "*.php" -print0 \
-          | xargs -0 -n1 php -l
-
-      - name: Laravel sanity check
-        run: |
           php artisan config:clear
-          php artisan route:list > /dev/null

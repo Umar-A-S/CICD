@@ -1,8 +1,35 @@
 services:
   app:
-    build:  .
+    build: .
     container_name: laravel_app
-    ports:
-      - "3000:8000"
+    expose:
+      - "9000"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mariadb:10.6
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: selaksa
+      MYSQL_USER: selaksa
+      MYSQL_PASSWORD: 313233
+      MYSQL_ROOT_PASSWORD: root313233
     volumes:
-      - .:/var/www
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: selaksa
+      PMA_PASSWORD: 313233
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
