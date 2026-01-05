@@ -1,9 +1,13 @@
 services:
+
+  # ------ CORE APPLICATION ----------
   app:
     build: .
     container_name: laravel_app
-    expose:
-      - "9000"
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/var/www/html/selaksa-app
     depends_on:
       - mysql
 
@@ -30,6 +34,30 @@ services:
       PMA_PASSWORD: 313233
     depends_on:
       - mysql
+
+  # --- Monitoring Tools ---
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8888:8080"
+    environment:
+      - DOZZLE_USERNAME=admin
+      - DOZZLE_PASSWORD=ganti_password_kamu_disini
+    restart: unless-stopped
+
+  # Monitor Log Host (Deploy & Nginx)
+  log-monitor:
+    image: alpine
+    container_name: server_log_monitor
+    volumes:
+      - ./deploy.log:/logs/deploy.log:ro
+      - /var/log/nginx/access.log:/logs/nginx-access.log:ro
+      - /var/log/nginx/error.log:/logs/nginx-error.log:ro
+    command: tail -f /logs/deploy.log /logs/nginx-access.log /logs/nginx-error.log
+    restart: always
 
 volumes:
   mysql_data:
