@@ -10,6 +10,18 @@ services:
       - .:/var/www/html/selaksa-app
     depends_on:
       - mysql
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.50'
+        reservations:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:           # <--- Tadi bagian ini hilang
+        max-size: "10m"
+        max-file: "3"
 
   mysql:
     image: mariadb:10.6
@@ -22,6 +34,11 @@ services:
       MYSQL_ROOT_PASSWORD: root313233
     volumes:
       - mysql_data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -47,6 +64,11 @@ services:
       - DOZZLE_USERNAME=admin
       - DOZZLE_PASSWORD=ganti_password_kamu_disini
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
 
   # Monitor Log Host (Deploy & Nginx)
   log-monitor:
