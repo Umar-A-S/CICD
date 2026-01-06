@@ -7,5 +7,5 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard-kota-Kabupaten', function () {
-    return view('dashboard', ['title' => 'Dashboard-kota-Kabupaten']);
+    return view('kota_kabupaten/dashboard', ['title' => 'Dashboard-kota-Kabupaten']);
 });
