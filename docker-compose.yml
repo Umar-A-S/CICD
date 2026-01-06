@@ -44,11 +44,10 @@ services:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
     ports:
-      - "8081:80"
+      - "127.0.0.1:8081:80"
     environment:
       PMA_HOST: mysql
-      PMA_USER: selaksa
-      PMA_PASSWORD: 313233
+      PMS_ABSOLUTE_URI: https://192.200.50.51/phpmyadmin/
     depends_on:
       - mysql
 
@@ -59,10 +58,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "8888:8080"
+      - "127.0.0.1:8888:8080"
     environment:
-      - DOZZLE_USERNAME=admin
-      - DOZZLE_PASSWORD=ganti_password_kamu_disini
+      - DOZZLE_BASE=/dozzle
     restart: unless-stopped
     deploy:
       resources:
