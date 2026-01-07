@@ -1,6 +1,6 @@
         <header class="p-6 flex justify-between items-center z-10 border-b border-white/5 bg-white">
             <div>
-                <h2 id="pageTitle" class="text-2xl font-bold text-black tracking-tight">Dashboard</h2>
+                <h2 id="pageTitle" class="text-2xl font-bold text-black tracking-tight">{{ $slot }}</h2>
                 <p id="pageSubtitle" class="text-xs text-black/80">Sistem Layanan Administrasi Kependudukan</p>
             </div>
             <div class="flex items-center gap-4">
