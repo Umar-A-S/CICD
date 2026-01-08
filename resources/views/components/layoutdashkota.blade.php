@@ -1,9 +1,12 @@
+<?php
+$role='kota';
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard SELAKSA</title>
+    <title>Dashboard Kota/Kabupaten</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -14,7 +17,7 @@
 <body class="flex h-screen overflow-hidden">
 
     <!-- SIDEBAR -->
-    <x-sidebar></x-sidebar>
+    <x-sidebar :role="$role"></x-sidebar>
 
     <main class="flex-1 flex flex-col relative overflow-hidden">
 

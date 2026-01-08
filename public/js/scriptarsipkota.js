@@ -1,8 +1,8 @@
 // ================= DATA =================
 let submissions = [
-    { id: 1, date: '2025-01-20', nik: '3302150001880001', nama: 'Budi Santoso', status: 'pending', note: 'Menunggu Verifikasi', files: [] },
-    { id: 2, date: '2025-01-21', nik: '3302150002880002', nama: 'Siti Aminah', status: 'valid', note: 'Sedang Diproses Provinsi', files: [] },
-    { id: 3, date: '2025-01-22', nik: '3302150003880003', nama: 'Bambang Pamungkas', status: 'rejected', note: 'Scan KTP Buram', files: [] },
+    { id: 1, date: '2025-01-20', nik: '3302150001880001', nama: 'Budi Santoso', status: 'rejected', note: 'Dokumen Ditolak', files: [] },
+    { id: 2, date: '2025-01-21', nik: '3302150002880002', nama: 'Siti Aminah', status: 'rejected', note: 'Dokumen Ditolak', files: [] },
+    { id: 3, date: '2025-01-22', nik: '3302150003880003', nama: 'Bambang Pamungkas', status: 'completed', note: 'Dokumen Telah Terbit', files: [] },
     { id: 4, date: '2025-01-23', nik: '3302150003880004', nama: 'Riski Ridho', status: 'completed', note: 'Dokumen Telah Terbit', files: [] }
 ];
 
@@ -203,90 +203,12 @@ function showToast(msg) {
 
 // ================= INIT =================
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize active menu based on current URL (SEBELUM refresh data)
-    initializeActiveMenu();
-    
-    refreshData();
+    renderTableKotaKabupaten();
+
 
     // search realtime
     const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            handleSearch(e.target.value);
-        });
-    }
+    searchInput.addEventListener('input', (e) => {
+        handleSearch(e.target.value);
+    });
 });
-
-// ================= NAVIGATION MENU HANDLER =================
-function switchMenu(menuName) {
-    // Remove active class from all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-
-    // Add active class to current menu
-    const activeMenu = document.getElementById(`nav-${menuName}`);
-    if (activeMenu) {
-        activeMenu.classList.add('active');
-        // Save to localStorage for persistence
-        localStorage.setItem('activeMenu', menuName);
-    }
-}
-
-function initializeActiveMenu() {
-    const currentPath = window.location.pathname;
-    console.log('Current path:', currentPath); // Debug
-    
-    let foundMatch = false;
-
-    // Check all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        const href = item.getAttribute('href');
-        const navId = item.getAttribute('id');
-        
-        console.log('Checking:', { href, navId, currentPath }); // Debug
-        
-        if (href) {
-            let isMatch = false;
-            
-            // Exact match
-            if (currentPath === href) {
-                isMatch = true;
-            }
-            // Path starts with href (for subpaths)
-            else if (currentPath.startsWith(href + '/')) {
-                isMatch = true;
-            }
-            // Check if href is contained in path
-            else if (href !== '/' && currentPath.includes(href)) {
-                isMatch = true;
-            }
-            
-            if (isMatch) {
-                console.log('Match found:', navId); // Debug
-                item.classList.add('active');
-                foundMatch = true;
-                
-                // Save to localStorage
-                if (navId) {
-                    localStorage.setItem('activeMenu', navId.replace('nav-', ''));
-                }
-            } else {
-                item.classList.remove('active');
-            }
-        }
-    });
-
-    // If no exact match, try from localStorage
-    if (!foundMatch) {
-        console.log('No match found, trying localStorage'); // Debug
-        const savedMenu = localStorage.getItem('activeMenu');
-        if (savedMenu) {
-            const activeMenu = document.getElementById(`nav-${savedMenu}`);
-            if (activeMenu) {
-                console.log('Restored from localStorage:', savedMenu); // Debug
-                activeMenu.classList.add('active');
-            }
-        }
-    }
-}

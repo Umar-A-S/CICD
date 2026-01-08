@@ -1,4 +1,4 @@
-<x-layout>
+<x-layoutdashkota >
     <x-slot:title>{{ $title }}</x-slot:title>
     
     <!-- ================= TABLE ================= -->
@@ -54,4 +54,4 @@
     <div id="toast"
         class="fixed bottom-6 right-6 bg-black text-white px-4 py-3 rounded-lg shadow-lg translate-y-20 opacity-0 transition">
         <span id="toastMsg"></span>
-</x-layout>
+</x-layoutdashkota >
