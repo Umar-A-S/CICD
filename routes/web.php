@@ -31,6 +31,9 @@ Route::get('/permohonan-kota', function () {
     return view('kota/permohonan', ['title' => 'Permohonan']);
 });
 
+use App\Http\Controllers\PermohonanController;
+Route::post('/permohonan/store', [PermohonanController::class, 'store']);
+
 Route::get('/unggah_BAPR/{id}', function ($id) {
     return view('kota/unggah_BAPR', ['title' => 'Unggah BAPR', 'id' => $id]);
 });

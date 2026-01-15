@@ -13,8 +13,6 @@
                                 <button class="filter-btn active" data-status="all">Semua</button>
                                 <button class="filter-btn" data-status="pending">Menunggu</button>
                                 <button class="filter-btn" data-status="valid">Diproses</button>
-                                <button class="filter-btn" data-status="rejected">Ditolak</button>
-                                <button class="filter-btn" data-status="completed">Selesai</button>
                             </div>
 
                             <div class="overflow-x-auto">
@@ -26,7 +24,6 @@
                                             <th class="px-6 py-3">JENIS PERMOHONAN</th>
                                             <th class="px-6 py-3">TGL PENGAJUAN</th>
                                             <th class="px-6 py-3">STATUS</th>
-                                            <th class="px-6 py-3">AKSI</th>
 
                                         </tr>
                                     </thead>

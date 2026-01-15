@@ -22,7 +22,7 @@ let submissions = [
         nik: '23115655431234',
         jenis: 'KEABSAHAN',
         date: '24-11-2025',
-        status: 'rejected'
+        status: 'valid'
     },
     {
         id: 4,
@@ -30,7 +30,7 @@ let submissions = [
         nik: '23115655431234',
         jenis: 'LEGALISIR',
         date: '24-11-2025',
-        status: 'completed'
+        status: 'pending'
     }
 ];
 
@@ -64,22 +64,13 @@ function statusText(status) {
     }[status];
 }
 
-function aksiText(status) {
-    return {
-        pending: 'MENUNGGU',
-        valid: 'VERIFIKASI',
-        rejected: 'TIDAK VALID',
-        completed: 'BERHASIL'
-    }[status];
-}
-
 // ================= DASHBOARD COUNTER =================
 function updateDashboardCounter() {
     document.getElementById('stat-total').innerText = submissions.length;
-    document.getElementById('stat-success').innerText =
-        submissions.filter(s => s.status === 'completed').length;
-    document.getElementById('stat-reject').innerText =
-        submissions.filter(s => s.status === 'rejected').length;
+    document.getElementById('stat-pending').innerText =
+        submissions.filter(s => s.status === 'pending').length;
+    document.getElementById('stat-valid').innerText =
+        submissions.filter(s => s.status === 'valid').length;
 }
 
 // ================= TABLE RENDER =================
@@ -110,9 +101,6 @@ function renderTableKotaKabupaten(data = submissions) {
                 <td class="px-6 py-4 text-xs">${item.date}</td>
                 <td class="px-6 py-4 text-xs font-semibold">
                     ${statusText(item.status)}
-                </td>
-                <td class="px-6 py-4 text-xs font-semibold">
-                    ${aksiText(item.status)}
                 </td>
             </tr>
         `;

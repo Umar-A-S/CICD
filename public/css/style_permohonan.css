@@ -1,0 +1,119 @@
+/* =====================
+   GLOBAL
+===================== */
+body { 
+    font-family: 'Inter', sans-serif; 
+    margin: 0;
+    color: #111827; /* ✅ text default gelap */
+    background-color: #f5f5f5;
+}
+
+/* Helper */
+.hidden-section { display: none; }
+
+/* Fade In */
+.fade-in { animation: fadeIn 0.5s ease-in-out; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================
+   GLASS PANEL
+===================== */
+.glass-panel {
+    background: #ffffff;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(200, 238, 66, 0.1);
+}
+
+/* =====================
+   INPUT
+===================== */
+.glass-input {
+    background: #ffffff;
+    border: 1px solid #c0de3a;
+    color: #111827; /* ✅ text input terlihat */
+}
+
+.glass-input::placeholder {
+    color: #9ca3af; /* ✅ placeholder terlihat */
+}
+
+.glass-input:focus {
+    background: rgba(200, 238, 66, 0.1);
+    border-color: #c8ee42;
+    outline: none;
+}
+
+/* Detail Input */
+.detail-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #111827;
+}
+
+.detail-input::placeholder {
+    color: #9ca3af;
+}
+
+/* =====================
+   SIDEBAR / NAV
+===================== */
+.sidebar,
+.sidebar * {
+    color: #ffffff; /* ✅ putih HANYA di sidebar */
+}
+
+.nav-item {
+    transition: all 0.3s;
+    border-left: 4px solid transparent;
+}
+
+.nav-item.active { 
+    background: #c8ee42;
+    border-left: 4px solid #c8ee42; 
+    color: #000000; 
+}
+
+.nav-item:hover { 
+    background-color: rgba(255, 255, 255, 0.1); 
+}
+
+/* =====================
+   BUTTON & FILTER
+===================== */
+.filter-btn {
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    color: #6b7280;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background: #f7fee7;
+}
+
+.filter-btn.active {
+    background: #d9f99d;
+    border-color: #84cc16;
+    color: #4d7c0f;
+}
+
+/* =====================
+   LOGO
+===================== */
+.img_selaksa {
+    width: 70px; 
+    height: auto; 
+    display: block;
+}

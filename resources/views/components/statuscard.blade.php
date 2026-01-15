@@ -10,21 +10,21 @@
                         </div>
                     </div>
                     <div class="glass-panel p-5 rounded-xl flex items-center gap-4 hover:bg-white/5 transition" style="background-color: #ffffff; box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.20);">
-                        <div class="w-12 h-12 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-check-circle"></i>
+                        <div class="w-12 h-12 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-clock"></i>
                         </div>
                         <div>
-                            <div class="text-2xl font-bold text-black" id="stat-success">0</div>
-                            <div class="text-xs text-black uppercase">Selesai</div>
+                            <div class="text-2xl font-bold text-black" id="stat-pending">0</div>
+                            <div class="text-xs text-black uppercase">Menunggu</div>
                         </div>
                     </div>
                     <div class="glass-panel p-5 rounded-xl flex items-center gap-4 hover:bg-white/5 transition" style="background-color: #ffffff; box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.20);">
-                        <div class="w-12 h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-times-circle"></i>
+                        <div class="w-12 h-12 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-gear"></i>
                         </div>
                         <div>
-                            <div class="text-2xl font-bold text-black" id="stat-reject">0</div>
-                            <div class="text-xs text-black uppercase">Ditolak</div>
+                            <div class="text-2xl font-bold text-black" id="stat-valid">0</div>
+                            <div class="text-xs text-black uppercase">Diproses</div>
                         </div>
                     </div>
                 </div>

@@ -92,8 +92,12 @@
 
             <div>
                 <label class="text-xs font-bold">Berkas</label>
-                <div id="berkasContainer" class="mt-2 space-y-2">
-                    <span class="text-gray-400 text-sm italic">Sedang memuat berkas...</span>
+                <div class="mt-2 flex items-center gap-3 rounded-xl bg-gray-50 border px-4 py-3 text-sm">
+                    <i class="fa-solid fa-print text-sky-500"></i>
+                    <a id="linkberkas" href="#" target="_blank"
+                        class="text-sky-500 font-semibold hover:underline">
+                        Lihat Berkas
+                    </a>
                 </div>
             </div>
 
