@@ -38,7 +38,7 @@ jobs:
         run: |
           cp .env.example .env  
           # Sesuaikan konfigurasi database untuk MySQL service
-          sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/g' .env
+          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mysql/g' .env
           sed -i 's/DB_DATABASE=.*/DB_DATABASE=laravel_test/g' .env
           sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/g' .env
           sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=313233/g' .env
