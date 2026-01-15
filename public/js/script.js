@@ -1,16 +1,61 @@
 // ================= DATA =================
 let submissions = [
-    { id: 1, date: '2025-01-20', nik: '3302150001880001', nama: 'Budi Santoso', status: 'pending', note: 'Menunggu Verifikasi', files: [] },
-    { id: 2, date: '2025-01-21', nik: '3302150002880002', nama: 'Siti Aminah', status: 'valid', note: 'Sedang Diproses Provinsi', files: [] },
-    { id: 3, date: '2025-01-22', nik: '3302150003880003', nama: 'Bambang Pamungkas', status: 'rejected', note: 'Scan KTP Buram', files: [] },
-    { id: 4, date: '2025-01-23', nik: '3302150003880004', nama: 'Riski Ridho', status: 'completed', note: 'Dokumen Telah Terbit', files: [] }
+    {
+        id: 1,
+        nama: 'Asep Yono Joyo',
+        nik: '23115655431234',
+        jenis: 'LEGALISIR',
+        date: '20-11-2025',
+        status: 'pending'
+    },
+    {
+        id: 2,
+        nama: 'Asep',
+        nik: '23115655431234',
+        jenis: 'MUTASI',
+        date: '24-11-2025',
+        status: 'valid'
+    },
+    {
+        id: 3,
+        nama: 'Asep',
+        nik: '23115655431234',
+        jenis: 'KEABSAHAN',
+        date: '24-11-2025',
+        status: 'rejected'
+    },
+    {
+        id: 4,
+        nama: 'Asep',
+        nik: '23115655431234',
+        jenis: 'LEGALISIR',
+        date: '24-11-2025',
+        status: 'completed'
+    }
 ];
 
-let uploadedFiles = [];
-let currentViewFiles = [];
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        // reset active
+        document.querySelectorAll('.filter-btn')
+            .forEach(b => b.classList.remove('active'));
 
-// ================= STATUS UTIL =================
-function getStatusLabel(status) {
+        // set active
+        btn.classList.add('active');
+
+        const status = btn.dataset.status;
+
+        if (status === 'all') {
+            renderTableKotaKabupaten(submissions);
+        } else {
+            const filtered = submissions.filter(item => item.status === status);
+            renderTableKotaKabupaten(filtered);
+        }
+    });
+});
+
+// ================= STATUS MAP (PERSIS GAMBAR) =================
+function statusText(status) {
     return {
         pending: 'MENUNGGU',
         valid: 'DIPROSES',
@@ -19,31 +64,22 @@ function getStatusLabel(status) {
     }[status];
 }
 
-function getStatusBadge(status) {
+function aksiText(status) {
     return {
-        pending: 'bg-yellow-400/20 text-yellow-600 border-yellow-400/30',
-        valid: 'bg-blue-400/20 text-blue-600 border-blue-400/30',
-        rejected: 'bg-red-400/20 text-red-600 border-red-400/30',
-        completed: 'bg-green-400/20 text-green-600 border-green-400/30'
-    }[status];
-}
-
-function getStatusNote(status) {
-    return {
-        pending: 'Menunggu Verifikasi',
-        valid: 'Sedang Diproses Provinsi',
-        rejected: 'Pengajuan Ditolak',
-        completed: 'Dokumen Telah Terbit'
+        pending: 'MENUNGGU',
+        valid: 'VERIFIKASI',
+        rejected: 'TIDAK VALID',
+        completed: 'BERHASIL'
     }[status];
 }
 
 // ================= DASHBOARD COUNTER =================
 function updateDashboardCounter() {
     document.getElementById('stat-total').innerText = submissions.length;
-    document.getElementById('stat-pending').innerText = submissions.filter(s => s.status === 'pending').length;
-    document.getElementById('stat-valid').innerText = submissions.filter(s => s.status === 'valid').length;
-    document.getElementById('stat-success').innerText = submissions.filter(s => s.status === 'completed').length;
-    document.getElementById('stat-reject').innerText = submissions.filter(s => s.status === 'rejected').length;
+    document.getElementById('stat-success').innerText =
+        submissions.filter(s => s.status === 'completed').length;
+    document.getElementById('stat-reject').innerText =
+        submissions.filter(s => s.status === 'rejected').length;
 }
 
 // ================= TABLE RENDER =================
@@ -51,10 +87,10 @@ function renderTableKotaKabupaten(data = submissions) {
     const tbody = document.getElementById('tableKotaKabupaten');
     tbody.innerHTML = '';
 
-    if (data.length === 0) {
+    if (!data.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="4" class="px-6 py-6 text-center text-gray-400">
+                <td colspan="6" class="text-center py-6 text-gray-400">
                     Data tidak ditemukan
                 </td>
             </tr>
@@ -62,231 +98,48 @@ function renderTableKotaKabupaten(data = submissions) {
         return;
     }
 
-    data.forEach(item => {
+    data.forEach((item, index) => {
+        // baris hijau selang-seling (sesuai gambar)
+        const rowBg = index % 2 === 1 ? 'bg-lime-100/70' : '';
+
         tbody.innerHTML += `
-            <tr class="border-b">
-                <td class="px-6 py-4">
-                    <div class="font-bold">${item.nama}</div>
-                    <div class="text-xs text-black/50">${item.nik}</div>
-                </td>
+            <tr class="${rowBg}">
+                <td class="px-6 py-4 font-medium">${item.nama}</td>
+                <td class="px-6 py-4 text-xs">${item.nik}</td>
+                <td class="px-6 py-4 text-xs font-semibold">${item.jenis}</td>
                 <td class="px-6 py-4 text-xs">${item.date}</td>
-                <td class="px-6 py-4">
-                    <span class="px-3 py-1 rounded border text-xs font-bold ${getStatusBadge(item.status)}">
-                        ${getStatusLabel(item.status)}
-                    </span>
+                <td class="px-6 py-4 text-xs font-semibold">
+                    ${statusText(item.status)}
                 </td>
-                <td class="px-6 py-4 text-xs italic">${item.note}</td>
+                <td class="px-6 py-4 text-xs font-semibold">
+                    ${aksiText(item.status)}
+                </td>
             </tr>
         `;
     });
 }
 
-// ================= SEARCH =================
-function handleSearch(keyword) {
-    const q = keyword.toLowerCase();
+// ================= FILTER TAB =================
+function filterStatus(type) {
+    if (type === 'all') {
+        renderTableKotaKabupaten(submissions);
+        return;
+    }
 
-    const filtered = submissions.filter(item =>
-        item.nama.toLowerCase().includes(q) ||
-        item.nik.includes(q)
+    const map = {
+        pending: 'pending',
+        valid: 'valid',
+        rejected: 'rejected',
+        completed: 'completed'
+    };
+
+    renderTableKotaKabupaten(
+        submissions.filter(s => s.status === map[type])
     );
-
-    renderTableKotaKabupaten(filtered);
-}
-
-// ================= SUBMIT =================
-function submitData(e) {
-    e.preventDefault();
-
-    submissions.unshift({
-        id: Date.now(),
-        date: new Date().toISOString().split('T')[0],
-        nik: inputNIK.value,
-        nama: inputNama.value,
-        status: 'pending',
-        note: getStatusNote('pending'),
-        files: [...uploadedFiles]
-    });
-
-    uploadedFiles = [];
-    document.getElementById('fileList').innerHTML = '';
-    document.getElementById('uploadPlaceholder').classList.remove('hidden');
-    document.getElementById('btnAddFile').classList.add('hidden');
-
-    document.getElementById('formInput').reset();
-    showToast('Data permohonan berhasil dikirim!');
-    refreshData();
-}
-
-// ================= UPLOAD FILE =================
-function addFile() {
-    document.getElementById('inputBerkas').click();
-}
-
-function handleFile(input) {
-    const files = Array.from(input.files);
-    if (!files.length) return;
-
-    files.forEach(file => {
-        if (file.size > 50 * 1024 * 1024) {
-            alert(`File ${file.name} melebihi 50 MB`);
-            return;
-        }
-
-        uploadedFiles.push({
-            file,
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            url: URL.createObjectURL(file)
-        });
-    });
-
-    input.value = '';
-    renderFiles();
-}
-
-function renderFiles() {
-    const list = document.getElementById('fileList');
-    const placeholder = document.getElementById('uploadPlaceholder');
-    const btnAdd = document.getElementById('btnAddFile');
-
-    list.innerHTML = '';
-
-    uploadedFiles.forEach((item, index) => {
-        const isImage = item.type.startsWith('image');
-        const sizeKB = (item.size / 1024).toFixed(1);
-
-        list.innerHTML += `
-            <div class="flex items-center justify-between bg-white/70 rounded-lg p-4">
-                <div class="flex items-center gap-3 max-w-[80%]">
-                    <i class="fa-solid ${isImage ? 'fa-image text-sky-500' : 'fa-file-pdf text-red-500'} text-xl"></i>
-                    <div class="overflow-hidden">
-                        <span class="text-sm font-semibold truncate cursor-pointer"
-                            onclick="window.open('${item.url}','_blank')">
-                            ${item.name}
-                        </span>
-                        <span class="text-xs text-black/50">${sizeKB} KB</span>
-                    </div>
-                </div>
-                <button onclick="removeFile(${index})" class="text-red-500">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-            </div>
-        `;
-    });
-
-    placeholder.classList.toggle('hidden', uploadedFiles.length > 0);
-    btnAdd.classList.toggle('hidden', uploadedFiles.length === 0);
-}
-
-function removeFile(index) {
-    uploadedFiles.splice(index, 1);
-    renderFiles();
-}
-
-// ================= UTIL =================
-function refreshData() {
-    renderTableKotaKabupaten();
-    updateDashboardCounter();
-}
-
-// ================= TOAST =================
-function showToast(msg) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toastMsg').innerText = msg;
-
-    toast.classList.remove('translate-y-20', 'opacity-0');
-    setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0');
-    }, 3000);
 }
 
 // ================= INIT =================
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize active menu based on current URL (SEBELUM refresh data)
-    initializeActiveMenu();
-    
-    refreshData();
-
-    // search realtime
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            handleSearch(e.target.value);
-        });
-    }
+    renderTableKotaKabupaten();
+    updateDashboardCounter();
 });
-
-// ================= NAVIGATION MENU HANDLER =================
-function switchMenu(menuName) {
-    // Remove active class from all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-
-    // Add active class to current menu
-    const activeMenu = document.getElementById(`nav-${menuName}`);
-    if (activeMenu) {
-        activeMenu.classList.add('active');
-        // Save to localStorage for persistence
-        localStorage.setItem('activeMenu', menuName);
-    }
-}
-
-function initializeActiveMenu() {
-    const currentPath = window.location.pathname;
-    console.log('Current path:', currentPath); // Debug
-    
-    let foundMatch = false;
-
-    // Check all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        const href = item.getAttribute('href');
-        const navId = item.getAttribute('id');
-        
-        console.log('Checking:', { href, navId, currentPath }); // Debug
-        
-        if (href) {
-            let isMatch = false;
-            
-            // Exact match
-            if (currentPath === href) {
-                isMatch = true;
-            }
-            // Path starts with href (for subpaths)
-            else if (currentPath.startsWith(href + '/')) {
-                isMatch = true;
-            }
-            // Check if href is contained in path
-            else if (href !== '/' && currentPath.includes(href)) {
-                isMatch = true;
-            }
-            
-            if (isMatch) {
-                console.log('Match found:', navId); // Debug
-                item.classList.add('active');
-                foundMatch = true;
-                
-                // Save to localStorage
-                if (navId) {
-                    localStorage.setItem('activeMenu', navId.replace('nav-', ''));
-                }
-            } else {
-                item.classList.remove('active');
-            }
-        }
-    });
-
-    // If no exact match, try from localStorage
-    if (!foundMatch) {
-        console.log('No match found, trying localStorage'); // Debug
-        const savedMenu = localStorage.getItem('activeMenu');
-        if (savedMenu) {
-            const activeMenu = document.getElementById(`nav-${savedMenu}`);
-            if (activeMenu) {
-                console.log('Restored from localStorage:', savedMenu); // Debug
-                activeMenu.classList.add('active');
-            }
-        }
-    }
-}

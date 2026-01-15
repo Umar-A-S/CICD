@@ -13,9 +13,10 @@
         @if($role === 'kota')
             <x-nav-link href="/dashboard-kota" icon="fa-house">Dashboard</x-nav-link>
             <x-nav-link href="/arsipdata-kota" icon="fa-box-archive">Arsip Data</x-nav-link>
-            <x-nav-link href="/penerbitan" icon="fa-print">Penerbitan</x-nav-link>
-            <x-nav-link href="/permohonan" icon="fa-file">Permohonan</x-nav-link>
-            <x-nav-link href="/pengaturan" icon="fa-gear">Pengaturan</x-nav-link>
+            <x-nav-link href="/penerbitan-kota" icon="fa-print">Penerbitan</x-nav-link>
+            <x-nav-link href="/permohonan-kota" icon="fa-file">Permohonan</x-nav-link>
+            <x-nav-link href="/balasan-kota" icon="fa-comment">Balasan</x-nav-link>
+            <x-nav-link href="/pengaturan-kota" icon="fa-gear">Pengaturan</x-nav-link>
         @endif
 
         @if($role === 'provinsi')
