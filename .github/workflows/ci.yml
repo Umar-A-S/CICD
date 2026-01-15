@@ -1,32 +1,69 @@
-name: Laravel CI 
+name: Laravel CI
 
 on:
   push:
-    branches:
-      - main
+  # Hanya jalankan workflow ini pada cabang 'main' dan 'docker-setupdev'
+    branches: [ "main", "docker-setupdev" ]
+
   pull_request:
+  # Hanya jalankan workflow ini pada cabang 'main'
+    branches: [ "main" ]
 
 jobs:
-  laravel-ci:
-    runs-on: ubuntu-latest
+  build-and-test:
+  # Job untuk membangun dan menguji aplikasi Laravel menggunakan Docker
+    runs-on: ubuntu-latest # Menggunakan runner gratis GitHub
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: 313233
+          MYSQL_DATABASE: laravel_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
+        # Mengambil kode sumber dari repository dan menempatkannya di runner
         uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.3
-
-      - name: Validate composer.json
-        run: composer validate --strict
-
-      - name: Install dependencies (no dev)
-        run: composer install --no-dev --prefer-dist --no-interaction
-
-      - name: Laravel basic check
+      - name: Create .env file for Testing
+        # Menyiapkan file .env untuk pengujian
         run: |
-          cp .env.example .env
-          php artisan key:generate
-          php artisan config:clear
+          cp .env.example .env  
+          # Sesuaikan konfigurasi database untuk MySQL service
+          sed -i 's/DB_HOST=127.0.0.1/DB_HOST=127.0.0.1/g' .env
+          sed -i 's/DB_DATABASE=laravel/DB_DATABASE=laravel_test/g' .env
+          sed -i 's/DB_USERNAME=root/DB_USERNAME=root/g' .env
+          sed -i 's/DB_PASSWORD=/DB_PASSWORD=313233/g' .env
+
+      - name: Build Docker Image
+        # Ini akan mengetes apakah Dockerfile Anda valid dan bisa dibuild
+        run: docker build -t selaksa-app:latest .
+
+      - name: Install & Migrate (Testing)
+        run: |
+          docker run --rm \
+            --network host \
+            -v $(pwd):/var/www/html/selaksa-app \
+            -u root \
+            selaksa-app:latest \
+            sh -c "composer install && php artisan key:generate && php artisan migrate --force"
+
+      - name: Build Assets
+        run: |
+          docker run --rm \
+            -v $(pwd):/var/www/html/selaksa-app \
+            -u root \
+            selaksa-app:latest \
+            sh -c "npm install && npm run build"
+
+      - name: Success Message
+        if: success()
+        run: echo "Selamat! CI Anda Berhasil."
