@@ -89,7 +89,7 @@ jobs:
       - name: Build and Push Docker Image
         if: success()
         run: |
-          IMAGE_ID=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          IMAGE_ID=${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')
           SHA_TAG=${{ github.sha }}
           docker tag selaksa-app:latest $IMAGE_ID:latest
           docker tag selaksa-app:latest $IMAGE_ID:$SHA_TAG
