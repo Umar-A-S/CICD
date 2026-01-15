@@ -75,7 +75,7 @@ jobs:
 
       # steps php artisan test
       - name: Php Artisan Test
-        run : |
+        run: |
           docker run --rm \
             --network host \
             -v $(pwd):/var/www/html/selaksa-app \
