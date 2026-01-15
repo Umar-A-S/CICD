@@ -34,6 +34,8 @@ FROM php:8.3-fpm-alpine
 # Set working directory
 WORKDIR /var/www/html/selaksa-app
 
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 # Install library sistem yang dibutuhkan PHP di runtime
 RUN apk add --no-cache libpng libxml2 libzip oniguruma nodejs npm
 
