@@ -1,0 +1,86 @@
+services:
+
+  # ------ CORE APPLICATION ----------
+  app:
+    build: .
+    container_name: laravel_app
+    ports:
+      - "9000:9000"
+      # karena .env dimasukkan ke .dockerignore
+    volumes:
+      - .:/var/www/html/selaksa-app
+      - /var/www/html/selaksa-app/vendor # agar vendor tidak tertimpa
+      - /var/www/html/selaksa-app/storage # agar storage tidak tertimpa
+      - .env:/var/www/html/selaksa-app/.env
+    depends_on:
+      - mysql
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.50'
+        reservations:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html/selaksa-app
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+  mysql:
+    image: mariadb:10.6
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: selaksa
+      MYSQL_USER: selaksa
+      MYSQL_PASSWORD: 313233
+      MYSQL_ROOT_PASSWORD: root313233
+    volumes:
+      - mysql_data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "127.0.0.1:8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMS_ABSOLUTE_URI: https://192.200.50.51/phpmyadmin/
+    depends_on:
+      - mysql
+
+  # --- Monitoring Tools ---
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "127.0.0.1:8888:8080"
+    restart: unless-stopped
+    mem_limit: 64M
+    cpus: 0.1
+
+volumes:
+  mysql_data:
