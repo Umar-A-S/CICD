@@ -22,7 +22,7 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: 313233
           MYSQL_DATABASE: laravel_test
         ports:
           - 3306:3306
@@ -48,7 +48,7 @@ jobs:
           sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env
           sed -i 's/^DB_DATABASE=.*/DB_DATABASE=laravel_test/' .env
           sed -i 's/^DB_USERNAME=.*/DB_USERNAME=root/' .env
-          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env
+          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=313233/' .env
 
       - name: Build Docker Image
         run: docker build -t selaksa-app:latest .
@@ -74,7 +74,7 @@ jobs:
             sh -c "npm install && npm run build"
 
       # steps php artisan test
-      - name : Php Artisan Test
+      - name: Php Artisan Test
         run : |
           docker run --rm \
             --network host \
