@@ -168,5 +168,11 @@
                 </div>
             </div>
         </div>
+        <!-- Test perubahan versi produciton via CICD prod -->
+         <div class="test"
+                style="position: fixed; bottom: 10px; right: 10px; background-color: #ff2d20; color: white; padding: 10px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); z-index: 1000;">
+            <h3>Test</h3>
+            <p>Perubahan versi produksi via CICD prod</p>
+         </div>
     </body>
 </html>
