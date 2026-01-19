@@ -52,15 +52,15 @@ jobs:
       - name: Install & Migrate (Testing)
         run: |
           docker run --rm \
-            - e DB_HOST=127.0.0.1 \
-            - e DB_PORT=3306 \
-            - e DB_DATABASE=laravel_test \
-            - e DB_USERNAME=root \
-            - e DB_PASSWORD=root \
+            -e DB_HOST=127.0.0.1 \
+            -e DB_PORT=3306 \
+            -e DB_DATABASE=laravel_test \
+            -e DB_USERNAME=root \
+            -e DB_PASSWORD=root \
             selaksa-app:ci \
             sh -c "
               php artisan key:generate &&
-              php artisan migrate --force
+              php artisan migrate --force &&
               php artisan test
             "
       # PUSH IMAGE JIKA HANYA DARI MAIN
