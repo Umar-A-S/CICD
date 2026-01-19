@@ -59,7 +59,6 @@ jobs:
             -e DB_PASSWORD=root \
             selaksa-app:ci \
             sh -c "
-              php artisan key:generate &&
               php artisan migrate --force &&
               php artisan test
             "
