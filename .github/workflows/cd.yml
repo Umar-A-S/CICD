@@ -39,10 +39,3 @@ jobs:
               exit 1
             }
             echo "Deployment successful"
-      - name: Notify Deployment Success
-        if: success()
-        uses: dawidd6/action-slack@v3
-        with:
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          message: "Deployment to production server was successful :tada:"
-          color: "good"
