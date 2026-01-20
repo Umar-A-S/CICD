@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArsipKotaController;
 use App\Http\Controllers\UnggahBaprController;
+use App\Http\Controllers\PermohonanController;
 
 Route::get('/arsip-kota', [ArsipKotaController::class, 'index']);
 Route::get('/detailarsip-kota/{id}', [ArsipKotaController::class, 'detail']);
@@ -31,7 +32,6 @@ Route::get('/permohonan-kota', function () {
     return view('kota/permohonan', ['title' => 'Permohonan']);
 });
 
-use App\Http\Controllers\PermohonanController;
 Route::post('/permohonan/store', [PermohonanController::class, 'store']);
 
 Route::get('/unggah_BAPR/{id}', function ($id) {
