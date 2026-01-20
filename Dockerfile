@@ -17,12 +17,20 @@ WORKDIR /app
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Strategi cache : install vendor dulu berdasarkan composer.json & composer.lock
+# install dependency PHP
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --prefer-dist --no-autoloader
 
+# install build & asset frontend
+COPY package.json package-lock.json* ./
+RUN npm install
+
 # Copy seluruh code dan lakukan dump-autoload
 COPY . .
+RUN npm run build  # <--- INI KUNCINYA agar CSS/JS jadi
 RUN composer dump-autoload --optimize
+
+
 
 # ==========================================
 # STAGE 2: Production (Hasil Akhir)
@@ -37,7 +45,7 @@ WORKDIR /var/www/html/selaksa-app
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Install library sistem yang dibutuhkan PHP di runtime
-RUN apk add --no-cache libpng libxml2 libzip oniguruma nodejs npm
+RUN apk add --no-cache libpng libxml2 libzip oniguruma
 
 # Install extension PHP yang wajib ada di runtime minimalis saja
 # Instal alat masak (build-deps), masak extension, lalu hapus alatnya
@@ -49,8 +57,8 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
 
 # Kunci multi-stage: Copy hasil build dari stage sebelumnya (builder)
 # Hanya ambil source code aplikasi dan vendor yang sudah di-optimize supaya ringan
-COPY --from=builder /app/vendor ./vendor
 COPY --from=builder /app .
+COPY --from=builder /app/vendor ./vendor
 
 # Atur permission Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache \
