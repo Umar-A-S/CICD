@@ -2,7 +2,10 @@ name: Laravel CI
 
 on:
   push:
-    branches: [ "main" ]
+    # trigger saat ada perubahan di branch main dan stagging
+    branches:
+      - main
+      - stagging
   pull_request:
     branches: [ "main" ]
 
@@ -52,13 +55,18 @@ jobs:
       - name: Install & Migrate (Testing)
         run: |
           docker run --rm \
+            --network host \
+            -u root\
+            -e APP_KEY=base64:4ayvStrimUNBc+XMB4tYQMpmzOsDcuiyBTKSOcNjl7I=\
             -e DB_HOST=127.0.0.1 \
             -e DB_PORT=3306 \
             -e DB_DATABASE=laravel_test \
             -e DB_USERNAME=root \
-            -e DB_PASSWORD=root \
+            -e DB_PASSWORD=313233 \
             selaksa-app:ci \
             sh -c "
+              composer install &&
+              php artisan key:generate &&
               php artisan migrate --force &&
               php artisan test
             "
