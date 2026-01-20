@@ -3,7 +3,7 @@ services:
   # ------ CORE APPLICATION ----------
   app:
     build: .
-    container_name: laravel_app
+    container_name: laravel_app_1
     ports:
       - "9000:9000"
       # karena .env dimasukkan ke .dockerignore
@@ -29,7 +29,7 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: nginx_1
     ports:
       - "80:80"
     volumes:
@@ -44,7 +44,7 @@ services:
           cpus: '0.25'
   mysql:
     image: mariadb:10.6
-    container_name: mysql
+    container_name: mysql_1
     restart: always
     environment:
       MYSQL_DATABASE: selaksa
@@ -61,7 +61,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: phpmyadmin_1
     ports:
       - "127.0.0.1:8081:80"
     environment:
@@ -73,7 +73,7 @@ services:
   # --- Monitoring Tools ---
   dozzle:
     image: amir20/dozzle:latest
-    container_name: dozzle
+    container_name: dozzle_1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
