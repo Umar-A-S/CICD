@@ -56,6 +56,8 @@ jobs:
         run: |
           docker run --rm \
             --network host \
+            -u root\
+            -e APP_KEY=base64:4ayvStrimUNBc+XMB4tYQMpmzOsDcuiyBTKSOcNjl7I=\
             -e DB_HOST=127.0.0.1 \
             -e DB_PORT=3306 \
             -e DB_DATABASE=laravel_test \
@@ -63,6 +65,8 @@ jobs:
             -e DB_PASSWORD=313233 \
             selaksa-app:ci \
             sh -c "
+              composer install &&
+              php artisan key:generate &&
               php artisan migrate --force &&
               php artisan test
             "
