@@ -1,4 +1,4 @@
-name: Laravel CI
+name: Laravel CI CD
 
 on:
   push:
@@ -6,8 +6,13 @@ on:
     branches:
       - main
       - stagging
+    tags:
+      - "v*.*.*"
+  
   pull_request:
-    branches: [ "main" ]
+    branches: 
+      - main
+      - stagging
 
 env:
   REGISTRY: ghcr.io
@@ -85,3 +90,21 @@ jobs:
           IMAGE_ID=${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')
           docker tag selaksa-app:ci $IMAGE_ID:latest
           docker push $IMAGE_ID:latest
+
+  # otomatisasi delploy ke server dan jalankan deploy.sh di server
+  deploy:
+    needs: ci
+    # hanya jalankan job deploy jika ada tag versi
+    if: startsWith(github.ref, 'refs/tags/v') 
+    runs-on: self-hosted
+
+    steps:
+      - name: Jalankan Script deploy.sh di Lokal
+        run: |
+          # masuk ke folder
+          cd ~/prod_selaksa
+
+          # Menjalankan script deploy
+          chmod +x deploy.sh
+          ./deploy.sh
+
