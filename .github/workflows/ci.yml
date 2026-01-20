@@ -3,7 +3,9 @@ name: Laravel CI
 on:
   push:
     # trigger saat ada perubahan di branch main dan stagging
-    branches: [ "main", "staging" ]
+    branches:
+      - main
+      - stagging
   pull_request:
     branches: [ "main" ]
 
