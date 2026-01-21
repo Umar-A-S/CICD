@@ -44,8 +44,8 @@ function statusText(status) {
 
 function statusClass(status) {
     return status === 'completed'
-        ? 'text-green-600 font-semibold'
-        : 'text-red-600 font-semibold';
+        ? 'bg-green-100 text-green-700 font-semibold rounded pt-1 pb-1'
+        : 'bg-red-100 text-red-700 font-semibold rounded';
 }
 
 // ================= RENDER TABLE (HALAMAN LIST) =================
