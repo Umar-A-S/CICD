@@ -17,18 +17,18 @@ $role='kota';
 <body class="flex h-screen overflow-hidden">
 
     <!-- SIDEBAR -->
-    <x-sidebar :role="$role"></x-sidebar>
+    <x-sidebar_kakot :role="$role"></x-sidebar_kakot>
 
     <main class="flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header>{{ $title }}</x-header>
+        <x-header_kakot>{{ $title }}</x-header_kakot>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">
 
             <!-- STATUS CARD -->
-            <x-statuscardpenerbit></x-statuscardpenerbit>
+            <x-statuscard_penerbitan_kakot></x-statuscard_penerbitan_kakot>
 
             <!-- TABLE -->
             {{ $slot }}

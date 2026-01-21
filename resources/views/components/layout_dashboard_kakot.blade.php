@@ -6,8 +6,7 @@ $role='kota';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>UNGGAH BAPR</title>
+    <title>Dashboard Kota/Kabupaten</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -17,13 +16,19 @@ $role='kota';
 
 <body class="flex h-screen overflow-hidden">
 
+    <!-- SIDEBAR -->
+    <x-sidebar_kakot :role="$role"></x-sidebar_kakot>
+
     <main class="flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header>{{ $title }}</x-header>
+        <x-header_kakot>{{ $title }}</x-header_kakot>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">
+
+            <!-- STATUS CARD -->
+            <x-statuscard_kakot></x-statuscard_kakot>
 
             <!-- TABLE -->
             {{ $slot }}
@@ -31,7 +36,7 @@ $role='kota';
     </main>
 
     <!-- SCRIPT -->
-    <script src="{{ asset('js/unggahbapr.js') }}"></script>
+    <script src="js/script.js"></script>
 
 </body>
 </html>

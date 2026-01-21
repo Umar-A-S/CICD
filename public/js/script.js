@@ -3,7 +3,7 @@ let submissions = [
     {
         id: 1,
         nama: 'Asep Yono Joyo',
-        nik: '23115655431234',
+        nomor_surat: '23115655431234',
         jenis: 'LEGALISIR',
         date: '20-11-2025',
         status: 'pending'
@@ -11,7 +11,7 @@ let submissions = [
     {
         id: 2,
         nama: 'Asep',
-        nik: '23115655431234',
+        nomor_surat: '23115655431234',
         jenis: 'MUTASI',
         date: '24-11-2025',
         status: 'valid'
@@ -19,28 +19,27 @@ let submissions = [
     {
         id: 3,
         nama: 'Asep',
-        nik: '23115655431234',
+        nomor_surat: '23115655431234',
         jenis: 'KEABSAHAN',
         date: '24-11-2025',
-        status: 'valid'
+        status: 'rejected'
     },
     {
         id: 4,
         nama: 'Asep',
-        nik: '23115655431234',
+        nomor_surat: '23115655431234',
         jenis: 'LEGALISIR',
         date: '24-11-2025',
-        status: 'pending'
+        status: 'success'
     }
 ];
 
+// ================= FILTER BUTTON =================
 document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        // reset active
         document.querySelectorAll('.filter-btn')
             .forEach(b => b.classList.remove('active'));
 
-        // set active
         btn.classList.add('active');
 
         const status = btn.dataset.status;
@@ -48,20 +47,42 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
         if (status === 'all') {
             renderTableKotaKabupaten(submissions);
         } else {
-            const filtered = submissions.filter(item => item.status === status);
-            renderTableKotaKabupaten(filtered);
+            renderTableKotaKabupaten(
+                submissions.filter(item => item.status === status)
+            );
         }
     });
 });
 
-// ================= STATUS MAP (PERSIS GAMBAR) =================
-function statusText(status) {
-    return {
-        pending: 'MENUNGGU',
-        valid: 'DIPROSES',
-        rejected: 'DITOLAK',
-        completed: 'SELESAI'
-    }[status];
+// ================= STATUS BADGE =================
+function statusBadge(status) {
+    const map = {
+        pending: {
+            text: 'BELUM',
+            class: 'bg-yellow-100 text-yellow-700'
+        },
+        valid: {
+            text: 'DIPROSES',
+            class: 'bg-blue-100 text-cyan-700'
+        },
+        rejected: {
+            text: 'DITOLAK',
+            class: 'bg-red-100 text-red-700'
+        },
+        success: {
+            text: 'SELESAI',
+            class: 'bg-green-100 text-green-700'
+        }
+    };
+
+    const s = map[status];
+
+    return `
+        <span class="inline-flex items-center px-3 py-1
+                    rounded-full text-xs font-bold ${s.class}">
+            ${s.text}
+        </span>
+    `;
 }
 
 // ================= DASHBOARD COUNTER =================
@@ -71,6 +92,10 @@ function updateDashboardCounter() {
         submissions.filter(s => s.status === 'pending').length;
     document.getElementById('stat-valid').innerText =
         submissions.filter(s => s.status === 'valid').length;
+    document.getElementById('stat-rejected').innerText =
+        submissions.filter(s => s.status === 'rejected').length;
+    document.getElementById('stat-success').innerText =
+        submissions.filter(s => s.status === 'success').length;
 }
 
 // ================= TABLE RENDER =================
@@ -90,40 +115,42 @@ function renderTableKotaKabupaten(data = submissions) {
     }
 
     data.forEach((item, index) => {
-        // baris hijau selang-seling (sesuai gambar)
         const rowBg = index % 2 === 1 ? 'bg-lime-100/70' : '';
 
         tbody.innerHTML += `
             <tr class="${rowBg}">
                 <td class="px-6 py-4 font-medium">${item.nama}</td>
-                <td class="px-6 py-4 text-xs">${item.nik}</td>
+                <td class="px-6 py-4 text-xs">${item.nomor_surat}</td>
                 <td class="px-6 py-4 text-xs font-semibold">${item.jenis}</td>
                 <td class="px-6 py-4 text-xs">${item.date}</td>
-                <td class="px-6 py-4 text-xs font-semibold">
-                    ${statusText(item.status)}
+                <td class="px-6 py-4 text-xs">
+                    ${statusBadge(item.status)}
+                </td>
+                <td class="px-6 py-4">
+                    <button
+                        onclick="openDetail(${item.id})"
+                        class="bg-green-600 hover:bg-green-700
+                                transition text-white px-4 py-1
+                                rounded-full text-xs font-semibold">
+                        DETAIL
+                    </button>
                 </td>
             </tr>
         `;
     });
 }
 
-// ================= FILTER TAB =================
-function filterStatus(type) {
-    if (type === 'all') {
-        renderTableKotaKabupaten(submissions);
+// ================= DETAIL ACTION =================
+function openDetail(id) {
+    const data = submissions.find(item => item.id === id);
+
+    if (!data) {
+        alert('Data tidak ditemukan');
         return;
     }
 
-    const map = {
-        pending: 'pending',
-        valid: 'valid',
-        rejected: 'rejected',
-        completed: 'completed'
-    };
-
-    renderTableKotaKabupaten(
-        submissions.filter(s => s.status === map[type])
-    );
+    // contoh: pindah halaman detail
+    window.location.href = `/detail_permohonan-kota/${id}`;
 }
 
 // ================= INIT =================

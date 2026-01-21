@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class layoutdashkota extends Component
+class sidebar_kakot extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class layoutdashkota extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.layoutdashkota');
+        return view('components.sidebar_kakot');
     }
 }

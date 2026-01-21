@@ -2,11 +2,11 @@
 $role='kota';
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Arsip Data Kota/Kabupaten</title>
+    <title>Detail Penerbitan Kota/Kabupaten</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -19,19 +19,18 @@ $role='kota';
     <main class="flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header>{{ $title }}</x-header>
+        <x-header_kakot>{{ $title }}</x-header_kakot>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">
 
-            <!-- ARSIP DATA -->
+            <!-- TABLE -->
             {{ $slot }}
-
-        </div>
+    </div>
     </main>
 
     <!-- SCRIPT -->
-    <script src="{{ asset('js/detailarsip.js') }}"></script>
+    <script src="{{ asset('js/detail_penerbitan_kakot.js') }}"></script>
 
 </body>
 </html>

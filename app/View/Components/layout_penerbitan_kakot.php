@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class layoutpermohonankota extends Component
+class layout_penerbitan_kakot extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class layoutpermohonankota extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.layoutpermohonankota');
+        return view('components.layout_penerbitan_kakot');
     }
 }

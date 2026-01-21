@@ -1,30 +1,60 @@
-<x-layoutpenerbitkota>
+<x-layout_penerbitan_kakot>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ================= PERLU DIBALAS ================= -->
+    <div class="bg-white rounded-2xl p-8 mb-10">
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+    <h3 class="text-lg font-semibold text-gray-800">Perlu Dibalas</h3>
+    <p class="text-sm text-gray-500 mb-6">Data valid siap cetak dan distribusi</p>
 
-        <div class="mb-6">
-            <h3 class="text-xl font-bold text-gray-800">
-                Penerbitan Dokumen
-            </h3>
-            <p class="text-sm text-gray-500 mt-1">
-                Data valid siap cetak dan distribusi
-            </p>
+    <!-- WRAPPER SCROLL -->
+    <div class="border rounded-xl overflow-hidden">
+
+        <!-- HEADER (FIXED) -->
+        <div class="bg-lime-300 px-6 py-3 grid grid-cols-10 text-sm font-semibold text-gray-700">
+            <div class="col-span-2">DUKCAPIL ASAL</div>
+            <div class="col-span-2">NOMOR SURAT/AKTA</div>
+            <div class="col-span-2 text-center">JENIS PERMOHONAN</div>
+            <div class="col-span-2 text-center">TGL PENGAJUAN</div>
+            <div class="col-span-2 text-center">AKSI</div>
         </div>
 
-        <div class="bg-[#D4F575] rounded-t-lg grid grid-cols-12 gap-4 px-6 py-4 text-xs font-bold text-gray-700 uppercase tracking-wider text-center items-center">
-            <div class="col-span-3 text-left">Nama</div>
-            <div class="col-span-3 text-left">NIK</div>
-            <div class="col-span-2">Jenis Permohonan</div>
-            <div class="col-span-2">Tgl Pengajuan</div>
-            <div class="col-span-2">Aksi</div>
+        <!-- BODY (SCROLLABLE) -->
+        <div
+            id="listPerluDibalas"
+            class="max-h-[200px] overflow-y-auto divide-y"
+        >
         </div>
-
-        <div id="penerbitanList" class="flex flex-col">
-            </div>
 
     </div>
+</div>
 
-</x-layoutpenerbitkota>
+    <!-- ================= SELESAI ================= -->
+    <div class="bg-white rounded-2xl p-8">
+
+    <h3 class="text-lg font-semibold text-gray-800">SELESAI</h3>
+    <p class="text-sm text-gray-500 mb-6">Data valid siap cetak dan distribusi</p>
+
+    <!-- WRAPPER SCROLL -->
+    <div class="border rounded-xl overflow-hidden">
+
+        <!-- HEADER (FIXED) -->
+        <div class="bg-lime-300 px-6 py-3 grid grid-cols-10 text-sm font-semibold text-gray-700">
+            <div class="col-span-2">DUKCAPIL ASAL</div>
+            <div class="col-span-2">NOMOR SURAT/AKTA</div>
+            <div class="col-span-2 text-center">JENIS PERMOHONAN</div>
+            <div class="col-span-2 text-center">TGL PENGAJUAN</div>
+            <div class="col-span-2 text-center">AKSI</div>
+        </div>
+
+        <!-- BODY (SCROLLABLE) -->
+        <div
+            id="listSelesai"
+            class="max-h-[200px] overflow-y-auto divide-y"
+        >
+        </div>
+
+    </div>
+</div>
+
+</x-layout_penerbitan_kakot>

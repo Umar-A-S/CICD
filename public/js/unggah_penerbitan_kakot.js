@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ================= ACTION =================
 function goBack() {
-    window.location.href = '/permohonan-kota';
+    window.history.back();
 }
 
 function kirim() {
