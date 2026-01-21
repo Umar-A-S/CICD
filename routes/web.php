@@ -7,7 +7,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard-kota', function () {
-    return view('kota/dashboard', ['title' => 'Dashboard']);
+    return view('kota/dashboard_kakot', ['title' => 'Dashboard']);
 });
 
 Route::get('/detail_permohonan-kota/{id}', function ($id) {
@@ -18,7 +18,7 @@ Route::get('/detail_permohonan-kota/{id}', function ($id) {
 });
 
 Route::get('/penerbitan-kota', function () {
-    return view('kota/penerbitan', ['title' => 'Penerbitan']);
+    return view('kota/penerbitan_kakot', ['title' => 'Penerbitan']);
 });
 
 Route::get('/unggah_penerbitan-kota/{id}', function ($id) {
@@ -37,16 +37,16 @@ Route::get('/detail_penerbitan-kota/{id}', function ($id) {
 });
 
 Route::get('/permohonan-kota', function () {
-    return view('kota/permohonan', ['title' => 'Permohonan']);
+    return view('kota/permohonan_kakot', ['title' => 'Permohonan']);
 });
 
 use App\Http\Controllers\PermohonanController;
 Route::post('/permohonan/store', [PermohonanController::class, 'store']);
 
 Route::get('/balasan-kota', function () {
-    return view('kota/balasan', ['title' => 'Balasan']);
+    return view('kota/balasan_kakot', ['title' => 'Balasan']);
 });
 
 Route::get('/pengaturan-kota', function () {
-    return view('kota/pengaturan', ['title' => 'Pengaturan']);
+    return view('kota/pengaturan_kakot', ['title' => 'Pengaturan']);
 });

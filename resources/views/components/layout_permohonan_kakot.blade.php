@@ -11,7 +11,7 @@ $role='kota';
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style_permohonan.css">
+    <link rel="stylesheet" href="css/style_permohonan_kakot.css">
 </head>
 
 <body class="flex h-screen overflow-hidden">
@@ -33,7 +33,7 @@ $role='kota';
     </main>
 
     <!-- SCRIPT -->
-    <script src="js/permohonan.js"></script>
+    <script src="js/permohonan_kakot.js"></script>
 
 </body>
 </html>
