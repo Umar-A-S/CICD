@@ -32,6 +32,15 @@
                 <div>
                     <label class="text-xs font-bold uppercase">Daerah Tujuan</label>
 
+                    <!-- Provinsi (AUTO) -->
+                    <label class="text-[10px] font-semibold text-gray-500 uppercase mt-4 block">
+                        Provinsi
+                    </label>
+                    <select id="provinsi"
+                        class="w-full mt-1 bg-gray-100 rounded-lg px-4 py-2 outline-none">
+                        <option value="" disabled selected>Pilih Provinsi</option>
+                    </select>
+
                     <!-- Kab / Kota -->
                     <label class="text-[10px] font-semibold text-gray-500 uppercase mt-2 block">
                         Kabupaten / Kota
@@ -41,14 +50,6 @@
                         <option value="" disabled selected>Pilih Kabupaten/Kota</option>
                     </select>
 
-                    <!-- Provinsi (AUTO) -->
-                    <label class="text-[10px] font-semibold text-gray-500 uppercase mt-4 block">
-                        Provinsi
-                    </label>
-                    <select id="provinsi"
-                        class="w-full mt-1 bg-gray-100 rounded-lg px-4 py-2 outline-none">
-                        <option value="" disabled selected>Pilih Provinsi</option>
-                    </select>
                 </div>
 
                 <!-- Jenis Permohonan --> 

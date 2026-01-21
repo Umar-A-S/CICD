@@ -12,6 +12,8 @@ $role='kota';
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style_kakot.css">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
 <body class="flex h-screen overflow-hidden">

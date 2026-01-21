@@ -8,19 +8,18 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('status_permohonans', function (Blueprint $table) {
+        Schema::create('permohonan', function (Blueprint $table) {
             $table->id();
             $table->string('jenis');
-            $table->string('nama');
-            $table->string('nik')->nullable();
-            $table->date('tanggal_surat')->nullable();
-            $table->string('nomor_surat')->nullable();
-            $table->string('wilayah_tujuan')->nullable();
+            $table->string('nama_subjek');
+            $table->date('tanggal_surat');
+            $table->timestamp('tanggal_permohonan');
             $table->string('wilayah')->nullable();
+            $table->string('wilayah_tujuan');
             $table->string('daerah_tujuan')->nullable();
             $table->string('daerah_asal')->nullable();
             $table->string('file_path')->nullable();
-            $table->string('status')->default('PENDING');
+            $table->enum('status', ['BELUM', 'DIPROSES', 'DITOLAK','SELESAI'])->default('BELUM');
             $table->timestamps();
         });
     }

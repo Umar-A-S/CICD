@@ -1,9 +1,9 @@
 // ================= LUPA PASSWORD VIA WA =================
         function lupaPasswordWA() {
-            const email = document.getElementById('email').value.trim();
+            const username = document.getElementById('username').value.trim();
 
-            if (!email) {
-                alert('Silakan isi email terlebih dahulu.');
+            if (!username) {
+                alert('Silakan isi username terlebih dahulu.');
                 return;
             }
 
@@ -12,7 +12,7 @@
             const pesan = `Halo Admin SELAKSA,
             Saya lupa password akun saya.
 
-            Email: ${email}
+            Username: ${username}
 
             Mohon bantu reset password.
             Terima kasih.`;

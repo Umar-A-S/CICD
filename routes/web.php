@@ -1,52 +1,60 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Kota\DashboardKotaController;
 
-Route::get('/', function () {
-    return view('login', ['title' => 'Login']);
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// --- GUEST ROUTES (Hanya bisa diakses jika BELUM login) ---
+Route::middleware(['guest'])->group(function () {
+    Route::get('/', [AuthController::class, 'showLogin']);
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
-Route::get('/dashboard-kota', function () {
-    return view('kota/dashboard_kakot', ['title' => 'Dashboard']);
-});
+// --- AUTH ROUTES (Hanya bisa diakses jika SUDAH login) ---
+Route::middleware(['auth'])->group(function () {
+    
+    // Proses Logout
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/detail_permohonan-kota/{id}', function ($id) {
-    return view('kota/detail_permohonan_kakot', [
-        'title' => 'Permohonan',
-        'id' => $id
-    ]);
-});
+    // 1. LEVEL KOTA/KABUPATEN
+    Route::get('/dashboard-kota', [DashboardKotaController::class, 'index'])->name('dashboard.kota');
+    
+    // Fitur-fitur Kota/Kabupaten
+    Route::get('/permohonan-kota', function () {
+        return view('kota.permohonan_kakot', ['title' => 'Permohonan']);
+    });
+    
+    Route::get('/detail_permohonan-kota/{id}', function ($id) {
+        return view('kota.detail_permohonan_kakot', ['title' => 'Detail Permohonan', 'id' => $id]);
+    });
 
-Route::get('/penerbitan-kota', function () {
-    return view('kota/penerbitan_kakot', ['title' => 'Penerbitan']);
-});
+    Route::get('/penerbitan-kota', function () {
+        return view('kota.penerbitan_kakot', ['title' => 'Penerbitan']);
+    });
 
-Route::get('/unggah_penerbitan-kota/{id}', function ($id) {
-    return view('kota/unggah_penerbitan_kakot', [
-        'title' => 'Unggah Penerbitan',
-        'id' => $id
-    ]);
-});
+    Route::get('/unggah_penerbitan-kota', function () {
+        return view('kota.unggah_penerbitan_kakot', ['title' => 'Unggah Penerbitan']);
+    });
 
+    Route::get('/detail_penerbitan-kota', function () {
+        return view('kota.detail_penerbitan_kakot', ['title' => 'Detail Penerbitan']);
+    });
 
-Route::get('/detail_penerbitan-kota/{id}', function ($id) {
-    return view('kota/detail_penerbitan_kakot', [
-        'title' => 'Penerbitan',
-        'id' => $id
-    ]);
-});
+    // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti
+    Route::get('/dashboard-provinsi', function () {
+        return "Halaman Dashboard Provinsi (Sedang dikembangkan)";
+    })->name('dashboard.provinsi');
 
-Route::get('/permohonan-kota', function () {
-    return view('kota/permohonan_kakot', ['title' => 'Permohonan']);
-});
+    // 3. LEVEL SUPERADMIN - Tambahkan controller nanti
+    Route::get('/dashboard-admin', function () {
+        return "Halaman Dashboard Superadmin (Sedang dikembangkan)";
+    })->name('dashboard.admin');
 
-use App\Http\Controllers\PermohonanController;
-Route::post('/permohonan/store', [PermohonanController::class, 'store']);
-
-Route::get('/balasan-kota', function () {
-    return view('kota/balasan_kakot', ['title' => 'Balasan']);
-});
-
-Route::get('/pengaturan-kota', function () {
-    return view('kota/pengaturan_kakot', ['title' => 'Pengaturan']);
 });
