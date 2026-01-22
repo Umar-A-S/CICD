@@ -24,26 +24,26 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // 1. LEVEL KOTA/KABUPATEN
-    Route::get('/dashboard-kota', [DashboardKotaController::class, 'index'])->name('dashboard.kota');
+    Route::get('/dashboard_kakot', [DashboardKotaController::class, 'index'])->name('dashboard.kota');
     
     // Fitur-fitur Kota/Kabupaten
-    Route::get('/permohonan-kota', function () {
+    Route::get('/permohonan_kakot', function () {
         return view('kota.permohonan_kakot', ['title' => 'Permohonan']);
     });
     
-    Route::get('/detail_permohonan-kota/{id}', function ($id) {
+    Route::get('/detail_permohonan_kakot/{id}', function ($id) {
         return view('kota.detail_permohonan_kakot', ['title' => 'Detail Permohonan', 'id' => $id]);
     });
 
-    Route::get('/penerbitan-kota', function () {
+    Route::get('/penerbitan_kakot', function () {
         return view('kota.penerbitan_kakot', ['title' => 'Penerbitan']);
     });
 
-    Route::get('/unggah_penerbitan-kota', function () {
+    Route::get('/unggah_penerbitan_kakot', function () {
         return view('kota.unggah_penerbitan_kakot', ['title' => 'Unggah Penerbitan']);
     });
 
-    Route::get('/detail_penerbitan-kota', function () {
+    Route::get('/detail_penerbitan_kakot', function () {
         return view('kota.detail_penerbitan_kakot', ['title' => 'Detail Penerbitan']);
     });
 

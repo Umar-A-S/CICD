@@ -11,9 +11,9 @@
     <nav class="flex-1 mt-4 px-2 space-y-1 overflow-y-auto">
 
         @if($role === 'kota')
-            <x-nav-link href="/dashboard-kota" icon="fa-house">Dashboard</x-nav-link>
-            <x-nav-link href="/penerbitan-kota" icon="fa-print">Penerbitan</x-nav-link>
-            <x-nav-link href="/permohonan-kota" icon="fa-file">Permohonan</x-nav-link>
+            <x-nav-link href="/dashboard_kakot" icon="fa-house">Dashboard</x-nav-link>
+            <x-nav-link href="/penerbitan_kakot" icon="fa-print">Penerbitan</x-nav-link>
+            <x-nav-link href="/permohonan_kakot" icon="fa-file">Permohonan</x-nav-link>
             <x-nav-link href="/balasan-kota" icon="fa-comment">Balasan</x-nav-link>
             <x-nav-link href="/pengaturan-kota" icon="fa-gear">Pengaturan</x-nav-link>
         @endif

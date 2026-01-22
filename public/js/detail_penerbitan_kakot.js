@@ -1,36 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
+// ================= NAVIGATION =================
 
-    // ================= DATA DUMMY =================
-    const data = {
-        nama: 'Asep',
-        wilayah: 'LUAR JATENG',
-        asal: 'Semarang',
-        tujuan: 'Kab/Kota',
-        provinsi: 'Provinsi',
-        jenis: 'KEABSAHAN',
-        dokumen: 'Akta Kelahiran',
-
-        tglPermohonan: '20-11-2025',
-        noSuratPermohonan: '08.006/ITS/III/2023',
-        noSuratSelesai: '08.006/ITS/III/2023',
-
-        tglTerbit: '20-01-2026',
-        noSuratTerbit: '08.006/ITS/III/2023',
-        noSuratTerbitSelesai: '08.006/ITS/III/2023'
-    };
-
-    // ================= ISI INPUT =================
-    Object.entries(data).forEach(([id, value]) => {
-        const el = document.getElementById(id);
-        if (el) el.value = value;
-    });
-});
-
-// ================= BUTTON =================
 function goBack() {
     window.history.back();
 }
 
-function lihatBerkas() {
-    alert('Lihat berkas (dummy)');
+// ================= ACTION BUTTONS =================
+
+/**
+ * Fungsi untuk membuka file dokumen penerbitan di tab baru.
+ * URL file nanti akan dikirim dari tombol di Blade (PHP).
+ */
+function lihatDokumen(url) {
+    if (url && url !== '#') {
+        window.open(url, '_blank');
+    } else {
+        alert('Dokumen fisik belum tersedia atau link rusak.');
+    }
+}
+
+/**
+ * Fungsi opsional jika nanti kamu ingin menambahkan tombol print
+ */
+function cetakHalaman() {
+    window.print();
 }
