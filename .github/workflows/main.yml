@@ -64,10 +64,16 @@ jobs:
             --network host \
             -u root \
             -e APP_KEY=${{ secrets.APP_KEY }} \
+<<<<<<< HEAD
             -e DB_HOST=127.0.0.1 \
             -e DB_PORT=${{ secrets.DB_PORT }} \
+=======
+            -e DB_CONNECTION=mysql \
+            -e DB_HOST=127.0.0.1 \
+            -e DB_PORT=3306 \
+>>>>>>> f82fc5333baa8302e93b17f747495a10fb4345bd
             -e DB_DATABASE=${{ secrets.DB }} \
-            -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e DB_USERNAME=root \
             -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
             selaksa-app:ci \
             sh -c "
@@ -105,7 +111,7 @@ jobs:
 
       - name: Generate .env File
         run: |
-          cd ~/${{ secrets.FOLDER }}
+          cd ${{ secrets.PATH_TUJUAN }}
           
           cat <<EOF > .env
 
