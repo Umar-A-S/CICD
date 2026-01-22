@@ -123,7 +123,7 @@ jobs:
           
       - name: Generate Nginx Config
         run: |
-          target_dir="${{ secrets.FOLDER }}"
+          target_dir="${{ secrets.PATH_TUJUAN }}"
 
           rm -rf $target_dir/nginx/default.conf || sudo rm -rf $target_dir/nginx/default.conf
 
@@ -157,6 +157,8 @@ jobs:
           }
           EOF
           echo "Nginx config generated at $target_dir/nginx/default.conf"
+
+          sudo chown -R $USER:$USER $target_dir
 
       - name: Jalankan Script deploy.sh di Lokal
         run: |
