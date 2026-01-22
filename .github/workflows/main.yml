@@ -64,7 +64,7 @@ jobs:
             --network host \
             -u root \
             -e APP_KEY=${{ secrets.APP_KEY }} \
-            -e DB_HOST=${{ secrets.DB_HOST }} \
+            -e DB_HOST=127.0.0.1 \
             -e DB_PORT=${{ secrets.DB_PORT }} \
             -e DB_DATABASE=${{ secrets.DB }} \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
@@ -122,12 +122,38 @@ jobs:
           
       - name: Generate Nginx Config
         run: |
-          cd ~/${{ secrets.FOLDER }}
-          
-          # Copy template dan replace dengan variabel
-          cp nginx/default.conf.template nginx/default.conf
-          sed -i "s|\${SERVER_NAME}|${{ secrets.APP_URL }}|g" nginx/default.conf
-          sed -i "s|\${PROJECT_PATH}|/var/www/html/selaksa-app|g" nginx/default.conf
+          target_dir="${{ secrets.FOLDER }}"
+
+          mkdir -p $target_dir/nginx
+
+          cat <<'EOF' > $target_dir/nginx/default.conf
+          server {
+              listen 80;
+              server_name /${{ secrets.APP_URL }};
+
+              root /var/www/html/selaksa-app/public;
+              index index.php index.html index.htm;
+
+              location / {
+                  try_files $uri $uri/ /index.php?$query_string;
+              }
+
+              location ~ \.php$ {
+                try_files $uri =404;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass app:9000;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param PATH_INFO $fastcgi_path_info;
+              }
+
+              location ~ /\.ht {
+                  deny all;
+              }
+          }
+          EOF
+          echo "Nginx config generated at $target_dir/nginx/default.conf"
 
       - name: Jalankan Script deploy.sh di Lokal
         run: |
