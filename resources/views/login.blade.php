@@ -26,7 +26,7 @@
 
         <!-- LOGO -->
         <div class="flex justify-center mb-4">
-            <img src="{{ asset('img/Logo_Selaksa.png') }}"
+            <img src="{{ asset('img/logo_selaksa.png') }}"
                 alt="SELAKSA"
                 class="h-16">
         </div>

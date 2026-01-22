@@ -2,7 +2,11 @@
     $role = $role ?? 'kota';
 @endphp
 
-<aside class="w-64 border-r flex flex-col z-20 h-full bg-white">
+<aside
+    id="sidebar"
+    class="fixed inset-y-0 left-0 w-48 bg-white border-r flex flex-col z-30
+        transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+
     <div class="p-6 flex items-center gap-3 border-b border-gray-100">
         <img class="w-8 h-8" src="img/logo_selaksa.png" alt="Logo" onerror="this.style.display='none';">
         <span class="font-bold text-lg tracking-wide text-black">SELAKSA</span>

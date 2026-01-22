@@ -6,7 +6,7 @@ $role='kota';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Penerbitan Kota/Kabupaten</title>
+    <title>Detail Balasan Kota/Kabupaten</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -31,7 +31,7 @@ $role='kota';
     </main>
 
     <!-- SCRIPT -->
-    <script src="{{ asset('js/detail_penerbitan_kakot.js') }}"></script>
+    <script src="{{ asset('js/detail_balasan_kakot.js') }}"></script>
 
 </body>
 </html>

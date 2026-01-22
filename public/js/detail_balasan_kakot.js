@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
         nama: 'Asep',
         wilayah: 'LUAR JATENG',
         asal: 'Semarang',
-        provinsi: 'Provinsi',
         tujuan: 'Kab/Kota',
+        provinsi: 'Provinsi',
         jenis: 'KEABSAHAN',
         dokumen: 'Akta Kelahiran',
 
@@ -16,14 +16,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tglTerbit: '20-01-2026',
         noSuratTerbit: '08.006/ITS/III/2023',
-        noSuratTerbitSelesai: '08.006/ITS/III/2023'
+        noSuratTerbitSelesai: '08.006/ITS/III/2023',
+
+        hasil: 'Disetujui',
+        alasan: 'Data sesuai dengan dokumen asli.'
     };
 
     // ================= ISI INPUT =================
-    Object.entries(data).forEach(([id, value]) => {
+    for (const id in data) {
         const el = document.getElementById(id);
-        if (el) el.value = value;
-    });
+        if (el) {
+            el.value = data[id];
+        }
+    }
 });
 
 // ================= BUTTON =================

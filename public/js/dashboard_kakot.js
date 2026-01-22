@@ -34,6 +34,13 @@ let submissions = [
     }
 ];
 
+const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggleSidebar');
+
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+    });
+    
 // ================= FILTER BUTTON =================
 document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {

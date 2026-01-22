@@ -12,6 +12,7 @@ $role='kota';
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style_permohonan_kakot.css">
+    <link rel="icon" type="image/png" href="/img/logo_selaksa.png" sizes="32x32">
 </head>
 
 <body class="flex h-screen overflow-hidden">
@@ -19,7 +20,7 @@ $role='kota';
     <!-- SIDEBAR -->
     <x-sidebar_kakot :role="$role"></x-sidebar_kakot>
 
-    <main class="flex-1 flex flex-col relative overflow-hidden">
+    <main class="md:ml-48 flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
         <x-header_kakot>{{ $title }}</x-header_kakot>

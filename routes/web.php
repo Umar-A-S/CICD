@@ -47,6 +47,20 @@ Route::get('/balasan-kota', function () {
     return view('kota/balasan_kakot', ['title' => 'Balasan']);
 });
 
+Route::get('/unggah_balasan-kota/{id}', function ($id) {
+    return view('kota/unggah_balasan_kakot', [
+        'title' => 'Unggah BAPR',
+        'id' => $id
+    ]);
+});
+
+Route::get('/detail_balasan-kota/{id}', function ($id) {
+    return view('kota/detail_balasan_kakot', [
+        'title' => 'Balasan',
+        'id' => $id
+    ]);
+});
+
 Route::get('/pengaturan-kota', function () {
     return view('kota/pengaturan_kakot', ['title' => 'Pengaturan']);
 });
