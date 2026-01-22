@@ -106,7 +106,7 @@ jobs:
 
       - name: Generate .env File
         run: |
-          cd ~/${{ secrets.FOLDER }}
+          cd ${{ secrets.PATH_TUJUAN }}
           
           cat <<EOF > .env
 
@@ -123,7 +123,7 @@ jobs:
           
       - name: Generate Nginx Config
         run: |
-          cd ~/${{ secrets.FOLDER }}
+          cd ${{ secrets.PATH_TUJUAN }}
           
           # Copy template dan replace dengan variabel
           cp nginx/default.conf.template nginx/default.conf
