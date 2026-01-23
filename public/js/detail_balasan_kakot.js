@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
         nama: 'Asep',
         wilayah: 'LUAR JATENG',
         asal: 'Semarang',
-        tujuan: 'Kab/Kota',
-        provinsi: 'Provinsi',
+        tujuan: 'Kota Bandung',
+        provinsi: 'Jawa Barat',
         jenis: 'KEABSAHAN',
         dokumen: 'Akta Kelahiran',
 
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         noSuratTerbitSelesai: '08.006/ITS/III/2023',
 
         hasil: 'Disetujui',
-        alasan: 'Data sesuai dengan dokumen asli.'
+        keterangan: 'Data sesuai dengan dokumen asli.'
     };
 
     // ================= ISI INPUT =================

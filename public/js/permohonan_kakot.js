@@ -1,8 +1,12 @@
 // ================= DATA DUMMY =================
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('nama').value = 'Asep';
-    document.getElementById('asal').value = 'Semarang';
-    document.getElementById('tglSelesai').value = '2026-01-20';
+    document.getElementById('nama').value = 'Agus';
+    document.getElementById('asal').value = 'Kota Semarang';
+
+    // FIELD BARU
+    document.getElementById('tglPermohonan').value = '2026-01-15';
+    document.getElementById('noSurat').value = '470/123/2026';
+    document.getElementById('noSuratSelesai').value = '470/123-A/2026';
 });
 
 // ================= ACTION =================
@@ -25,81 +29,72 @@ fileInput.addEventListener('change', () => {
 
     files.forEach(file => {
 
-        // validasi format
         const allowed = ['application/pdf', 'image/jpeg', 'image/png'];
         if (!allowed.includes(file.type)) {
             alert(`Format tidak valid: ${file.name}`);
             return;
         }
 
-        // validasi ukuran (2MB)
         if (file.size > 2 * 1024 * 1024) {
             alert(`Ukuran file > 2MB: ${file.name}`);
             return;
         }
 
-        // cegah file dobel
         if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
             return;
         }
 
         selectedFiles.push(file);
 
-        // ===== PREVIEW =====
         const wrapper = document.createElement('div');
         wrapper.className =
             'flex items-center justify-between bg-gray-100 rounded-lg p-3 border';
 
-        const info = document.createElement('div');
-        info.innerHTML = `
-            <p class="text-sm font-semibold">${file.name}</p>
-            <p class="text-xs text-gray-500">
-                ${(file.size / 1024).toFixed(1)} KB
-            </p>
+        wrapper.innerHTML = `
+            <div>
+                <p class="text-sm font-semibold">${file.name}</p>
+                <p class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</p>
+            </div>
+            <div class="flex gap-2">
+                <button class="text-xs bg-sky-500 text-white px-3 py-1 rounded">Review</button>
+                <button class="text-xs bg-red-500 text-white px-3 py-1 rounded">Hapus</button>
+            </div>
         `;
 
-        const actions = document.createElement('div');
-        actions.className = 'flex gap-2';
+        const [reviewBtn, deleteBtn] = wrapper.querySelectorAll('button');
 
-        // review
-        const reviewBtn = document.createElement('button');
-        reviewBtn.className = 'text-xs bg-sky-500 text-white px-3 py-1 rounded';
-        reviewBtn.innerText = 'Review';
-        reviewBtn.onclick = () => {
-            window.open(URL.createObjectURL(file), '_blank');
-        };
-
-        // hapus
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'text-xs bg-red-500 text-white px-3 py-1 rounded';
-        deleteBtn.innerText = 'Hapus';
+        reviewBtn.onclick = () => window.open(URL.createObjectURL(file), '_blank');
         deleteBtn.onclick = () => {
             selectedFiles = selectedFiles.filter(f => f !== file);
             wrapper.remove();
         };
 
-        actions.appendChild(reviewBtn);
-        actions.appendChild(deleteBtn);
-
-        wrapper.appendChild(info);
-        wrapper.appendChild(actions);
         filePreview.appendChild(wrapper);
     });
 
-    // reset supaya file yang sama bisa dipilih lagi
     fileInput.value = '';
 });
 
-// ================= DAERAH TUJUAN (PROVINSI -> KAB/KOTA) =================
+// ================= DAERAH TUJUAN (DALAM / LUAR DAERAH) =================
+const wilayahSelect = document.getElementById('wilayah');
+const provSelect    = document.getElementById('provinsi');
+const kabSelect     = document.getElementById('kabkota');
+const provWrapper   = document.getElementById('provinsiWrapper');
+
+let dataWilayah = {};
+
+// default
+provWrapper.style.display = 'none';
+kabSelect.disabled = true;
+
 fetch('/data/kota_kabupaten.json')
     .then(res => res.json())
     .then(data => {
+        dataWilayah = data;
 
-        const provSelect = document.getElementById('provinsi');
-        const kabSelect  = document.getElementById('kabkota');
-
-        // isi provinsi
+        // isi provinsi (LUAR DAERAH SAJA, TANPA JAWA TENGAH)
         Object.keys(data)
+            .filter(p => p !== 'Jawa Tengah')
             .sort((a, b) => a.localeCompare(b, 'id'))
             .forEach(prov => {
                 const opt = document.createElement('option');
@@ -107,37 +102,53 @@ fetch('/data/kota_kabupaten.json')
                 opt.textContent = prov;
                 provSelect.appendChild(opt);
             });
+    });
 
-        // saat provinsi dipilih
-        provSelect.addEventListener('change', () => {
-            const provinsiDipilih = provSelect.value;
+// pilih wilayah
+wilayahSelect.addEventListener('change', () => {
+    kabSelect.innerHTML = `<option disabled selected>Pilih Kabupaten/Kota</option>`;
+    kabSelect.disabled = false;
 
-            kabSelect.innerHTML = '';
-            kabSelect.disabled = false;
+    if (wilayahSelect.value === 'dalam') {
+        // DALAM DAERAH
+        provWrapper.style.display = 'none';
 
-            // placeholder
-            const placeholder = document.createElement('option');
-            placeholder.value = '';
-            placeholder.textContent = 'Pilih Kab/Kota';
-            placeholder.disabled = true;
-            placeholder.selected = true;
-            kabSelect.appendChild(placeholder);
+        dataWilayah['Jawa Tengah']
+            .sort((a, b) => a.localeCompare(b, 'id'))
+            .forEach(kab => {
+                const opt = document.createElement('option');
+                opt.value = kab;
+                opt.textContent = kab;
+                kabSelect.appendChild(opt);
+            });
 
-            // isi kab/kota sesuai provinsi
-            data[provinsiDipilih]
-                .sort((a, b) => a.localeCompare(b, 'id'))
-                .forEach(kab => {
-                    const opt = document.createElement('option');
-                    opt.value = kab;
-                    opt.textContent = kab;
-                    kabSelect.appendChild(opt);
-                });
+    } else {
+        // LUAR DAERAH
+        provWrapper.style.display = 'block';
+        kabSelect.disabled = true;
+        provSelect.selectedIndex = 0;
+    }
+});
+
+// pilih provinsi (LUAR DAERAH)
+provSelect.addEventListener('change', () => {
+    kabSelect.innerHTML = `<option disabled selected>Pilih Kabupaten/Kota</option>`;
+    kabSelect.disabled = false;
+
+    dataWilayah[provSelect.value]
+        .sort((a, b) => a.localeCompare(b, 'id'))
+        .forEach(kab => {
+            const opt = document.createElement('option');
+            opt.value = kab;
+            opt.textContent = kab;
+            kabSelect.appendChild(opt);
         });
-    });
+});
 
+// ================= SIDEBAR =================
 const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggleSidebar');
+const toggleBtn = document.getElementById('toggleSidebar');
 
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('-translate-x-full');
-    });
+toggleBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('-translate-x-full');
+});

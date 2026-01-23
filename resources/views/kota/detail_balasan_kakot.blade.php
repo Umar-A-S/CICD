@@ -30,14 +30,14 @@
 
                     <!-- IDENTITAS -->
                     <div>
-                        <h2 class="font-extrabold text-sm mb-8 tracking-wide text-gray-700">
+                        <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
                             IDENTITAS
                         </h2>
 
                         <div class="space-y-5">
                             {!! input('Nama Subjek', 'nama') !!}
-                            {!! input('Wilayah Tujuan (Dalam/Luar)', 'wilayah') !!}
                             {!! input('Daerah Asal', 'asal') !!}
+                            {!! input('Wilayah Tujuan (Dalam/Luar)', 'wilayah') !!}
 
                             <div>
                                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
@@ -58,7 +58,7 @@
 
                     <!-- PERMOHONAN (KIRI) -->
                     <div>
-                        <h2 class="font-extrabold text-sm mb-8 tracking-wide text-gray-700">
+                        <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
                             PERMOHONAN
                         </h2>
 
@@ -76,16 +76,12 @@
 
                 <!-- PERMOHONAN (LANJUTAN) -->
                 <div>
-                    <h2 class="font-extrabold text-sm mb-8 tracking-wide text-gray-700">
-                        PERMOHONAN
-                    </h2>
-
                     <div class="space-y-5">
                         {!! input('Nomor Surat Selesai', 'noSuratSelesai') !!}
 
                         <div>
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
-                                Berkas Permohonan
+                                Berkas
                             </label>
                             <a onclick="lihatBerkasPermohonan()"
                                 class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer">
@@ -98,7 +94,7 @@
 
                 <!-- PENERBITAN -->
                 <div>
-                    <h2 class="font-extrabold text-sm mb-8 tracking-wide text-gray-700">
+                    <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
                         PENERBITAN
                     </h2>
 
@@ -109,7 +105,7 @@
 
                         <div>
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
-                                Berkas Penerbitan
+                                Berkas
                             </label>
                             <a onclick="lihatBerkasPenerbitan()"
                                 class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer">
@@ -122,7 +118,7 @@
 
                 <!-- HASIL PEMERIKSAAN -->
                 <div>
-                    <h2 class="font-extrabold text-sm mb-8 tracking-wide text-gray-700">
+                    <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
                         HASIL PEMERIKSAAN
                     </h2>
 
@@ -137,9 +133,9 @@
 
                         <div>
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
-                                Alasan
+                                Keterangan
                             </label>
-                            <textarea id="alasan" disabled rows="4"
+                            <textarea id="keterangan" disabled rows="4"
                                 class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm resize-none"></textarea>
                         </div>
                     </div>

@@ -11,7 +11,7 @@
 
                 <!-- ================= KIRI ================= -->
                 <div>
-                    <h2 class="text-sm font-extrabold tracking-wide mb-8 text-gray-700">
+                    <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
                         IDENTITAS
                     </h2>
 
@@ -31,18 +31,33 @@
                                 rounded-xl px-4 py-3 text-sm outline-none">
                         </div>
 
+                        <!-- Wilayah Tujuan -->
+                        <div>
+                            <label class="text-xs font-bold uppercase">Wilayah Tujuan</label>
+
+                            <!-- Dalam / Luar Daerah -->
+                            <select id="wilayah"
+                                class="w-full mt-1 bg-gray-100 rounded-lg px-4 py-2 outline-none">
+                                <option value="" disabled selected>Pilih Wilayah</option>
+                                <option value="dalam">Dalam Daerah (Jawa Tengah)</option>
+                                <option value="luar">Luar Daerah</option>
+                            </select>
+                        </div>
+                        
                         <!-- Daerah Tujuan -->
                         <div>
                             <label class="text-xs font-bold uppercase">Daerah Tujuan</label>
 
                             <!-- Provinsi -->
-                            <label class="text-[10px] font-semibold text-gray-500 uppercase mt-2 block">
-                                Provinsi
-                            </label>
-                            <select id="provinsi"
-                                class="w-full mt-1 bg-gray-100 rounded-lg px-4 py-2 outline-none">
-                                <option value="" disabled selected>Pilih Provinsi</option>
-                            </select>
+                            <div id="provinsiWrapper" class="mt-4">
+                                <label class="text-[10px] font-semibold text-gray-500 uppercase block">
+                                    Provinsi
+                                </label>
+                                <select id="provinsi"
+                                    class="w-full mt-1 bg-gray-100 rounded-lg px-4 py-2 outline-none">
+                                    <option value="" disabled selected>Pilih Provinsi</option>
+                                </select>
+                            </div>
 
                             <!-- Kabupaten / Kota -->
                             <label class="text-[10px] font-semibold text-gray-500 uppercase mt-4 block">
@@ -82,63 +97,60 @@
 
                 <!-- ================= KANAN ================= -->
                 <div>
-                    <h2 class="text-sm font-extrabold tracking-wide mb-8 text-gray-700">
-                        HASIL
+                    <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
+                        PERMOHONAN
                     </h2>
 
-                    <div class="space-y-5">
 
-                        <div>
-                            <label class="text-xs font-bold uppercase">Tanggal Selesai</label>
-                            <input type="date"
-                                class="w-full mt-1 bg-gray-50 border border-gray-200
-                                rounded-xl px-4 py-3 text-sm outline-none">
-                        </div>
+                <div class="space-y-5">
 
-                        <div>
-                            <label class="text-xs font-bold uppercase">Keterangan</label>
-                            <input type="text" placeholder="Keterangan"
-                                class="w-full mt-1 bg-gray-50 border border-gray-200
-                                rounded-xl px-4 py-3 text-sm outline-none">
-                        </div>
-
-                        <div>
-                            <label class="text-xs font-bold uppercase">Hasil Pemeriksaan</label>
-                            <select
-                                class="w-full mt-1 bg-gray-50 border border-gray-200
-                                rounded-xl px-4 py-3 text-sm outline-none">
-                                <option disabled selected>Pilih Hasil Pemeriksaan</option>
-                                <option>TERCATAT</option>
-                                <option>TIDAK TERCATAT</option>
-                            </select>
-                        </div>
-
-                        <!-- UPLOAD -->
-                        <div>
-                            <label class="text-xs font-bold uppercase">
-                                Unggah Berkas <span class="text-red-500">*</span>
-                            </label>
-
-                            <label for="fileUpload"
-                                class="mt-3 cursor-pointer flex flex-col items-center justify-center
-                                border-2 border-dashed border-lime-400
-                                rounded-2xl h-40 text-center hover:bg-lime-50 transition">
-
-                                <i class="fa-solid fa-cloud-arrow-up
-                                text-lime-500 text-4xl mb-2"></i>
-                                <span class="text-sm font-semibold">
-                                    Klik untuk upload PDF/JPG
-                                </span>
-
-                                <input id="fileUpload" type="file" class="hidden" multiple>
-                            </label>
-
-                            <div id="filePreview" class="mt-4 space-y-3"></div>
-                        </div>
-                    </div>
+                <!-- Nomor Surat -->
+                <div>
+                    <label class="text-xs font-bold uppercase">
+                        Nomor Surat
+                    </label>
+                    <input type="text" id="noSurat"
+                        placeholder="Masukkan Nomor Surat"
+                        class="w-full mt-1 bg-gray-50 border border-gray-200
+                        rounded-xl px-4 py-3 text-sm outline-none">
                 </div>
-            </div>
 
+                <!-- Tanggal Surat -->
+                <div>
+                    <label class="text-xs font-bold uppercase">
+                        Tanggal Surat
+                    </label>
+                    <input type="date" id="tglSurat"
+                        class="w-full mt-1 bg-gray-50 border border-gray-200
+                        rounded-xl px-4 py-3 text-sm outline-none">
+                </div>
+
+                <!-- UPLOAD -->
+                <div>
+                    <label class="text-xs font-bold uppercase">
+                        Unggah Berkas <span class="text-red-500">*</span>
+                    </label>
+
+                    <label for="fileUpload"
+                        class="mt-3 cursor-pointer flex flex-col items-center justify-center
+                        border-2 border-dashed border-lime-400
+                        rounded-2xl h-40 text-center hover:bg-lime-50 transition">
+
+                        <i class="fa-solid fa-cloud-arrow-up
+                        text-lime-500 text-4xl mb-2"></i>
+                        <span class="text-sm font-semibold">
+                            Klik untuk upload PDF/JPG
+                        </span>
+
+                        <input id="fileUpload" type="file" class="hidden" multiple>
+                    </label>
+
+                    <div id="filePreview" class="mt-4 space-y-3"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
             <!-- FOOTER -->
             <div class="flex justify-between items-center mt-14">
                 <button onclick="goBack()"

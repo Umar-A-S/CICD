@@ -1,10 +1,7 @@
 <x-layout_detail_permohonan_kakot>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <!-- PAGE BACKGROUND -->
     <div class="bg-gray-100 min-h-screen py-10 px-6">
-
-        <!-- CARD -->
         <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-md px-16 py-14">
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
@@ -13,87 +10,125 @@
                 <div class="flex flex-col justify-between">
 
                     <div>
-                        <h2 class="font-extrabold text-sm mb-8 tracking-wide text-gray-700">
-                            IDENTITAS
-                        </h2>
+                        <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
+                        IDENTITAS
+                    </h2>
 
                         <div class="space-y-5">
 
-                            @php
-                                function input($label, $id) {
-                                    return "
-                                    <div>
-                                        <label class='block text-xs font-bold mb-2 uppercase text-gray-600'>$label</label>
-                                        <input id='$id' disabled
-                                            class='w-full bg-gray-50 border border-gray-200
-                                                rounded-xl px-4 py-3 text-sm text-black'>
-                                    </div>";
-                                }
-                            @endphp
+                            <!-- Nama -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Nama Subjek
+                                </label>
+                                <input disabled value="Asep"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
 
-                            {!! input('Nama Subjek', 'nama') !!}
-                            {!! input('Wilayah Tujuan (Dalam/Luar)', 'wilayah') !!}
-                            {!! input('Daerah Asal', 'asal') !!}
+                            <!-- Asal -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Daerah Asal
+                                </label>
+                                <input disabled value="Kota Semarang"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
 
+                            <!-- Wilayah -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Wilayah Tujuan
+                                </label>
+                                <input disabled value="Luar Daerah"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
+
+                            <!-- Tujuan -->
                             <div>
                                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                     Daerah Tujuan
                                 </label>
 
                                 <div class="space-y-2">
-                                    <input id="tujuan" disabled
-                                        class="w-full bg-gray-50 border border-gray-200
-                                            rounded-xl px-4 py-3 text-sm text-gray-700"
-                                        placeholder="Kab/Kota">
-
-                                    <input id="provinsi" disabled
-                                        class="w-full bg-gray-50 border border-gray-200
-                                            rounded-xl px-4 py-3 text-sm text-gray-700"
-                                        placeholder="Provinsi">
+                                    <input disabled value="Jawa Barat"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                                    <input disabled value="Kota Bandung"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                                 </div>
                             </div>
 
-                            {!! input('Jenis Permohonan', 'jenis') !!}
-                            {!! input('Jenis Dokumen', 'dokumen') !!}
+                            <!-- Jenis -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Jenis Permohonan
+                                </label>
+                                <input disabled value="KEABSAHAN"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
+
+                            <!-- Dokumen -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Jenis Dokumen
+                                </label>
+                                <input disabled value="Akta Kelahiran"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
+
                         </div>
                     </div>
 
                     <!-- BUTTON -->
-                    <button onclick="goBack()"
-                        class="mt-16 w-fit bg-lime-400 hover:bg-lime-500
-                            text-black font-bold px-10 py-3 rounded-xl shadow-sm">
+                    <button onclick="history.back()"
+                        class="mt-16 w-fit bg-lime-400 hover:bg-lime-500 text-black font-bold px-10 py-3 rounded-xl">
                         KEMBALI
                     </button>
 
                 </div>
 
                 <!-- ================= RIGHT ================= -->
-                <div class="space-y-14">
+                <div>
 
-                    <div>
-                        <h2 class="font-extrabold text-sm mb-8 tracking-wide text-gray-700">
-                            PERMOHONAN
-                        </h2>
+                    <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
+                        PERMOHONAN
+                    </h2>
 
-                        <div class="space-y-5">
-                            {!! input('Tanggal Permohonan', 'tglPermohonan') !!}
-                            {!! input('Nomor Surat', 'noSuratPermohonan') !!}
-                            {!! input('Nomor Surat Selesai', 'noSuratSelesai') !!}
+                    <div class="space-y-5">
 
-                            <div>
-                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
-                                    Berkas
-                                </label>
-
-                                <a onclick="lihatBerkas()"
-                                    class="inline-flex items-center gap-2
-                                    text-blue-600 hover:text-blue-700
-                                    font-semibold text-sm cursor-pointer">
-                                    <i class="fa-solid fa-file-lines"></i>
-                                    Lihat Berkas
-                                </a>
-                            </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                Tanggal Permohonan
+                            </label>
+                            <input disabled value="20-11-2025"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                         </div>
+
+                        <div>
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                Nomor Surat
+                            </label>
+                            <input disabled value="08.006/ITS/III/2023"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                Tanggal Surat
+                            </label>
+                            <input disabled value="22-11-2025"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                Berkas
+                            </label>
+                            <span class="text-blue-600 font-semibold text-sm cursor-pointer">
+                                <i class="fa-solid fa-file-lines"></i>
+                                Lihat Berkas
+                            </span>
+                        </div>
+
                     </div>
 
                 </div>
