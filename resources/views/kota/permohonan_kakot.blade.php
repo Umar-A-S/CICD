@@ -106,25 +106,8 @@
 
                 <!-- Nomor Surat -->
                 <div>
-<<<<<<< HEAD
-                    <label class="text-xs font-bold uppercase">Daerah Tujuan</label>
-
-                    <!-- Provinsi (AUTO) -->
-                    <label class="text-[10px] font-semibold text-gray-500 uppercase mt-4 block">
-                        Provinsi
-                    </label>
-                    <select id="provinsi"
-                        class="w-full mt-1 bg-gray-100 rounded-lg px-4 py-2 outline-none">
-                        <option value="" disabled selected>Pilih Provinsi</option>
-                    </select>
-
-                    <!-- Kab / Kota -->
-                    <label class="text-[10px] font-semibold text-gray-500 uppercase mt-2 block">
-                        Kabupaten / Kota
-=======
                     <label class="text-xs font-bold uppercase">
                         Nomor Surat
->>>>>>> 079f6ef494a01b13ed513824df4136c52774f74b
                     </label>
                     <input type="text" id="noSurat"
                         placeholder="Masukkan Nomor Surat"
@@ -132,8 +115,6 @@
                         rounded-xl px-4 py-3 text-sm outline-none">
                 </div>
 
-<<<<<<< HEAD
-=======
                 <!-- Tanggal Surat -->
                 <div>
                     <label class="text-xs font-bold uppercase">
@@ -142,7 +123,6 @@
                     <input type="date" id="tglSurat"
                         class="w-full mt-1 bg-gray-50 border border-gray-200
                         rounded-xl px-4 py-3 text-sm outline-none">
->>>>>>> 079f6ef494a01b13ed513824df4136c52774f74b
                 </div>
 
                 <!-- UPLOAD -->

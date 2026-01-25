@@ -14,7 +14,7 @@
             <x-nav-link href="/dashboard_kakot" icon="fa-house">Dashboard</x-nav-link>
             <x-nav-link href="/penerbitan_kakot" icon="fa-print">Penerbitan</x-nav-link>
             <x-nav-link href="/permohonan_kakot" icon="fa-file">Permohonan</x-nav-link>
-            <x-nav-link href="/balasan-kota" icon="fa-comment">Balasan</x-nav-link>
+            <x-nav-link href="/balasan_kakot" icon="fa-comment">Balasan</x-nav-link>
             <x-nav-link href="/pengaturan-kota" icon="fa-gear">Pengaturan</x-nav-link>
         @endif
 

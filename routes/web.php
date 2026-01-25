@@ -46,6 +46,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/detail_penerbitan_kakot', function () {
         return view('kota.detail_penerbitan_kakot', ['title' => 'Detail Penerbitan']);
     });
+    Route::get('/balasan_kakot', function () {
+        return view('kota.balasan_kakot', ['title' => 'Balasan']);
+    });
 
     // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti
     Route::get('/dashboard-provinsi', function () {
