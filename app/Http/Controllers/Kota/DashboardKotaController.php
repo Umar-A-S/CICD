@@ -13,45 +13,41 @@ class DashboardKotaController extends Controller
     {
         $user = Auth::user();
         
-        // Filter permohonan berdasarkan user yang login
+        // // DEBUG
+        // dd($user);
+        
+        // Filter permohonan berdasarkan role
         if ($user->role === 'daerah') {
-            // User daerah: lihat permohonan miliknya + yang status DIPROSES untuk daerahnya
-            $permohonans = Permohonan::where(function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                      ->orWhere(function ($q) use ($user) {
-                          $q->where('status', 'DIPROSES')
-                            ->where('daerah_tujuan', $user->kode_wilayah);
-                      });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
+
+            // Menampilkan SEMUA STATUS (BELUM, DIPROSES, SELESAI, DITOLAK)
+            $permohonans = Permohonan::where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
         } elseif ($user->role === 'provinsi') {
-            // Admin provinsi: lihat semua permohonan status BELUM (menunggu verifikasi)
+            // Admin provinsi: tetap lihat permohonan status BELUM untuk divalidasi
             $permohonans = Permohonan::where('status', 'BELUM')
                 ->orderBy('created_at', 'desc')
                 ->get();
         } else {
-            // Superadmin: lihat semua
+            // Superadmin: lihat semua tanpa filter
             $permohonans = Permohonan::orderBy('created_at', 'desc')->get();
         }
 
-        // Hitung statistik
-        $totalPermohonan = $permohonans->count();
-        $totalBelum = $permohonans->where('status', 'BELUM')->count();
-        $totalProses = $permohonans->where('status', 'DIPROSES')->count();
-        $totalSelesai = $permohonans->where('status', 'SELESAI')->count();
-        $totalTolak = $permohonans->where('status', 'DITOLAK')->count();
-
+        // // DEBUG
+        // dd($permohonans);
+        
+         // Hitung statistik berdasarkan hasil filter 
+        $stat = [
+            'total'   => $permohonans->count(),
+            'belum'   => $permohonans->where('status', 'BELUM')->count(),
+            'proses'  => $permohonans->where('status', 'DIPROSES')->count(),
+            'selesai' => $permohonans->where('status', 'SELESAI')->count(),
+            'tolak'   => $permohonans->where('status', 'DITOLAK')->count(),
+        ];
         return view('kota.dashboard_kakot', [
-            'title' => 'Dashboard Kota',
-            'permohonans' => $permohonans,
-            'stat' => [
-                'total' => $totalPermohonan,
-                'belum' => $totalBelum,
-                'proses' => $totalProses,
-                'selesai' => $totalSelesai,
-                'tolak' => $totalTolak
-            ]
-        ]);
+                'title' => 'Dashboard Kota',
+                'permohonans' => $permohonans,
+                'stat' => $stat
+            ]);
     }
 }

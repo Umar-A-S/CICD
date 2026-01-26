@@ -11,9 +11,11 @@ class statuscard_kakot extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public $stat;
+
+    public function __construct($stat = null)
     {
-        //
+        $this->stat = $stat;
     }
 
     /**

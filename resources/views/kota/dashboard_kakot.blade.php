@@ -1,4 +1,4 @@
-<x-layout_dashboard_kakot> >
+<x-layout_dashboard_kakot :stat="$stat"> 
     <x-slot:title>{{ $title }}</x-slot:title>
     
     <!-- ================= TABLE ================= -->
@@ -8,13 +8,12 @@
                             <div class="p-4 border-b border-white/10 bg-white/5">
                                 <h3 class="font-bold text-black">Status Permohonan Terkini</h3>
                             </div>
-
                             <div class="flex flex-wrap gap-2 mb-4">
-                                <button class="filter-btn active" data-status="all">Semua</button>
-                                <button class="filter-btn" data-status="pending">Belum</button>
-                                <button class="filter-btn" data-status="valid">Diproses</button>
-                                <button class="filter-btn" data-status="success">Selesai</button>
-                                <button class="filter-btn" data-status="rejected">Ditolak</button>
+                                <button class="filter-btn active px-4 py-2 rounded-lg bg-gray-200" data-status="all">Semua</button>
+                                <button class="filter-btn px-4 py-2 rounded-lg" data-status="belum">Belum</button>
+                                <button class="filter-btn px-4 py-2 rounded-lg" data-status="diproses">Diproses</button>
+                                <button class="filter-btn px-4 py-2 rounded-lg" data-status="selesai">Selesai</button>
+                                <button class="filter-btn px-4 py-2 rounded-lg" data-status="ditolak">Ditolak</button>
                             </div>
 
                             <div class="overflow-x-auto">
@@ -69,3 +68,8 @@
                         </div>
                     </div>
 </x-layout_dashboard_kakot>
+
+<script>
+    // Mengonversi data dari Laravel ($permohonans) ke Array JavaScript
+    window.submissions = @json($permohonans);
+</script>
