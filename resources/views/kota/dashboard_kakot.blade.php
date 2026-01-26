@@ -29,7 +29,41 @@
                                             <th class="px-6 py-3">AKSI</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tableKotaKabupaten"></tbody>
+                                    <tbody>
+                                        @forelse($permohonans as $permohonan)
+                                            <tr class="border-b border-gray-200 hover:bg-gray-50 transition" data-status="{{ strtolower($permohonan->status) }}">
+                                                <td class="px-6 py-4 font-semibold">{{ $permohonan->nama_subjek }}</td>
+                                                <td class="px-6 py-4">{{ $permohonan->nomor_surat }}</td>
+                                                <td class="px-6 py-4">{{ $permohonan->jenis }}</td>
+                                                <td class="px-6 py-4">{{ $permohonan->created_at->format('d/m/Y') }}</td>
+                                                <td class="px-6 py-4">
+                                                    @php
+                                                        $statusClass = match($permohonan->status) {
+                                                            'BELUM' => 'bg-yellow-100 text-yellow-800',
+                                                            'DIPROSES' => 'bg-blue-100 text-blue-800',
+                                                            'SELESAI' => 'bg-green-100 text-green-800',
+                                                            'DITOLAK' => 'bg-red-100 text-red-800',
+                                                            default => 'bg-gray-100 text-gray-800'
+                                                        };
+                                                    @endphp
+                                                    <span class="px-3 py-1 rounded-full text-xs font-bold {{ $statusClass }}">
+                                                        {{ $permohonan->status }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <a href="/detail_permohonan_kakot/{{ $permohonan->id }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                                        Lihat
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                                    Belum ada data permohonan
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

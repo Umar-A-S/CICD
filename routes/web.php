@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Kota\DashboardKotaController;
+use App\Http\Controllers\PermohonanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,10 +27,13 @@ Route::middleware(['auth'])->group(function () {
     // 1. LEVEL KOTA/KABUPATEN
     Route::get('/dashboard_kakot', [DashboardKotaController::class, 'index'])->name('dashboard.kota');
     
-    // Fitur-fitur Kota/Kabupaten
+    // Fitur Permohonan
     Route::get('/permohonan_kakot', function () {
         return view('kota.permohonan_kakot', ['title' => 'Permohonan']);
     });
+    Route::get('/api/permohonan', [PermohonanController::class, 'index'])->name('permohonan.index');
+    Route::post('/api/permohonan', [PermohonanController::class, 'store'])->name('permohonan.store');
+    Route::get('/api/permohonan/{id}', [PermohonanController::class, 'show'])->name('permohonan.show');
     
     Route::get('/detail_permohonan_kakot/{id}', function ($id) {
         return view('kota.detail_permohonan_kakot', ['title' => 'Detail Permohonan', 'id' => $id]);
@@ -48,6 +52,9 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('/balasan_kakot', function () {
         return view('kota.balasan_kakot', ['title' => 'Balasan']);
+    });
+    Route::get('/profil_kakot', function () {
+        return view('kota.profil_kakot', ['title' => 'Profil']);
     });
 
     // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti

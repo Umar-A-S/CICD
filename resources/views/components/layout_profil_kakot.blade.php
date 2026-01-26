@@ -6,7 +6,7 @@ $role='kota';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penerbitan Kota/Kabupaten</title>
+    <title>Profil Kota/Kabupaten</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -29,16 +29,13 @@ $role='kota';
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">
 
-            <!-- STATUS CARD -->
-            <x-statuscard_penerbitan_kakot></x-statuscard_penerbitan_kakot>
-
             <!-- TABLE -->
             {{ $slot }}
     </div>
     </main>
 
     <!-- SCRIPT -->
-    <script src="{{ asset('js/penerbitan_kakot.js') }}" defer></script>
+    <script src="js/profil_kakot.js"></script>
 
 </body>
 </html>
