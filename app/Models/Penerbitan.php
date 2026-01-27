@@ -13,16 +13,15 @@ class Penerbitan extends Model
 
     protected $fillable = [
         'permohonan_id',
-        'tanggal_surat',
-        'tanggal_selesai',
+        'nomor_surat_selesai',
+        'tanggal_surat_selesai',
         'alasan',
         'file_path',
         'hasil',
     ];
 
     protected $casts = [
-        'tanggal_surat' => 'date',
-        'tanggal_selesai' => 'datetime',
+        'tanggal_surat_selesai' => 'datetime',
     ];
 
     /**

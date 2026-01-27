@@ -1,12 +1,9 @@
 /* style.css */
 
-/* 1. Global Font & Background (Senada dengan Login) */
 body { 
     font-family: 'Inter', sans-serif; 
     margin: 0;
-    color: white; /* Default text jadi putih */
-    
-    /* Background diambil dari Login Page Anda */
+    color: #1f2937; /* Ganti ke abu-abu gelap/hitam (Tailwind gray-800) */
     background-color: #f5f5f5;
 }
 

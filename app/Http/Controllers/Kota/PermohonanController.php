@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Kota;
 
+use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,69 +14,47 @@ class PermohonanController extends Controller
     /**
      * Display a listing of permohonan for the authenticated user
      */
+// app/Http/Controllers/Kota/PermohonanController.php
+
+// app/Http/Controllers/Kota/PermohonanController.php
+
     public function index()
     {
         $user = Auth::user();
         
-        // Filter berdasarkan role dan wilayah
+        // Filter data (sama seperti sebelumnya)
         if ($user->role === 'daerah') {
-            // User daerah: lihat permohonan yang dibuat + permohonan yang ditujukan ke daerahnya
-            $permohonan = Permohonan::where(function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                      ->orWhere(function ($q) use ($user) {
-                          $q->where('status', 'DIPROSES')
-                            ->where('daerah_tujuan', $user->kode_wilayah);
-                      });
-            })
-            ->orderBy('created_at', 'desc')
-            ->get();
-        } elseif ($user->role === 'provinsi') {
-            // Admin provinsi: lihat semua permohonan dengan status BELUM (belum diverifikasi)
-            $permohonan = Permohonan::where('status', 'BELUM')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            $permohonans = Permohonan::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         } else {
-            // Superadmin: lihat semua
-            $permohonan = Permohonan::orderBy('created_at', 'desc')->get();
+            $permohonans = Permohonan::orderBy('created_at', 'desc')->get();
         }
 
-        return response()->json($permohonan);
+        // JANGAN PAKAI response()->json()!
+        // Gunakan return view agar menampilkan halaman desain kamu
+        return view('kota.permohonan_kakot', [
+            'title' => 'Daftar Permohonan',
+            'permohonans' => $permohonans
+        ]);
     }
-
     /**
      * Show a single permohonan detail
      */
+// app/Http/Controllers/Kota/PermohonanController.php
+
     public function show($id)
     {
-        $permohonan = Permohonan::with(['user', 'balasanProvinsi', 'penerbitan'])->find($id);
+        // Ambil data permohonan berdasarkan ID, jika tidak ada muncul 404
+        $permohonan = Permohonan::findOrFail($id);
 
-        if (!$permohonan) {
-            return response()->json(['message' => 'Permohonan tidak ditemukan'], 404);
+        // Proteksi Keamanan: User daerah hanya boleh lihat miliknya sendiri
+        if (Auth::user()->role === 'daerah' && $permohonan->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke data ini.');
         }
 
-        // Check authorization
-        $user = Auth::user();
-        $authorized = false;
-
-        if ($user->role === 'daerah') {
-            // User daerah hanya bisa lihat permohonan miliknya atau yang ditujukan ke daerahnya
-            if ($permohonan->user_id === $user->id || 
-                ($permohonan->status === 'DIPROSES' && $permohonan->daerah_tujuan === $user->kode_wilayah)) {
-                $authorized = true;
-            }
-        } elseif ($user->role === 'provinsi') {
-            // Admin provinsi bisa lihat semua
-            $authorized = true;
-        } else {
-            // Superadmin bisa lihat semua
-            $authorized = true;
-        }
-
-        if (!$authorized) {
-            return response()->json(['message' => 'Tidak diizinkan'], 403);
-        }
-
-        return response()->json($permohonan);
+        return view('kota.detail_permohonan_kakot', [
+            'title' => 'Detail Permohonan',
+            'permohonan' => $permohonan
+        ]);
     }
 
     /**
@@ -83,17 +62,18 @@ class PermohonanController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input
+            // Validasi input
         $validated = $request->validate([
-            'jenis' => 'required|string',
             'nama_subjek' => 'required|string',
-            'nomor_surat' => 'required|string',
-            'tanggal_surat' => 'required|date',
+            'daerah_asal' => 'required|string',
             'wilayah' => 'required|in:dalam,luar',
             'wilayah_tujuan' => 'required|string',
             'daerah_tujuan' => 'required|string',
-            'daerah_asal' => 'required|string',
-            'file' => 'required|file|mimes:pdf|max:10240', // 10MB
+            'jenis_permohonan' => 'required|string', 
+            'jenis_dokumen' => 'required|string',       
+            'nomor_surat' => 'required|string',
+            'tanggal_surat' => 'required|date',
+            'file' => 'required|file|mimes:pdf|max:10240',
         ]);
 
         // Handle file upload
@@ -106,24 +86,25 @@ class PermohonanController extends Controller
         }
 
         // Create permohonan
-        $permohonan = Permohonan::create([
-            'user_id' => Auth::id(),
-            'jenis' => $validated['jenis'],
-            'nama_subjek' => $validated['nama_subjek'],
-            'nomor_surat' => $validated['nomor_surat'],
-            'tanggal_surat' => $validated['tanggal_surat'],
-            'wilayah' => $validated['wilayah'],
-            'wilayah_tujuan' => $validated['wilayah_tujuan'],
-            'daerah_tujuan' => $validated['daerah_tujuan'],
-            'daerah_asal' => $validated['daerah_asal'],
-            'file_path' => $filePath,
-            'status' => 'BELUM',
-        ]);
+    $permohonan = Permohonan::create([
+        'user_id' => Auth::id(),
+        'nama_subjek' => $validated['nama_subjek'],
+        'daerah_asal' => $validated['daerah_asal'],
+        'wilayah' => $validated['wilayah'],
+        'wilayah_tujuan' => $validated['wilayah_tujuan'],
+        'daerah_tujuan' => $validated['daerah_tujuan'],
+        'nomor_surat' => $validated['nomor_surat'],
+        'tanggal_surat' => $validated['tanggal_surat'],
+        'file_path' => $filePath  , // Contoh fungsi upload
+        'status' => 'BELUM',
+        
+        // Pemetaan: Isi kolom 'jenis' di DB dengan data 'jenis_permohonan' dari form
+        'jenis' => $validated['jenis_permohonan'], 
+        'jenis_permohonan' => $validated['jenis_permohonan'],
+        'jenis_dokumen' => $validated['jenis_dokumen'],
+    ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Permohonan berhasil dibuat',
-            'id' => $permohonan->id
-        ], 201);
+        return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
+
     }
 }

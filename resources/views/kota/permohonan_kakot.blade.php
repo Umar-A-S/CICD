@@ -6,8 +6,16 @@
 
         <!-- CARD -->
         <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow px-12 py-10">
-
-            <form id="permohonanForm" enctype="multipart/form-data">
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form id="permohonanForm" action="/permohonan_kakot" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -80,7 +88,7 @@
 
                             <div>
                                 <label class="text-xs font-bold uppercase">Jenis Permohonan <span class="text-red-500">*</span></label>
-                                <select name="jenis" id="jenisPermohonan"
+                                <select id="jenisPermohonan" name="jenis_permohonan" 
                                     class="w-full mt-1 bg-gray-50 border border-gray-200
                                     rounded-xl px-4 py-3 text-sm outline-none" required>
                                     <option value="" disabled selected>Pilih Jenis Permohonan</option>
@@ -93,7 +101,7 @@
 
                             <div>
                                 <label class="text-xs font-bold uppercase">Jenis Dokumen</label>
-                                <select id="jenisDokumen"
+                                <select id="jenisDokumen" name="jenis_dokumen"
                                     class="w-full mt-1 bg-gray-50 border border-gray-200
                                     rounded-xl px-4 py-3 text-sm outline-none">
                                     <option disabled selected>Pilih Jenis Dokumen</option>

@@ -15,7 +15,6 @@ class Permohonan extends Model
     // Kolom yang boleh diisi (mass assignment)
     protected $fillable = [
         'user_id',
-        'jenis',
         'nama_subjek',
         'nomor_surat',
         'tanggal_surat',
@@ -23,6 +22,8 @@ class Permohonan extends Model
         'wilayah_tujuan',
         'daerah_tujuan',
         'daerah_asal',
+        'jenis_permohonan',
+        'jenis_dokumen',
         'file_path',
         'status'
     ];

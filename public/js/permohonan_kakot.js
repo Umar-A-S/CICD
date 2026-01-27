@@ -159,60 +159,7 @@ if (fileInput && filePreview) {
 }
 
 // ================= FORM SUBMISSION =================
-document.getElementById('permohonanForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
 
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Mengirim...';
-
-    try {
-        const formData = new FormData(document.getElementById('permohonanForm'));
-
-        const response = await fetch('/api/permohonan', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-            }
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            // Validation errors
-            if (result.errors) {
-                Object.keys(result.errors).forEach(field => {
-                    const input = document.querySelector(`[name="${field}"]`);
-                    if (input) {
-                        const errorText = input.parentElement.querySelector('.error-text');
-                        if (errorText) {
-                            errorText.textContent = result.errors[field][0];
-                            errorText.classList.remove('hidden');
-                        }
-                    }
-                });
-            } else {
-                alert(result.message || 'Terjadi kesalahan saat mengirim permohonan');
-            }
-        } else {
-            alert('Permohonan berhasil dikirim!');
-            document.getElementById('permohonanForm').reset();
-            document.getElementById('filePreview').innerHTML = '';
-            
-            // Redirect atau reload
-            setTimeout(() => {
-                window.location.href = '/permohonan_kakot';
-            }, 1000);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan. Silakan coba lagi.');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'KIRIM';
-    }
-});
 
 // ================= NAVIGATION =================
 function goBack() {

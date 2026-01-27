@@ -2,7 +2,7 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     
     <!-- ================= TABLE ================= -->
-                    <div class="lg:col-span-5">
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
                         <div class="glass-panel rounded-xl overflow-hidden">
 
                             <div class="p-4 border-b border-white/10 bg-white/5">
@@ -17,7 +17,7 @@
                             </div>
 
                             <div class="overflow-x-auto">
-                                <table class="w-full text-left text-sm text-black">
+                                <table class="w-full text-left border-collapse overflow-hidden rounded-xl">
                                     <thead class="bg-lime-400 text-xs font-bold uppercase">
                                         <tr>
                                             <th class="px-6 py-3">NAMA</th>
@@ -33,7 +33,7 @@
                                             <tr class="border-b border-gray-200 hover:bg-gray-50 transition" data-status="{{ strtolower($permohonan->status) }}">
                                                 <td class="px-6 py-4 font-semibold">{{ $permohonan->nama_subjek }}</td>
                                                 <td class="px-6 py-4">{{ $permohonan->nomor_surat }}</td>
-                                                <td class="px-6 py-4">{{ $permohonan->jenis }}</td>
+                                                <td class="px-6 py-4">{{ $permohonan->jenis_permohonan }}</td>
                                                 <td class="px-6 py-4">{{ $permohonan->created_at->format('d/m/Y') }}</td>
                                                 <td class="px-6 py-4">
                                                     @php
@@ -51,7 +51,7 @@
                                                 </td>
                                                 <td class="px-6 py-4">
                                                     <a href="/detail_permohonan_kakot/{{ $permohonan->id }}" class="text-blue-600 hover:text-blue-800 font-semibold">
-                                                        Lihat
+                                                        Lihat Detail
                                                     </a>
                                                 </td>
                                             </tr>

@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('penerbitan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('permohonan_id')->constrained('permohonan')->onDelete('cascade');
-            $table->date('tanggal_surat')->nullable();
-            $table->timestamp('tanggal_selesai')->nullable();
+            $table->string('nomor_surat_selesai');
+            $table->timestamp('tanggal_surat_selesai');
             $table->string('alasan')->nullable();
-            $table->string('file_path')->nullable();
+            $table->string('file_path');
             $table->enum('hasil', ['TERCATAT', 'TIDAK TERCATAT', 'DISETUJUI', 'TIDAK DISETUJUI', 'LAINNYA']); 
             $table->timestamps();
         });
