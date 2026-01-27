@@ -5,7 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Kota\DashboardKotaController;
 use App\Http\Controllers\Kota\PermohonanController;
 use App\Http\Controllers\Kota\BalasanController;    
-
+use App\Http\Controllers\Kota\PenerbitanController;
+use App\Http\Controllers\Kota\ProfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ Route::middleware(['guest'])->group(function () {
 
 // --- AUTH ROUTES (Hanya bisa diakses jika SUDAH login) ---
 Route::middleware(['auth'])->group(function () {
+
+    //---USER DAERAH---
     
     // Proses Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -37,26 +40,25 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/permohonan_kakot', [PermohonanController::class, 'store'])->name('permohonan.store');
     Route::get('/detail_permohonan_kakot/{id}', [PermohonanController::class, 'show']); // Fitur detail yang baru
 
-    // Menu Balasan
+    // --Fitur Balasan
     Route::get('/balasan_kakot', [BalasanController::class, 'index'])->name('balasan.index');
     Route::get('/detail_balasan_kakot/{id}', [BalasanController::class, 'show'])->name('balasan.show');
 
-    Route::get('/penerbitan_kakot', function () {
-        return view('kota.penerbitan_kakot', ['title' => 'Penerbitan']);
-    });
+    //-- Fitur Penerbitan
+    Route::get('/penerbitan_kakot', [PenerbitanController::class, 'index'])->name('penerbitan.index');
+    Route::get('/penerbitan_kakot/proses/{id}', [PenerbitanController::class, 'create'])->name('penerbitan.create');
+    Route::post('/penerbitan_kakot/simpan', [PenerbitanController::class, 'store'])->name('penerbitan.store');
+    Route::get('/detail_penerbitan_kakot/{id}', [PenerbitanController::class, 'show'])->name('penerbitan.show');
 
-    Route::get('/unggah_penerbitan_kakot', function () {
-        return view('kota.unggah_penerbitan_kakot', ['title' => 'Unggah Penerbitan']);
-    });
 
     Route::get('/detail_penerbitan_kakot', function () {
         return view('kota.detail_penerbitan_kakot', ['title' => 'Detail Penerbitan']);
     });
 
-    Route::get('/profil_kakot', function () {
-        return view('kota.profil_kakot', ['title' => 'Profil']);
-    });
-
+    // Route Profil (Cuma satu baris cukup)
+        Route::get('/profil_kakot', [ProfilController::class, 'index'])->name('profil.index');
+    
+    //---USER PROVINSI---
     // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti
     Route::get('/dashboard-provinsi', function () {
         return "Halaman Dashboard Provinsi (Sedang dikembangkan)";

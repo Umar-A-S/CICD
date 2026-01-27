@@ -30,7 +30,11 @@ $role='kota';
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">
 
             <!-- STATUS CARD -->
-            <x-statuscard_penerbitan_kakot></x-statuscard_penerbitan_kakot>
+            <x-statuscard_penerbitan_kakot
+                :permohonanPerlu="$permohonanPerlu" 
+                 :permohonanSelesai="$permohonanSelesai">
+                
+            </x-statuscard_penerbitan_kakot>
 
             <!-- TABLE -->
             {{ $slot }}
@@ -38,7 +42,7 @@ $role='kota';
     </main>
 
     <!-- SCRIPT -->
-    <script src="{{ asset('js/penerbitan_kakot.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
 
 </body>
 </html>

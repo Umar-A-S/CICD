@@ -8,6 +8,11 @@
                             <div class="p-4 border-b border-white/10 bg-white/5">
                                 <h3 class="font-bold text-black">Status Permohonan Terkini</h3>
                             </div>
+                            <x-search_input
+                            id="SearchPermohonan"
+                            targetTable="permohonanTable"
+                            placeholder="Cari nama, asal, atau nomor surat..."
+                            ></x-search_input>
                             <div class="flex flex-wrap gap-2 mb-4">
                                 <button class="filter-btn active px-4 py-2 rounded-lg bg-gray-200" data-status="all">Semua</button>
                                 <button class="filter-btn px-4 py-2 rounded-lg" data-status="belum">Belum</button>
@@ -17,8 +22,8 @@
                             </div>
 
                             <div class="overflow-x-auto">
-                                <table class="w-full text-left border-collapse overflow-hidden rounded-xl">
-                                    <thead class="bg-lime-400 text-xs font-bold uppercase">
+                                <table class="w-full text-left border-collapse overflow-hidden rounded-xl" id ="permohonanTable">
+                                    <thead class="bg-lime-300 text-black text-sm uppercase">
                                         <tr>
                                             <th class="px-6 py-3">NAMA</th>
                                             <th class="px-6 py-3">NOMOR SURAT/AKTA</th>

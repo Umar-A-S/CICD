@@ -6,157 +6,154 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
 
-                <!-- ================= LEFT ================= -->
                 <div class="space-y-14">
 
-                    <!-- IDENTITAS -->
                     <section>
                         <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
                             IDENTITAS
                         </h2>
 
                         <div class="space-y-5">
-
                             @php
-                                $inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black';
+                                $inputClass = 'w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black font-medium';
                                 $labelClass = 'block text-xs font-bold mb-2 uppercase text-gray-600';
                             @endphp
 
                             <div>
                                 <label class="{{ $labelClass }}">Nama Subjek</label>
-                                <input value="Asep" disabled class="{{ $inputClass }}">
+                                <input value="{{ $permohonan->nama_subjek }}" disabled class="{{ $inputClass }}">
                             </div>
 
                             <div>
                                 <label class="{{ $labelClass }}">Daerah Asal</label>
-                                <input value="Kota Semarang" disabled class="{{ $inputClass }}">
+                                <input value="{{ $permohonan->daerah_asal }}" disabled class="{{ $inputClass }}">
                             </div>
 
                             <div>
                                 <label class="{{ $labelClass }}">Wilayah Tujuan</label>
-                                <input value="Luar Daerah" disabled class="{{ $inputClass }}">
+                                <input value="{{ $permohonan->wilayah_tujuan }}" disabled class="{{ $inputClass }}">
                             </div>
 
                             <div>
                                 <label class="{{ $labelClass }}">Daerah Tujuan</label>
                                 <div class="space-y-2">
-                                    <input value="Jawa Barat" disabled class="{{ $inputClass }}">
-                                    <input value="Kota Bandung" disabled class="{{ $inputClass }}">
+                                    <input value="{{ $permohonan->daerah_tujuan }}" disabled class="{{ $inputClass }}">
                                 </div>
                             </div>
 
                             <div>
                                 <label class="{{ $labelClass }}">Jenis Permohonan</label>
-                                <input value="Keabsahan" disabled class="{{ $inputClass }}">
+                                <input value="{{ $permohonan->jenis_permohonan }}" disabled class="{{ $inputClass }}">
                             </div>
 
                             <div>
                                 <label class="{{ $labelClass }}">Jenis Dokumen</label>
-                                <input value="Akta Kelahiran" disabled class="{{ $inputClass }}">
+                                <input value="{{ $permohonan->jenis_dokumen }}" disabled class="{{ $inputClass }}">
                             </div>
-
                         </div>
                     </section>
 
-                    <!-- PERMOHONAN -->
                     <section>
                         <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
-                            PERMOHONAN
+                            PERMOHONAN MASUK
                         </h2>
 
                         <div class="space-y-5">
                             <div>
-                                <label class="{{ $labelClass }}">Tanggal Permohonan</label>
-                                <input value="20-01-2025" disabled class="{{ $inputClass }}">
+                                <label class="{{ $labelClass }}">Tanggal Surat Masuk</label>
+                                <input value="{{ $permohonan->tanggal_surat->format('d/m/Y') }}" disabled class="{{ $inputClass }}">
                             </div>
 
                             <div>
-                                <label class="{{ $labelClass }}">Nomor Surat</label>
-                                <input value="123/LEG/I/2025" disabled class="{{ $inputClass }}">
+                                <label class="{{ $labelClass }}">Nomor Surat Permohonan</label>
+                                <input value="{{ $permohonan->nomor_surat }}" disabled class="{{ $inputClass }}">
                             </div>
                         </div>
 
-                        <div class="space-y-5">
-                            <div>
-                                <label class="{{ $labelClass }}">Tanggal Surat</label>
-                                <input value="21-01-2025" disabled class="{{ $inputClass }}">
-                            </div>
-
-                            <div>
-                                <label class="{{ $labelClass }}">Berkas</label>
-                                <span class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm">
-                                    <i class="fa-solid fa-file-lines"></i>
-                                    Surat_Permohonan.pdf
-                                </span>
-                            </div>
+                        <div class="mt-5">
+                            <label class="{{ $labelClass }}">Berkas Permohonan</label>
+                            @if($permohonan->file_path)
+                                <a href="{{ asset($permohonan->file_path) }}" target="_blank" 
+                                   class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
+                                    <i class="fa-solid fa-file-pdf text-xl"></i>
+                                    Lihat Dokumen Asli
+                                </a>
+                            @else
+                                <span class="text-red-500 text-sm italic">Tidak ada berkas terlampir</span>
+                            @endif
                         </div>
                     </section>
 
                 </div>
 
-                <!-- ================= RIGHT ================= -->
                 <div class="space-y-14">
 
-                    <!-- PENERBITAN -->
                     <section>
                         <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
-                            PENERBITAN
+                            PENERBITAN (BALASAN)
+                        </h2>
+
+                        @if($permohonan->penerbitan)
+                        <div class="space-y-5">
+                            <div>
+                                <label class="{{ $labelClass }}">Tanggal Diselesaikan</label>
+                                <input value="{{ $permohonan->penerbitan->tanggal_surat_selesai ? $permohonan->penerbitan->tanggal_surat_selesai->format('d/m/Y') : '-' }}" disabled class="{{ $inputClass }}">
+                            </div>
+
+                            <div>
+                                <label class="{{ $labelClass }}">Nomor Surat Balasan</label>
+                                <input value="{{ $permohonan->penerbitan->nomor_surat_selesai ?? '-' }}" disabled class="{{ $inputClass }}">
+                            </div>
+
+                            <div>
+                                <label class="{{ $labelClass }}">Berkas Balasan</label>
+                                @if($permohonan->penerbitan->file_path)
+                                        <a href="{{ asset($permohonan->penerbitan->file_path) }}" target="_blank"
+                                        class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
+                                            <i class="fa-solid fa-file-circle-check text-xl"></i>
+                                            Lihat Surat Balasan
+                                        </a>
+                                    @else
+                                        <span class="text-red-500 text-sm italic">Tidak ada berkas</span>
+                                    @endif
+                            </div>
+                        </div>
+                        @else
+                        <div class="p-6 bg-yellow-50 rounded-xl border border-yellow-200 text-yellow-800 text-sm">
+                            <i class="fa-solid fa-circle-exclamation mr-2"></i> Belum ada data penerbitan.
+                        </div>
+                        @endif
+                    </section>
+
+                    @if($permohonan->penerbitan)
+                    <section>
+                        <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
+                            HASIL AKHIR
                         </h2>
 
                         <div class="space-y-5">
                             <div>
-                                <label class="{{ $labelClass }}">Tanggal Penerbitan</label>
-                                <input value="25-01-2025" disabled class="{{ $inputClass }}">
+                                <label class="{{ $labelClass }}">Status Keputusan</label>
+                                <input value="{{ $permohonan->penerbitan->hasil }}" disabled 
+                                    class="{{ $inputClass }} {{ $permohonan->penerbitan->hasil == 'TERCATAT' ? 'text-green-600 font-extrabold bg-green-50 border-green-200' : 'text-red-600 font-extrabold bg-red-50 border-red-200' }}">
                             </div>
 
                             <div>
-                                <label class="{{ $labelClass }}">Nomor Surat</label>
-                                <input value="123/LEG/I/2025" disabled class="{{ $inputClass }}">
-                            </div>
-
-                            <div>
-                                <label class="{{ $labelClass }}">Nomor Surat Selesai</label>
-                                <input value="456/LEG/I/2025" disabled class="{{ $inputClass }}">
-                            </div>
-
-                            <div>
-                                <label class="{{ $labelClass }}">Berkas</label>
-                                <span class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm">
-                                    <i class="fa-solid fa-file-lines"></i>
-                                    Surat_Penerbitan.pdf
-                                </span>
+                                <label class="{{ $labelClass }}">Catatan / Keterangan</label>
+                                <textarea disabled rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black font-medium resize-none">{{ $permohonan->penerbitan->alasan }}</textarea>
                             </div>
                         </div>
                     </section>
-
-                    <!-- HASIL -->
-                    <section>
-                        <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
-                            HASIL
-                        </h2>
-
-                        <div class="space-y-5">
-                            <div>
-                                <label class="{{ $labelClass }}">Hasil Pemeriksaan</label>
-                                <input value="DITERIMA" disabled class="{{ $inputClass }}">
-                            </div>
-
-                            <div>
-                                <label class="{{ $labelClass }}">Keterangan</label>
-                                <input value="Berkas Lengkap & Valid" disabled class="{{ $inputClass }}">
-                            </div>
-                        </div>
-                    </section>
+                    @endif
 
                 </div>
             </div>
 
-            <!-- BUTTON -->
-            <div class="mt-20">
-                <button onclick="history.back()"
-                    class="bg-lime-400 hover:bg-lime-500 text-black font-bold px-12 py-3 rounded-xl">
-                    KEMBALI
-                </button>
+            <div class="mt-20 flex justify-start">
+                <a href="{{ route('penerbitan.index') }}"
+                    class="bg-gray-800 hover:bg-black text-white font-bold px-12 py-3 rounded-xl transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> KEMBALI
+                </a>
             </div>
 
         </div>

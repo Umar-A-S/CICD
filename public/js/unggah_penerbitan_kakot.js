@@ -41,25 +41,66 @@ function goBack() {
     window.history.back();
 }
 
-// // ================= FILE PREVIEW =================
-// const fileInput = document.getElementById('fileUpload');
-// const filePreview = document.getElementById('filePreview');
+//================= UPLOAD FILE PREVIEW =================
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('fileUpload');
+    const filePreview = document.getElementById('filePreview'); 
 
-// if (fileInput && filePreview) {
-//     fileInput.addEventListener('change', () => {
-//         filePreview.innerHTML = ''; // Clear previous preview
-//         const files = Array.from(fileInput.files);
+    if (fileInput && filePreview) {
+        fileInput.addEventListener('change', () => {
+            // Bersihkan preview lama tiap kali user pilih file baru
+            filePreview.innerHTML = ''; 
+            const file = fileInput.files[0];
 
-//         files.forEach(file => {
-//             const wrapper = document.createElement('div');
-//             wrapper.className = 'flex items-center justify-between bg-gray-100 rounded-lg p-3 border mt-2';
-//             wrapper.innerHTML = `
-//                 <div>
-//                     <p class="text-sm font-semibold">${file.name}</p>
-//                     <p class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</p>
-//                 </div>
-//             `;
-//             filePreview.appendChild(wrapper);
-//         });
-//     });
-// }
+            if (file) {
+                // 1. Validasi Ukuran (Max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`Ukuran file terlalu besar (max 10MB). Ukuran file: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+                    fileInput.value = ''; // Reset input
+                    return;
+                }
+
+                // 2. Validasi Tipe (PDF Only)
+                if (!file.type.includes('pdf')) {
+                    alert('Hanya file PDF yang diterima');
+                    fileInput.value = ''; // Reset input
+                    return;
+                }
+
+                // 3. Render HTML Preview
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-center justify-between bg-lime-50 rounded-lg p-3 border border-lime-200';
+
+                // Bagian Info File
+                const info = document.createElement('div');
+                info.className = 'flex items-center gap-3';
+                info.innerHTML = `
+                    <div class="w-8 h-8 bg-lime-100 rounded flex items-center justify-center text-lime-600">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800">${file.name}</p>
+                        <p class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</p>
+                    </div>
+                `;
+
+                // Bagian Tombol Hapus (X)
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button'; // Penting biar gak submit form
+                removeBtn.className = 'text-red-400 hover:text-red-600 transition p-2';
+                removeBtn.innerHTML = '<i class="fa-solid fa-xmark text-lg"></i>';
+                
+                // Logic Hapus File
+                removeBtn.addEventListener('click', () => {
+                    fileInput.value = ''; // Kosongkan input file asli
+                    filePreview.innerHTML = ''; // Hapus tampilan preview
+                });
+
+                // Gabungkan elemen
+                wrapper.appendChild(info);
+                wrapper.appendChild(removeBtn);
+                filePreview.appendChild(wrapper);
+            }
+        });
+    }
+});

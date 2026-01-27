@@ -7,7 +7,12 @@
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse overflow-hidden rounded-xl">
+            <x-search_input 
+                id="searchBalasan" 
+                targetTable="tableBalasan" 
+                placeholder="Cari nama, asal, atau nomor surat...">
+            </x-search_input>
+            <table class="w-full text-left border-collapse overflow-hidden rounded-xl" id="tableBalasan">
                 <thead>
                     <tr class="bg-lime-400 text-black">
                         <th class="py-4 px-4 text-xs font-bold ">No</th>
