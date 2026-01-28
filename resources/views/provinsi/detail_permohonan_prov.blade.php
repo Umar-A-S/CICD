@@ -2,131 +2,148 @@
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="bg-gray-100 min-h-screen py-10 px-6">
-        <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow px-12 py-10">
+        <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-md px-16 py-14">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24">
 
-                <!-- ================= IDENTITAS ================= -->
-                <div>
-                    <h2 class="text-sm font-extrabold tracking-wide text-gray-700 mb-6">
+                <!-- ================= LEFT ================= -->
+                <div class="flex flex-col justify-between">
+
+                    <div>
+                        <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
                         IDENTITAS
                     </h2>
 
-                    <div class="space-y-5">
+                        <div class="space-y-5">
 
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                NAMA SUBJEK
-                            </label>
-                            <input type="text" value="Siti Aminah" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+                            <!-- Nama -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Nama Subjek
+                                </label>
+                                <input disabled value="{{ $permohonan->nama_subjek }}"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
+
+                            <!-- Asal -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Daerah Asal
+                                </label>
+                                <input disabled value="{{ $permohonan->daerah_asal }}"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
+
+                            <!-- Wilayah -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Wilayah Tujuan
+                                </label>
+                                <input disabled value="{{ $permohonan->wilayah }}"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
+
+                            <!-- Tujuan -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Daerah Tujuan
+                                </label>
+
+                                <div class="space-y-2">
+                                    <input disabled value="{{ $permohonan->wilayah_tujuan}}"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                                    <input disabled value="{{ $permohonan->daerah_tujuan }}"
+                                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Jenis -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Jenis Permohonan
+                                </label>
+                                <input disabled value="{{ $permohonan->jenis_permohonan }}"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
+
+                            <!-- Dokumen -->
+                            <div>
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Jenis Dokumen
+                                </label>
+                                <input disabled value="{{ $permohonan->jenis_dokumen }}"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                            </div>
+
                         </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                DAERAH ASAL
-                            </label>
-                            <input type="text" value="Kota Semarang" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                WILAYAH TUJUAN
-                            </label>
-                            <input type="text" value="dalam" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                DAERAH TUJUAN
-                            </label>
-                            <input type="text" value="Jawa Tengah" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
-                            <input type="text" value="admin_magelang" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                JENIS PERMOHONAN
-                            </label>
-                            <input type="text" value="KEABSAHAN" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                JENIS DOKUMEN
-                            </label>
-                            <input type="text" value="KTP" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
-                        </div>
-
                     </div>
+
+                    <!-- BUTTON -->
+                    <button onclick="history.back()"
+                        class="mt-16 w-fit bg-lime-400 hover:bg-lime-500 text-black font-bold px-10 py-3 rounded-xl">
+                        KEMBALI
+                    </button>
+
                 </div>
 
-                <!-- ================= PERMOHONAN ================= -->
+                <!-- ================= RIGHT ================= -->
                 <div>
-                    <h2 class="text-sm font-extrabold tracking-wide text-gray-700 mb-6">
+
+                    <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
                         PERMOHONAN
                     </h2>
 
                     <div class="space-y-5">
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                TANGGAL PERMOHONAN
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                Tanggal Permohonan
                             </label>
-                            <input type="text" value="27-01-2026" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+                            <input disabled value="{{ $permohonan->created_at->format('d-m-Y') }}"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                NOMOR SURAT
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                Nomor Surat
                             </label>
-                            <input type="text" value="123/SMG/2026" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+                            <input disabled value="{{ $permohonan->nomor_surat }}"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                TANGGAL SURAT
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                Tanggal Surat
                             </label>
-                            <input type="text" value="25-01-2026" readonly
-                                class="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+                            <input disabled value="{{ $permohonan->tanggal_surat->format('d-m-Y') }}"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">
-                                BERKAS
-                            </label>
-
-                            <a href="/storage/berkas/contoh.pdf"
-                                target="_blank"
-                                class="inline-flex items-center gap-2 text-blue-600 font-semibold hover:underline">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor"
-                                    viewBox="0 0 16 16">
-                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5z"/>
-                                </svg>
-                                Lihat Berkas
-                            </a>
-                        </div>
+                            <div class="mb-4">
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Berkas
+                                </label>
+                                
+                                @if($permohonan->file_path)
+                                    <a href="{{ asset($permohonan->file_path) }}" target="_blank" class="inline-block">
+                                        <span class="text-blue-600 font-semibold text-sm cursor-pointer hover:text-blue-800 transition">
+                                            <i class="fa-solid fa-file-lines"></i>
+                                            Lihat Berkas
+                                        </span>
+                                    </a>
+                                @else
+                                    <span class="text-red-500 font-semibold text-sm italic">
+                                        <i class="fa-solid fa-circle-exmark"></i>
+                                        Berkas tidak ditemukan
+                                    </span>
+                                @endif
+                            </div>
 
                     </div>
+
                 </div>
-            </div>
 
-            <!-- ================= BUTTON ================= -->
-            <div class="mt-14">
-                <button id="btnKembali"
-                    class="bg-lime-400 hover:bg-lime-500 text-black font-bold px-10 py-3 rounded-xl">
-                    KEMBALI
-                </button>
             </div>
-
         </div>
     </div>
 </x-layout_detail_permohonan_prov>

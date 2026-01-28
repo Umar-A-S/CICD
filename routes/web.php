@@ -60,12 +60,10 @@ Route::middleware(['auth'])->group(function () {
     
     //---USER PROVINSI---
     // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti
-    Route::get('/dashboard-provinsi', function () {
+    Route::get('/dashboard_provinsi', function () {
         return view('provinsi.dashboard_prov', ['title' => 'Dashboard']);
     });
-    Route::get('/detail-permohonan-prov', function () {
-        return view('provinsi.detail_permohonan_prov', ['title' => 'Detail Permohonan']);
-    });
+    Route::get('/detail_permohonan_prov/{id}', [PermohonanController::class, 'show']);
 
     Route::get('/penerbitan-provinsi', function () {
         return view('provinsi.penerbitan_prov', ['title' => 'Penerbitan']);

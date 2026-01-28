@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // ================= DETAIL =================
         btnDetail.addEventListener('click', () => {
-            window.location.href = '/detail-permohonan-prov';
+            window.location.href = '/detail_permohonan_prov';
         });
     });
 

@@ -62,7 +62,7 @@
 
         @if($role === 'provinsi')
             <x-nav-link 
-                href="/dashboard-provinsi" 
+                href="/dashboard_provinsi" 
                 icon="fa-solid fa-grip">
                 Dashboard
             </x-nav-link>
