@@ -1,9 +1,9 @@
 @php
-    $role = $role ?? 'kota';
+    $role = $role ?? 'provinsi';
 
     // CONTOH NOTIF (nanti bisa dari DB)
     $notifPenerbitan = 2;
-    $notifBalasan = 5;
+    $notifBalasan = 10;
 @endphp
 
 <aside
