@@ -1,0 +1,357 @@
+/* style.css */
+
+body { 
+    font-family: 'Inter', sans-serif; 
+    margin: 0;
+    color: #1f2937; /* Ganti ke abu-abu gelap/hitam (Tailwind gray-800) */
+    background-color: #f5f5f5;
+}
+
+/* Helper: Sembunyikan element */
+.hidden-section { display: none; }
+
+/* Animasi Fade In */
+.fade-in { animation: fadeIn 0.5s ease-in-out; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 100; transform: translateY(0); }
+}
+
+/* 2. Glassmorphism Utilities (Efek Kaca) */
+.glass-panel {
+    background: rgb(255, 255, 255);
+    backdrop-filter: blur(10px);    /* Efek blur background */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(200, 238, 66, 0.1); /* Garis tipis halus */
+}
+
+.glass-input {
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(192, 222, 58);
+    color: #000000;
+}
+.glass-input:focus {
+    background: rgba(200, 238, 66, 0.1);
+    border-color: #c8ee42;
+    outline: none;
+}
+
+/* 3. Sidebar Navigation Styling */
+.nav-item.active { 
+    background: rgba(200, 238, 66, 1);
+    border-left: 4px solid #c8ee42; 
+    color: #000000; 
+}
+
+.nav-item { 
+    color: #000000; 
+    transition: all 0.3s; 
+    border-left: 4px solid transparent; 
+}
+
+.nav-item:hover { 
+    background-color: rgba(255, 255, 255, 0.05); 
+    color: #000000; 
+}
+
+/* Logo Filter (Agar putih) */
+.img_selaksa {
+    width: 70px; 
+    height: auto; 
+    display: block;}
+
+.filter-btn {
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #9ca3af;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background: #f7fee7;
+}
+
+.filter-btn.active {
+    background: #d9f99d;
+    border-color: #84cc16;
+    color: #4d7c0f;
+}
+
+.detail-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #111827;
+}
+
+.soft-input {
+    width: 100%;
+    background: #f9fafb;
+    border: 1px solid #f1f5f9;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.input {
+    width: 100%;
+    background: #f9fafb;
+    border: 1px solid #f1f5f9;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+}
+
+.select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+}
+
+/* ================= TABLE WRAPPER ================= */
+.table-wrapper {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 18px;
+    margin-top: 24px;
+}
+
+.table-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+/* ================= TABLE ================= */
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px; /* jarak antar baris */
+}
+
+/* HEADER */
+.data-table thead th {
+    background: #70f000;
+    color: #1f2937;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 14px;
+    text-transform: uppercase;
+}
+
+.data-table thead th:first-child {
+    border-top-left-radius: 12px;
+}
+
+.data-table thead th:last-child {
+    border-top-right-radius: 12px;
+}
+
+/* BODY */
+.data-table tbody tr {
+    background: #ffffff;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+    border-radius: 12px;
+}
+
+.data-table tbody td {
+    padding: 16px 14px;
+    font-size: 14px;
+    color: #374151;
+}
+
+/* Rounded row */
+.data-table tbody tr td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.data-table tbody tr td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* ================= AKSI BUTTON ================= */
+.aksi {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn.green { background: #22c55e; }
+.btn.red { background: #ef4444; }
+.btn.blue { background: #3b82f6; }
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+    .data-table thead {
+        display: none;
+    }
+
+    .data-table tbody tr {
+        display: block;
+        margin-bottom: 16px;
+    }
+
+    .data-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 14px;
+    }
+
+    .data-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6b7280;
+    }
+}
+
+/* ================= MODAL ================= */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #fff;
+    width: 420px;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.modal-content p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+}
+
+.modal-content textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    resize: none;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn.cancel {
+    background: #e5e7eb;
+    color: #333;
+}
+
+/* ================= NOTIF ================= */
+.notif {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.notif.hidden {
+    display: none;
+}
+
+.notif-box {
+    background: #fff;
+    width: 280px;
+    padding: 28px 20px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: scaleIn .3s ease;
+}
+
+.checkmark {
+    width: 70px;
+    height: 70px;
+    background: #ef4444; /* merah = dikembalikan */
+    color: white;
+    font-size: 38px;
+    font-weight: bold;
+    border-radius: 50%;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notif-box p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(.7);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

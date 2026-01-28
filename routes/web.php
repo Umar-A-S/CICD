@@ -61,8 +61,32 @@ Route::middleware(['auth'])->group(function () {
     //---USER PROVINSI---
     // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti
     Route::get('/dashboard-provinsi', function () {
-        return "Halaman Dashboard Provinsi (Sedang dikembangkan)";
-    })->name('dashboard.provinsi');
+        return view('provinsi.dashboard_prov', ['title' => 'Dashboard']);
+    });
+    Route::get('/detail-permohonan-prov', function () {
+        return view('provinsi.detail_permohonan_prov', ['title' => 'Detail Permohonan']);
+    });
+
+    Route::get('/penerbitan-provinsi', function () {
+        return view('provinsi.penerbitan_prov', ['title' => 'Penerbitan']);
+    });
+    Route::get('/detail-penerbitan-prov', function () {
+        return view('provinsi.detail_penerbitan_prov', ['title' => 'Detail Penerbitan']);
+    });
+    Route::get('/unggah-penerbitan-prov', function () {
+        return view('provinsi.unggah_penerbitan_prov', ['title' => 'Unggah Penerbitan']);
+    });
+
+    Route::get('/balasan-provinsi', function () {
+        return view('provinsi.balasan_prov', ['title' => 'Balasan']);
+    });
+    Route::get('/detail-balasan-prov', function () {
+        return view('provinsi.detail_balasan_prov', ['title' => 'Detail balasan']);
+    });
+
+    Route::get('/profil-provinsi', function () {
+        return view('provinsi.profil_prov', ['title' => 'Profil']);
+    });
 
     // 3. LEVEL SUPERADMIN - Tambahkan controller nanti
     Route::get('/dashboard-admin', function () {
