@@ -30,7 +30,7 @@ class AuthController extends Controller
             if ($user->role === 'superadmin') {
                 return redirect()->intended('/dashboard-admin'); // Sesuaikan route-mu
             } elseif ($user->role === 'provinsi') {
-                return redirect()->intended('/dashboard-provinsi'); // Sesuaikan route-mu
+                return redirect()->intended('/dashboard_provinsi'); // Sesuaikan route-mu
             } elseif ($user->role === 'daerah') {
                 return redirect()->intended('/dashboard_kakot');
             }

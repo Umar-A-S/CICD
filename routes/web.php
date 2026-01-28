@@ -47,7 +47,6 @@ Route::middleware(['auth'])->group(function () {
     //-- Fitur Penerbitan
     Route::get('/penerbitan_kakot', [PenerbitanController::class, 'index'])->name('penerbitan.index');
     Route::get('/penerbitan_kakot/proses/{id}', [PenerbitanController::class, 'create'])->name('penerbitan.create');
-    Route::post('/penerbitan_kakot/simpan', [PenerbitanController::class, 'store'])->name('penerbitan.store');
     Route::get('/detail_penerbitan_kakot/{id}', [PenerbitanController::class, 'show'])->name('penerbitan.show');
 
 

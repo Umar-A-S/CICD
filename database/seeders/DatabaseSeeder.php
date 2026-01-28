@@ -20,6 +20,15 @@ class DatabaseSeeder extends Seeder
             'kode_wilayah' => '33.08', // Kode Magelang
         ]);
 
+        // Kita anggap kamu login sebagai "Provinsi Jawa Tengah"
+        User::create([
+            'name' => 'Admin Prov. Jawa Tengah',
+            'username' => 'admin_jawa_tengah', // Username buat login
+            'password' => Hash::make('password123'), // Password: password
+            'role' => 'provinsi',
+            'kode_wilayah' => '', // Kode Jawa Tengah
+        ]);
+
         // 2. Panggil Seeder Penerbitan (Untuk isi data dummy surat masuk)
         $this->call([
             PenerbitanSeeder::class,
