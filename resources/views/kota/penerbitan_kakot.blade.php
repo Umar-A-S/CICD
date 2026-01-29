@@ -41,7 +41,7 @@
                                    class="bg-lime-500 hover:bg-lime-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition inline-block">
                                     DETAIL
                                 </a>
-                                <a href="/penerbitan_kakot/proses/{{ $item->id }}" 
+                                <a href="/unggah_penerbitan_kakot/proses/{{ $item->id }}" 
                                    class="bg-sky-500 hover:bg-sky-600 text-white px-5 py-2 rounded-lg text-xs font-bold transition inline-flex items-center gap-2 shadow-sm hover:shadow-md">
                                     <i class="fa-solid fa-upload"></i> BALAS
                                 </a>

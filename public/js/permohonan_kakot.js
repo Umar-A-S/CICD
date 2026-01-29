@@ -1,63 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ================= DAERAH ASAL (JAWA TENGAH) =================
+    
+    // ====================================================================
+    // BAGIAN DAERAH ASAL DIHAPUS 
+    // (Karena sekarang sudah jadi Input Readonly dari Database)
+    // ====================================================================
+
+    // Fetch Data JSON hanya untuk Provinsi & Kota Tujuan
     fetch('/data/kota_kabupaten.json')
         .then(res => res.json())
         .then(data => {
-            const daerahAsalSelect = document.getElementById('daerahAsal');
             
-            // Populate Daerah Asal dengan kota/kabupaten Jawa Tengah
-            if (data['Jawa Tengah']) {
-                data['Jawa Tengah']
-                    .sort((a, b) => a.localeCompare(b, 'id'))
-                    .forEach(daerah => {
-                        const opt = document.createElement('option');
-                        opt.value = daerah;
-                        opt.textContent = daerah;
-                        daerahAsalSelect.appendChild(opt);
-                    });
-            }
-
             // ================= DAERAH TUJUAN (PROVINSI -> KAB/KOTA) =================
             const wilayahSelect = document.getElementById('wilayah');
             const provSelect = document.getElementById('provinsi');
             const kabSelect  = document.getElementById('kabkota');
+            const provWrapper = document.getElementById('provinsiWrapper');
 
-            // Default: tampilkan provinsi Jawa Tengah saat load
-            initializeJatengCities();
-
-            // Saat wilayah dipilih
-            wilayahSelect.addEventListener('change', () => {
-                if (wilayahSelect.value === 'dalam') {
-                    // Dalam daerah: tampilkan Jawa Tengah
-                    document.getElementById('provinsiWrapper').classList.remove('hidden');
-                    initializeJatengCities();
-                } else if (wilayahSelect.value === 'luar') {
-                    // Luar daerah: tampilkan semua provinsi
-                    document.getElementById('provinsiWrapper').classList.remove('hidden');
-                    provSelect.innerHTML = '';
-                    
-                    const placeholder = document.createElement('option');
-                    placeholder.value = '';
-                    placeholder.textContent = 'Pilih Provinsi';
-                    placeholder.disabled = true;
-                    placeholder.selected = true;
-                    provSelect.appendChild(placeholder);
-
-                    Object.keys(data)
-                        .sort((a, b) => a.localeCompare(b, 'id'))
-                        .forEach(prov => {
-                            const opt = document.createElement('option');
-                            opt.value = prov;
-                            opt.textContent = prov;
-                            provSelect.appendChild(opt);
-                        });
-                }
-            });
-
-            // Fungsi helper: inisialisasi Jawa Tengah
+            // Fungsi Helper: Reset & Inisialisasi Jawa Tengah
             function initializeJatengCities() {
+                // Set Provinsi ke Jawa Tengah (Lock)
                 provSelect.innerHTML = '';
-                
                 const opt = document.createElement('option');
                 opt.value = 'Jawa Tengah';
                 opt.textContent = 'Jawa Tengah';
@@ -67,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Isi kabupaten/kota Jawa Tengah
                 if (data['Jawa Tengah']) {
                     kabSelect.innerHTML = '';
+                    kabSelect.disabled = false; // Pastikan aktif
                     
                     const placeholder = document.createElement('option');
                     placeholder.value = '';
@@ -86,9 +49,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Saat provinsi dipilih
+            // --- LOGIC UTAMA ---
+
+            // 1. Saat Halaman Baru Dimuat (Default)
+            // Cek apakah user sudah memilih sesuatu (misal setelah refresh/error validation)
+            if(wilayahSelect.value === 'dalam') {
+                provWrapper.classList.remove('hidden');
+                initializeJatengCities();
+            } else if (wilayahSelect.value === 'luar') {
+                provWrapper.classList.remove('hidden');
+                loadAllProvinces();
+            } else {
+                // Jika belum pilih apa-apa, sembunyikan dropdown provinsi/kota (Opsional, biar rapi)
+                // provWrapper.classList.add('hidden'); 
+                // Atau biarkan default (kosong)
+            }
+
+            // 2. Saat User Mengganti Pilihan "Wilayah Tujuan"
+            wilayahSelect.addEventListener('change', () => {
+                provWrapper.classList.remove('hidden'); // Pastikan wrapper muncul
+
+                if (wilayahSelect.value === 'dalam') {
+                    // Logic Dalam Daerah: Lock Provinsi Jateng & Load Kotanya
+                    initializeJatengCities();
+
+                } else if (wilayahSelect.value === 'luar') {
+                    // Logic Luar Daerah: Load Semua Provinsi
+                    loadAllProvinces();
+                }
+            });
+
+            // Fungsi Helper: Load Semua Provinsi (Untuk Luar Daerah)
+            function loadAllProvinces() {
+                provSelect.innerHTML = '';
+                kabSelect.innerHTML = '<option value="" disabled selected>Pilih Provinsi Dulu</option>';
+                kabSelect.disabled = true; // Disable kab/kota sampai provinsi dipilih
+                
+                const placeholder = document.createElement('option');
+                placeholder.value = '';
+                placeholder.textContent = 'Pilih Provinsi';
+                placeholder.disabled = true;
+                placeholder.selected = true;
+                provSelect.appendChild(placeholder);
+
+                Object.keys(data)
+                    .sort((a, b) => a.localeCompare(b, 'id'))
+                    .forEach(prov => {
+                        // Skip Jawa Tengah agar tidak duplikat (opsional)
+                        // if (prov === 'Jawa Tengah') return; 
+
+                        const opt = document.createElement('option');
+                        opt.value = prov;
+                        opt.textContent = prov;
+                        provSelect.appendChild(opt);
+                    });
+            }
+
+            // 3. Saat User Mengganti Provinsi (Khusus Luar Daerah)
             provSelect.addEventListener('change', () => {
                 const provinsiDipilih = provSelect.value;
+                if (!provinsiDipilih) return;
 
                 kabSelect.innerHTML = '';
                 kabSelect.disabled = false;
@@ -96,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // placeholder
                 const placeholder = document.createElement('option');
                 placeholder.value = '';
-                placeholder.textContent = 'Pilih Kab/Kota';
+                placeholder.textContent = 'Pilih Kabupaten/Kota';
                 placeholder.disabled = true;
                 placeholder.selected = true;
                 kabSelect.appendChild(placeholder);
@@ -117,37 +137,30 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => console.error('Gagal memuat data wilayah:', err));
 });
 
-//================= UPLOAD FILE PREVIEW =================
+//================= UPLOAD FILE PREVIEW (TIDAK PERLU DIUBAH) =================
 document.addEventListener('DOMContentLoaded', () => {
+    // ... code upload preview kamu yang lama tetap aman ...
     const fileInput = document.getElementById('fileUpload');
     const filePreview = document.getElementById('filePreview'); 
 
     if (fileInput && filePreview) {
         fileInput.addEventListener('change', () => {
-            // Bersihkan preview lama tiap kali user pilih file baru
             filePreview.innerHTML = ''; 
             const file = fileInput.files[0];
 
             if (file) {
-                // 1. Validasi Ukuran (Max 10MB)
                 if (file.size > 10 * 1024 * 1024) {
                     alert(`Ukuran file terlalu besar (max 10MB). Ukuran file: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
-                    fileInput.value = ''; // Reset input
+                    fileInput.value = ''; 
                     return;
                 }
-
-                // 2. Validasi Tipe (PDF Only)
                 if (!file.type.includes('pdf')) {
                     alert('Hanya file PDF yang diterima');
-                    fileInput.value = ''; // Reset input
+                    fileInput.value = ''; 
                     return;
                 }
-
-                // 3. Render HTML Preview
                 const wrapper = document.createElement('div');
                 wrapper.className = 'flex items-center justify-between bg-lime-50 rounded-lg p-3 border border-lime-200';
-
-                // Bagian Info File
                 const info = document.createElement('div');
                 info.className = 'flex items-center gap-3';
                 info.innerHTML = `
@@ -159,20 +172,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</p>
                     </div>
                 `;
-
-                // Bagian Tombol Hapus (X)
                 const removeBtn = document.createElement('button');
-                removeBtn.type = 'button'; // Penting biar gak submit form
+                removeBtn.type = 'button'; 
                 removeBtn.className = 'text-red-400 hover:text-red-600 transition p-2';
                 removeBtn.innerHTML = '<i class="fa-solid fa-xmark text-lg"></i>';
-                
-                // Logic Hapus File
                 removeBtn.addEventListener('click', () => {
-                    fileInput.value = ''; // Kosongkan input file asli
-                    filePreview.innerHTML = ''; // Hapus tampilan preview
+                    fileInput.value = ''; 
+                    filePreview.innerHTML = ''; 
                 });
-
-                // Gabungkan elemen
                 wrapper.appendChild(info);
                 wrapper.appendChild(removeBtn);
                 filePreview.appendChild(wrapper);
