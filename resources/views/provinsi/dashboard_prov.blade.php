@@ -1,4 +1,4 @@
-<x-layout_dashboard_prov> 
+<x-layout_dashboard_prov>
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- TABLE -->
@@ -19,25 +19,28 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    <tr data-status="pending">
+                    <!-- ROW 1 -->
+                    <tr data-id="1" data-status="pending">
                         <td>2025-01-25</td>
                         <td>Kota Semarang</td>
                         <td>Jateng</td>
                         <td>Tembalang</td>
-                        <td class="aksi" style="display: flex; justify-content: center; gap: 5px;">
+                        <td class="aksi" style="display:flex;justify-content:center;gap:6px;">
                             <span class="btn green">Verifikasi</span>
                             <span class="btn red">Kembalikan</span>
                             <span class="btn blue">Lihat Detail</span>
                         </td>
                     </tr>
 
-                    <tr data-status="pending">
+                    <!-- ROW 2 -->
+                    <tr data-id="2" data-status="pending">
                         <td>2025-01-25</td>
                         <td>Kota Semarang</td>
                         <td>Luar Jateng</td>
                         <td>Bandung</td>
-                        <td class="aksi" style="display: flex; justify-content: center; gap: 5px;">
+                        <td class="aksi" style="display:flex;justify-content:center;gap:6px;">
                             <span class="btn green">Verifikasi</span>
                             <span class="btn red">Kembalikan</span>
                             <span class="btn blue">Lihat Detail</span>
@@ -64,9 +67,7 @@
     <!-- ================= NOTIF VERIFIKASI ================= -->
     <div id="notifVerifikasi" class="notif hidden">
         <div class="notif-box">
-            <div class="checkmark" style="background:#22c55e">
-                ✓
-            </div>
+            <div class="checkmark" style="background:#22c55e">✓</div>
             <p>Berkas berhasil diverifikasi</p>
         </div>
     </div>
@@ -92,11 +93,14 @@
     <!-- ================= NOTIF KEMBALIKAN ================= -->
     <div id="notifSuccess" class="notif hidden">
         <div class="notif-box">
-            <div class="checkmark">
-                ✓
-            </div>
+            <div class="checkmark">✓</div>
             <p>Berkas berhasil dikembalikan</p>
         </div>
     </div>
+
+    <!-- ROUTE HELPER -->
+    <script>
+        window.detailBaseUrl = "{{ url('/detail_permohonan_prov') }}";
+    </script>
 
 </x-layout_dashboard_prov>

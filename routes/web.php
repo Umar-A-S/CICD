@@ -7,6 +7,7 @@ use App\Http\Controllers\Kota\PermohonanController;
 use App\Http\Controllers\Kota\BalasanController;    
 use App\Http\Controllers\Kota\PenerbitanController;
 use App\Http\Controllers\Kota\ProfilController;
+use App\Http\Controllers\Provinsi\DashboardProvController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,10 +61,10 @@ Route::middleware(['auth'])->group(function () {
     {  
         
         // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti
-        Route::get('/dashboard_provinsi', function () {
-            return view('provinsi.dashboard_prov', ['title' => 'Dashboard']);
-        });
-        Route::get('/detail_permohonan_prov/{id}', [PermohonanController::class, 'show']);
+        Route::get('/dashboard_provinsi', [DashboardProvController::class, 'index'])->name('provinsi.dashboard');
+        Route::post('/provinsi/verifikasi/{id}', [DashboardProvController::class, 'verifikasi'])->name('provinsi.verifikasi');
+        Route::post('/provinsi/tolak/{id}', [DashboardProvController::class, 'tolak'])->name('provinsi.tolak');
+        Route::get('/detail_permohonan_prov/{id}', [DashboardProvController::class, 'show'])->name('provinsi.detail');
 
         Route::get('/penerbitan-provinsi', function () {
             return view('provinsi.penerbitan_prov', ['title' => 'Penerbitan']);
@@ -91,9 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['checkrole:superadmin'])->group(function () 
     {
         // 3. LEVEL SUPERADMIN - Tambahkan controller nanti
-        Route::get('/dashboard-admin', function () {
-            return "Halaman Dashboard Superadmin (Sedang dikembangkan)";
-        })->name('dashboard.admin');
+
 
     });
 
