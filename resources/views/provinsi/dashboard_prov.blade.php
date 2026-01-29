@@ -9,7 +9,7 @@
         </p>
 
         <div class="table-container">
-            <table class="data-table">
+            <table class="data-table" style="width: 100%; text-align: center;">
                 <thead>
                     <tr>
                         <th>Tanggal Masuk</th>
@@ -25,7 +25,7 @@
                         <td>Kota Semarang</td>
                         <td>Jateng</td>
                         <td>Tembalang</td>
-                        <td class="aksi">
+                        <td class="aksi" style="display: flex; justify-content: center; gap: 5px;">
                             <span class="btn green">Verifikasi</span>
                             <span class="btn red">Kembalikan</span>
                             <span class="btn blue">Lihat Detail</span>
@@ -37,7 +37,7 @@
                         <td>Kota Semarang</td>
                         <td>Luar Jateng</td>
                         <td>Bandung</td>
-                        <td class="aksi">
+                        <td class="aksi" style="display: flex; justify-content: center; gap: 5px;">
                             <span class="btn green">Verifikasi</span>
                             <span class="btn red">Kembalikan</span>
                             <span class="btn blue">Lihat Detail</span>

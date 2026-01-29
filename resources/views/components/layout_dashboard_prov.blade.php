@@ -14,6 +14,7 @@ $role='provinsi';
     <link rel="stylesheet" href="css/style_prov.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/img/logo_selaksa.png" sizes="32x32">
+    @vite('resources/css/app.css')
 </head>
 
 <body class="flex h-screen overflow-hidden">
