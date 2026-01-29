@@ -125,8 +125,7 @@ jobs:
         run: |
           target_dir="${{ secrets.PATH_TUJUAN }}"
 
-          rm -rf $target_dir/nginx/default.conf || sudo rm -rf $target_dir/nginx/default.conf
-
+          sudo rm -rf $target_dir/nginx/default.conf
           mkdir -p $target_dir/nginx
 
           cat <<'EOF' > $target_dir/nginx/default.conf

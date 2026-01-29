@@ -1,4 +1,9 @@
         <header class="p-6 flex justify-between items-center z-10 border-b border-white/5 bg-white">
+            <button
+                id="toggleSidebar"
+                class="md:hidden p-2 rounded-lg text-black hover:bg-gray-100">
+                <i class="fa-solid fa-bars"></i>
+            </button>
             <div>
                 <h2 id="pageTitle" class="text-2xl font-bold text-black tracking-tight">{{ $slot }}</h2>
                 <p id="pageSubtitle" class="text-xs text-black/80">SELAKSA (Sinergitas Layanan Keabsahan Dokumen Pencatatan Sipil)</p>
