@@ -29,8 +29,8 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: 313233
-          MYSQL_DATABASE: laravel_test
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.DB }}
         ports:
           - 3306:3306
         options: >-
@@ -48,26 +48,27 @@ jobs:
           cp .env.example .env
           rm -f bootstrap/cache/*.php
           sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
-          sed -i 's/^DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-          sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env
-          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=laravel_test/' .env
-          sed -i 's/^DB_USERNAME=.*/DB_USERNAME=root/' .env
-          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=313233/' .env
+          sed -i 's/^DB_HOST=.*/DB_HOST=${{ secrets.DB_HOST }}/' .env
+          sed -i 's/^DB_PORT=.*/DB_PORT=${{ secrets.DB_PORT }}/' .env
+          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB }}/' .env
+          sed -i 's/^DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/' .env
+          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env
 
       - name: Build Docker Image
         run: docker build -t selaksa-app:ci .
 
       - name: Install & Migrate (Testing)
+        # menggunakan github secrets
         run: |
           docker run --rm \
             --network host \
-            -u root\
-            -e APP_KEY=base64:4ayvStrimUNBc+XMB4tYQMpmzOsDcuiyBTKSOcNjl7I=\
+            -u root \
+            -e APP_KEY=${{ secrets.APP_KEY }} \
             -e DB_HOST=127.0.0.1 \
-            -e DB_PORT=3306 \
-            -e DB_DATABASE=laravel_test \
+            -e DB_PORT=${{ secrets.DB_PORT }} \
+            -e DB_DATABASE=${{ secrets.DB }} \
             -e DB_USERNAME=root \
-            -e DB_PASSWORD=313233 \
+            -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
             selaksa-app:ci \
             sh -c "
               composer install &&
@@ -99,12 +100,69 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Generate .env File
+        run: |
+          cd ${{ secrets.PATH_TUJUAN }}
+          
+          cat <<EOF > .env
+
+          APP_KEY=${{ secrets.APP_KEY }}
+          APP_URL=${{ secrets.APP_URL }}
+
+          DB_CONNECTION=mysql
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          DB_DATABASE=${{ secrets.DB }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }}
+          EOF
+          
+      - name: Generate Nginx Config
+        run: |
+          target_dir="${{ secrets.PATH_TUJUAN }}"
+
+          sudo rm -rf $target_dir/nginx/default.conf
+          mkdir -p $target_dir/nginx
+
+          cat <<'EOF' > $target_dir/nginx/default.conf
+          server {
+              listen 80;
+              server_name /${{ secrets.APP_URL }};
+
+              root /var/www/html/selaksa-app/public;
+              index index.php index.html index.htm;
+
+              location / {
+                  try_files $uri $uri/ /index.php?$query_string;
+              }
+
+              location ~ \.php$ {
+                try_files $uri =404;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass app:9000;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param PATH_INFO $fastcgi_path_info;
+              }
+
+              location ~ /\.ht {
+                  deny all;
+              }
+          }
+          EOF
+          echo "Nginx config generated at $target_dir/nginx/default.conf"
+
+          sudo chown -R $USER:$USER $target_dir
+
       - name: Jalankan Script deploy.sh di Lokal
         run: |
-          # masuk ke folder
-          cd ~/prod_selaksa
+          cd ~/${{ secrets.FOLDER }}
 
-          # Menjalankan script deploy
           chmod +x deploy.sh
           ./deploy.sh
 
