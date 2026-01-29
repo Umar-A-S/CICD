@@ -25,20 +25,42 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'username' => fake()->unique()->userName(), // Menggunakan username untuk login
+            'password' => static::$password ??= Hash::make('password'), // Password default: password
+            'role' => fake()->randomElement(['superadmin', 'provinsi', 'daerah']), // Role acak
+            'kode_wilayah' => null, // Diisi manual jika rolenya daerah
             'remember_token' => Str::random(10),
         ];
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * State khusus untuk role Superadmin
      */
-    public function unverified(): static
+    public function superadmin(): static
     {
         return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+            'role' => 'superadmin',
+        ]);
+    }
+
+    /**
+     * State khusus untuk role Provinsi
+     */
+    public function provinsi(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'provinsi',
+        ]);
+    }
+
+    /**
+     * State khusus untuk role Daerah dengan kode wilayah
+     */
+    public function daerah(string $kodeWilayah): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'daerah',
+            'kode_wilayah' => $kodeWilayah,
         ]);
     }
 }

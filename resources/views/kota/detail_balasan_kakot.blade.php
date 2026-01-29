@@ -3,11 +3,12 @@
 
 @php
     if (!function_exists('input')) {
-        function input($label, $id) {
+        // Tambahkan parameter $value = '' di sini
+        function input($label, $id, $value = '') { 
             return '
             <div>
                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">'.$label.'</label>
-                <input id="'.$id.'" disabled
+                <input id="'.$id.'" disabled value="'.$value.'"
                     class="w-full bg-gray-50 border border-gray-200
                         rounded-lg px-4 py-2.5 text-sm text-black">
             </div>';
@@ -35,24 +36,24 @@
                         </h2>
 
                         <div class="space-y-5">
-                            {!! input('Nama Subjek', 'nama') !!}
-                            {!! input('Daerah Asal', 'asal') !!}
-                            {!! input('Wilayah Tujuan (Dalam/Luar)', 'wilayah') !!}
+                            {!! input('Nama Subjek', 'nama', $permohonan->nama_subjek) !!}
+                            {!! input('Daerah Asal', 'asal', $permohonan->daerah_asal) !!}
+                            {!! input('Wilayah Tujuan (Dalam/Luar)', 'wilayah', $permohonan->wilayah) !!}
 
                             <div>
                                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                     Daerah Tujuan
                                 </label>
                                 <div class="space-y-2">
-                                    <input id="provinsi" disabled
+                                    <input id="wilayahTujuan" disabled value="{{ $permohonan->wilayah_tujuan }}"
                                         class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm">
-                                    <input id="tujuan" disabled
+                                    <input id="daerahTujuan" disabled value="{{ $permohonan->daerah_tujuan }}"
                                         class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm">
                                 </div>
                             </div>
 
-                            {!! input('Jenis Permohonan', 'jenis') !!}
-                            {!! input('Jenis Dokumen', 'dokumen') !!}
+                            {!! input('Jenis Permohonan', 'jenis', $permohonan->jenis_permohonan) !!}
+                            {!! input('Jenis Dokumen', 'dokumen', $permohonan->jenis_dokumen) !!}
                         </div>
                     </div>
 
@@ -63,9 +64,18 @@
                         </h2>
 
                         <div class="space-y-5">
-                            {!! input('Tanggal Permohonan', 'tglPermohonan') !!}
-                            {!! input('Nomor Surat', 'noSuratPermohonan') !!}
+                            {!! input('Tanggal Permohonan', 'tglPermohonan', $permohonan->created_at->format('d-m-Y')) !!}
+                            {!! input('Nomor Surat', 'noSuratPermohonan', $permohonan->nomor_surat) !!}
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                Berkas
+                            </label>
+                            <a href="{{ asset($permohonan->penerbitan->file_path) }}" target="_blank"
+                                class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer">
+                                <i class="fa-solid fa-file-lines"></i>
+                                Lihat Berkas
+                            </a>
                         </div>
+
                     </div>
 
                 </div>
@@ -74,24 +84,6 @@
             <!-- ================= RIGHT ================= -->
             <div class="space-y-14">
 
-                <!-- PERMOHONAN (LANJUTAN) -->
-                <div>
-                    <div class="space-y-5">
-                        {!! input('Nomor Surat Selesai', 'noSuratSelesai') !!}
-
-                        <div>
-                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
-                                Berkas
-                            </label>
-                            <a onclick="lihatBerkasPermohonan()"
-                                class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer">
-                                <i class="fa-solid fa-file-lines"></i>
-                                Lihat Berkas
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- PENERBITAN -->
                 <div>
                     <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">
@@ -99,15 +91,14 @@
                     </h2>
 
                     <div class="space-y-5">
-                        {!! input('Tanggal Penerbitan', 'tglTerbit') !!}
-                        {!! input('Nomor Surat', 'noSuratTerbit') !!}
-                        {!! input('Nomor Surat Selesai', 'noSuratTerbitSelesai') !!}
+                        {!! input('Tanggal Penerbitan', 'tglTerbit', $permohonan->penerbitan->created_at->format('d-m-Y')) !!}
+                        {!! input('Nomor Surat', 'noSuratTerbit', $permohonan->penerbitan->nomor_surat_selesai) !!}
 
                         <div>
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                 Berkas
                             </label>
-                            <a onclick="lihatBerkasPenerbitan()"
+                            <a href="{{ asset($permohonan->penerbitan->file_path) }}" target="_blank"
                                 class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer">
                                 <i class="fa-solid fa-file-lines"></i>
                                 Lihat Berkas
@@ -127,16 +118,14 @@
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                 Hasil
                             </label>
-                            <input id="hasil" disabled
+                            <input id="hasil" disabled value="{{ $permohonan->penerbitan->hasil }}"
                                 class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm font-semibold">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
-                                Keterangan
-                            </label>
-                            <textarea id="keterangan" disabled rows="4"
-                                class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm resize-none"></textarea>
+                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">Keterangan/Alasan</label>
+                            <textarea disabled rows="4"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm resize-none">{{ $permohonan->penerbitan->alasan }}</textarea>
                         </div>
                     </div>
                 </div>
