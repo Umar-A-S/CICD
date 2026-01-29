@@ -33,22 +33,21 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard_kakot', [DashboardKotaController::class, 'index'])->name('dashboard.kakot');
 
         // Route Permohonan
-        Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan.index');
-        Route::get('/permohonan/create', [PermohonanController::class, 'create'])->name('permohonan.create');
-        Route::post('/permohonan', [PermohonanController::class, 'store'])->name('permohonan.store');
-        Route::get('/detail_permohonan/{id}', [PermohonanController::class, 'show'])->name('permohonan.show');
+        Route::get('/permohonan_kakot', [PermohonanController::class, 'index'])->name('permohonan.index');
+        Route::get('/permohonan_kakot/create', [PermohonanController::class, 'create'])->name('permohonan.create');
+        Route::post('/permohonan_kakot', [PermohonanController::class, 'store'])->name('permohonan.store');
+        Route::get('/detail_permohonan_kakot/{id}', [PermohonanController::class, 'show'])->name('permohonan.show');
 
         // Route Penerbitan
-        Route::get('/penerbitan', [PenerbitanController::class, 'index'])->name('penerbitan.index');
-        Route::get('/detail-penerbitan/{id}', [PenerbitanController::class, 'show'])->name('penerbitan.show');
-        Route::get('/unggah-penerbitan/{id}', [PenerbitanController::class, 'create'])->name('penerbitan.create');
-        Route::post('/unggah-penerbitan/{id}', [PenerbitanController::class, 'store'])->name('penerbitan.store');
+        Route::get('/penerbitan_kakot', [PenerbitanController::class, 'index'])->name('penerbitan.index');
+        Route::get('/detail_penerbitan_kakot/{id}', [PenerbitanController::class, 'show'])->name('penerbitan.show');
+        Route::get('/unggah_penerbitan_kakot/proses/{id}', [PenerbitanController::class, 'create'])->name('penerbitan.create');
+        Route::post('/unggah_penerbitan_kakot/proses', [PenerbitanController::class, 'store'])->name('penerbitan.store');
 
         // Route Balasan
-        Route::get('/balasan', [BalasanController::class, 'index'])->name('balasan.index');
-        Route::get('/detail-balasan/{id}', [BalasanController::class, 'show'])->name('balasan.show');
-
-         // Route Profil (Cuma satu baris cukup)
+        Route::get('/balasan_kakot', [BalasanController::class, 'index'])->name('balasan.index');
+        Route::get('/detail_balasan_kakot/{id}', [BalasanController::class, 'show'])->name('balasan.show');
+         // Route Profil Instansi
         Route::get('/profil_kakot', [ProfilController::class, 'index'])->name('profil.index');
     
 

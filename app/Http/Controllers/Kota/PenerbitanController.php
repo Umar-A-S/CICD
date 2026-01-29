@@ -18,11 +18,11 @@ class PenerbitanController extends Controller
      */
     public function index()
     {
-        $daerahUser = Auth::user()->username; // Asumsi: username = nama daerah (misal: admin_magelang)
+        $daerahUser = Auth::user()->name; // Asumsi: username = nama daerah (misal: admin_magelang)
 
         // Data 1: Perlu Dibalas (Status bukan SELESAI dan ditujukan ke user ini)
         $permohonanPerlu = Permohonan::where('daerah_tujuan', $daerahUser)
-            ->where('status', '!=', 'SELESAI')
+            ->where('status', 'DIPROSES')
             ->orderBy('created_at', 'asc')
             ->get();
 

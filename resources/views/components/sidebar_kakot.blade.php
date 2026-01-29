@@ -34,27 +34,27 @@
             </x-nav-link>
 
             <x-nav-link
-                href="/penerbitan_kakot"
+                href="{{ route('penerbitan.index') }}"
                 icon="fa-print"
                 :count="$notifPenerbitan">
                 Penerbitan
             </x-nav-link>
 
             <x-nav-link 
-                href="/permohonan_kakot" 
+                href="{{ route('permohonan.index') }}" 
                 icon="fa-solid fa-file">
                 Permohonan
             </x-nav-link>
 
             <x-nav-link
-                href="/balasan_kakot"
+                href="{{ route('balasan.index') }}"
                 icon="fa-pen-to-square"
                 :count="$notifBalasan">
                 Balasan
             </x-nav-link>
 
             <x-nav-link 
-                href="/profil_kakot" 
+                href="{{ route('profil.index') }}" 
                 icon="fa-solid fa-user">
                 Profil
             </x-nav-link>

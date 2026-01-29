@@ -38,11 +38,14 @@
 
                             <div>
                                 <label class="text-xs font-bold uppercase">Daerah Asal <span class="text-red-500">*</span></label>
-                                <select name="daerah_asal" id="daerahAsal"
-                                    class="w-full mt-1 bg-gray-50 border border-gray-200
-                                    rounded-xl px-4 py-3 text-sm outline-none" required>
-                                    <option value="" disabled selected>Pilih Daerah Asal</option>
-                                </select>
+                                
+                                <input type="text" 
+                                    name="daerah_asal" 
+                                    value="{{ Auth::user()->name }}" 
+                                    class="w-full mt-1 bg-gray-100 border border-gray-200 text-gray-500
+                                            rounded-xl px-4 py-3 text-sm outline-none cursor-not-allowed"
+                                    readonly>
+                                    
                                 <span class="text-red-500 text-xs error-text hidden"></span>
                             </div>
 
