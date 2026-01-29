@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/style_kakot.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/img/logo_selaksa.png">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="flex h-screen bg-gray-100 overflow-hidden">
@@ -31,7 +32,7 @@
         </div>
     </main>
 
-    <!-- JS -->
-    <script src="/js/balasan_kakot.js"></script>
+    {{-- <!-- JS -->
+    <script src="/js/balasan_kakot.js"></script> --}}
 </body>
 </html>

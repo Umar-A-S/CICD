@@ -16,6 +16,7 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 
@@ -41,18 +42,24 @@
         </p>
 
         <!-- FORM -->
-        <form action="/dashboard-kota" method="GET" class="space-y-6">
-
-            <!-- EMAIL -->
+        <form action="/login" method="POST" class="space-y-6">
+            @csrf
+            <!-- USERNAME -->
             <div>
                 <label class="block text-sm font-semibold mb-1">
-                    Email
+                    Username
                 </label>
-                <input id="email"
-                      type="email"
-                      placeholder="Email"
-                      class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm
+                <input 
+                    name="username"
+                    id="username"
+                    type="text"
+                    placeholder="Username"
+                    value="{{ old('username') }}"
+                    class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm
                               focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-lime-400">
+                @error('username')
+                    <small style="color: red;">{{ $message }}</small>
+                @enderror
             </div>
 
             <!-- PASSWORD -->
@@ -60,7 +67,10 @@
                 <label class="block text-sm font-semibold mb-1">
                     Password
                 </label>
-                <input type="password"
+                <input
+                    name="password"
+                    id="password" 
+                    type="password"
                       placeholder="Password"
                       class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm
                               focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-lime-400">
@@ -78,7 +88,7 @@
             <!-- BUTTON -->
             <button 
             type="submit" 
-            class="w-full mt-6 rounded-xl bg-lime-400 py-2.5 text-white text-sm font-bold hover:bg-lime-500 transition duration-200 shadow-md"> Login 
+            class="w-full mt-6 rounded-xl bg-lime-400 py-2.5 text-white text-sm font-bold hover:bg-lime-500 transition duration-200 shadow-md"> LOGIN
             </button>
 
         </form>

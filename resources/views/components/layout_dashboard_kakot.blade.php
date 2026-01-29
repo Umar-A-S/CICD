@@ -30,15 +30,13 @@ $role='kota';
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">
 
             <!-- STATUS CARD -->
-            <x-statuscard_kakot></x-statuscard_kakot>
+            <x-statuscard_kakot :stat="$stat"></x-statuscard_kakot>
 
             <!-- TABLE -->
             {{ $slot }}
     </div>
     </main>
 
-    <!-- SCRIPT -->
-    <script src="js/dashboard_kakot.js"></script>
-
+    <script src="{{ asset('js/dashboard_kakot.js') }}"></script>
 </body>
 </html>

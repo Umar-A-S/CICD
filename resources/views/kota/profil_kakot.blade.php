@@ -16,6 +16,7 @@
                 </label>
                 <input
                     id="namaInstansi"
+                    value="{{ $user->name }}"
                     disabled
                     class="w-full bg-gray-50 rounded-xl px-5 py-3
                         text-sm text-gray-700 border border-gray-100">
@@ -28,6 +29,7 @@
                 </label>
                 <input
                     id="kodeWilayah"
+                    value="{{ $user->kode_wilayah }}"
                     disabled
                     class="w-full bg-gray-50 rounded-xl px-5 py-3
                         text-sm text-gray-700 border border-gray-100">

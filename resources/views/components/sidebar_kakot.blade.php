@@ -1,5 +1,6 @@
 @php
     $role = $role ?? 'kota';
+    $role = $role ?? 'provinsi';
 
     // CONTOH NOTIF (nanti bisa dari DB)
     $notifPenerbitan = 2;
@@ -26,57 +27,83 @@
     <nav class="flex-1 mt-4 px-2 space-y-1 overflow-y-auto">
 
         @if($role === 'kota')
-            <x-nav-link href="/dashboard-kota" icon="fa-solid fa-table-cells-large">
+            <x-nav-link 
+                href="/dashboard_kakot" 
+                icon="fa-solid fa-table-cells-large">
                 Dashboard
             </x-nav-link>
 
             <x-nav-link
-                href="/penerbitan-kota"
+                href="/penerbitan_kakot"
                 icon="fa-print"
                 :count="$notifPenerbitan">
                 Penerbitan
             </x-nav-link>
 
-            <x-nav-link href="/permohonan-kota" icon="fa-solid fa-file">
+            <x-nav-link 
+                href="/permohonan_kakot" 
+                icon="fa-solid fa-file">
                 Permohonan
             </x-nav-link>
 
             <x-nav-link
-                href="/balasan-kota"
+                href="/balasan_kakot"
                 icon="fa-pen-to-square"
                 :count="$notifBalasan">
                 Balasan
             </x-nav-link>
 
-            <x-nav-link href="/profil-kota" icon="fa-solid fa-user">
+            <x-nav-link 
+                href="/profil_kakot" 
+                icon="fa-solid fa-user">
                 Profil
             </x-nav-link>
         @endif
 
         @if($role === 'provinsi')
-            <x-nav-link href="/dashboard-provinsi" icon="fa-solid fa-grip">
+            <x-nav-link 
+                href="/dashboard_provinsi" 
+                icon="fa-solid fa-grip">
                 Dashboard
             </x-nav-link>
 
-            <x-nav-link href="/arsipdata-provinsi" icon="fa-solid fa-box-archive">
-                Arsip Data
+            <x-nav-link
+                href="/penerbitan-provinsi"
+                icon="fa-print"
+                :count="$notifPenerbitan">
+                Penerbitan
             </x-nav-link>
 
-            <x-nav-link href="/profil-provinsi" icon="fa-solid fa-user">
+            <x-nav-link
+                href="/balasan_provinsi"
+                icon="fa-pen-to-square"
+                :count="$notifBalasan">
+                Balasan
+            </x-nav-link>
+
+            <x-nav-link 
+                href="/profil-provinsi" 
+                icon="fa-solid fa-user">
                 Profil
             </x-nav-link>
         @endif
 
         @if($role === 'superadmin')
-            <x-nav-link href="/dashboard-superadmin" icon="fa-solid fa-grip">
+            <x-nav-link 
+                href="/dashboard-superadmin" 
+                icon="fa-solid fa-grip">
                 Dashboard
             </x-nav-link>
 
-            <x-nav-link href="/arsipdata-superadmin" icon="fa-solid fa-box-archive">
+            <x-nav-link 
+                href="/arsipdata-superadmin" 
+                icon="fa-solid fa-box-archive">
                 Arsip Data
             </x-nav-link>
 
-            <x-nav-link href="/manajemenuser" icon="fa-solid fa-users">
+            <x-nav-link 
+                href="/manajemenuser" 
+                icon="fa-solid fa-users">
                 Manajemen User
             </x-nav-link>
         @endif
@@ -85,10 +112,13 @@
 
     <!-- LOGOUT -->
     <div class="p-4 border-t border-gray-100">
-        <a href="/"
-            class="flex items-center gap-3 text-gray-600 hover:text-red-600 transition text-sm px-4 py-2">
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Logout
-        </a>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" 
+                class="w-full flex items-center gap-3 text-gray-600 hover:text-red-600 hover:bg-red-50 transition text-sm px-4 py-3 rounded-lg font-medium group">
+                <i class="fa-solid fa-right-from-bracket group-hover:scale-110 transition-transform"></i>
+                Logout
+            </button>
+        </form>
     </div>
 </aside>

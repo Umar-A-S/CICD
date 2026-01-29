@@ -21,7 +21,7 @@
                                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                     Nama Subjek
                                 </label>
-                                <input disabled value="Asep"
+                                <input disabled value="{{ $permohonan->nama_subjek }}"
                                     class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                             </div>
 
@@ -30,7 +30,7 @@
                                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                     Daerah Asal
                                 </label>
-                                <input disabled value="Kota Semarang"
+                                <input disabled value="{{ $permohonan->daerah_asal }}"
                                     class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                             </div>
 
@@ -39,7 +39,7 @@
                                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                     Wilayah Tujuan
                                 </label>
-                                <input disabled value="Luar Daerah"
+                                <input disabled value="{{ $permohonan->wilayah }}"
                                     class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                             </div>
 
@@ -50,9 +50,9 @@
                                 </label>
 
                                 <div class="space-y-2">
-                                    <input disabled value="Jawa Barat"
+                                    <input disabled value="{{ $permohonan->wilayah_tujuan}}"
                                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
-                                    <input disabled value="Kota Bandung"
+                                    <input disabled value="{{ $permohonan->daerah_tujuan }}"
                                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                     Jenis Permohonan
                                 </label>
-                                <input disabled value="KEABSAHAN"
+                                <input disabled value="{{ $permohonan->jenis_permohonan }}"
                                     class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                             </div>
 
@@ -71,7 +71,7 @@
                                 <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                     Jenis Dokumen
                                 </label>
-                                <input disabled value="Akta Kelahiran"
+                                <input disabled value="{{ $permohonan->jenis_dokumen }}"
                                     class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                             </div>
 
@@ -99,7 +99,7 @@
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                 Tanggal Permohonan
                             </label>
-                            <input disabled value="20-11-2025"
+                            <input disabled value="{{ $permohonan->created_at->format('d-m-Y') }}"
                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                         </div>
 
@@ -107,7 +107,7 @@
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                 Nomor Surat
                             </label>
-                            <input disabled value="08.006/ITS/III/2023"
+                            <input disabled value="{{ $permohonan->nomor_surat }}"
                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                         </div>
 
@@ -115,19 +115,29 @@
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
                                 Tanggal Surat
                             </label>
-                            <input disabled value="22-11-2025"
+                            <input disabled value="{{ $permohonan->tanggal_surat->format('d-m-Y') }}"
                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
-                                Berkas
-                            </label>
-                            <span class="text-blue-600 font-semibold text-sm cursor-pointer">
-                                <i class="fa-solid fa-file-lines"></i>
-                                Lihat Berkas
-                            </span>
-                        </div>
+                            <div class="mb-4">
+                                <label class="block text-xs font-bold mb-2 uppercase text-gray-600">
+                                    Berkas
+                                </label>
+                                
+                                @if($permohonan->file_path)
+                                    <a href="{{ asset($permohonan->file_path) }}" target="_blank" class="inline-block">
+                                        <span class="text-blue-600 font-semibold text-sm cursor-pointer hover:text-blue-800 transition">
+                                            <i class="fa-solid fa-file-lines"></i>
+                                            Lihat Berkas
+                                        </span>
+                                    </a>
+                                @else
+                                    <span class="text-red-500 font-semibold text-sm italic">
+                                        <i class="fa-solid fa-circle-exmark"></i>
+                                        Berkas tidak ditemukan
+                                    </span>
+                                @endif
+                            </div>
 
                     </div>
 

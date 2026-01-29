@@ -1,154 +1,182 @@
-// ================= DATA DUMMY =================
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('nama').value = 'Agus';
-    document.getElementById('asal').value = 'Kota Semarang';
+    // ================= DAERAH ASAL (JAWA TENGAH) =================
+    fetch('/data/kota_kabupaten.json')
+        .then(res => res.json())
+        .then(data => {
+            const daerahAsalSelect = document.getElementById('daerahAsal');
+            
+            // Populate Daerah Asal dengan kota/kabupaten Jawa Tengah
+            if (data['Jawa Tengah']) {
+                data['Jawa Tengah']
+                    .sort((a, b) => a.localeCompare(b, 'id'))
+                    .forEach(daerah => {
+                        const opt = document.createElement('option');
+                        opt.value = daerah;
+                        opt.textContent = daerah;
+                        daerahAsalSelect.appendChild(opt);
+                    });
+            }
 
-    // FIELD BARU
-    document.getElementById('tglPermohonan').value = '2026-01-15';
-    document.getElementById('noSurat').value = '470/123/2026';
-    document.getElementById('noSuratSelesai').value = '470/123-A/2026';
-});
+            // ================= DAERAH TUJUAN (PROVINSI -> KAB/KOTA) =================
+            const wilayahSelect = document.getElementById('wilayah');
+            const provSelect = document.getElementById('provinsi');
+            const kabSelect  = document.getElementById('kabkota');
 
-// ================= ACTION =================
-function goBack() {
-    window.location.href = '/permohonan-kota';
-}
+            // Default: tampilkan provinsi Jawa Tengah saat load
+            initializeJatengCities();
 
-function kirim() {
-    alert('Data berhasil dikirim (dummy)');
-}
+            // Saat wilayah dipilih
+            wilayahSelect.addEventListener('change', () => {
+                if (wilayahSelect.value === 'dalam') {
+                    // Dalam daerah: tampilkan Jawa Tengah
+                    document.getElementById('provinsiWrapper').classList.remove('hidden');
+                    initializeJatengCities();
+                } else if (wilayahSelect.value === 'luar') {
+                    // Luar daerah: tampilkan semua provinsi
+                    document.getElementById('provinsiWrapper').classList.remove('hidden');
+                    provSelect.innerHTML = '';
+                    
+                    const placeholder = document.createElement('option');
+                    placeholder.value = '';
+                    placeholder.textContent = 'Pilih Provinsi';
+                    placeholder.disabled = true;
+                    placeholder.selected = true;
+                    provSelect.appendChild(placeholder);
 
-// ================= UPLOAD MULTI FILE =================
-const fileInput   = document.getElementById('fileUpload');
-const filePreview = document.getElementById('filePreview');
+                    Object.keys(data)
+                        .sort((a, b) => a.localeCompare(b, 'id'))
+                        .forEach(prov => {
+                            const opt = document.createElement('option');
+                            opt.value = prov;
+                            opt.textContent = prov;
+                            provSelect.appendChild(opt);
+                        });
+                }
+            });
 
-let selectedFiles = [];
-
-fileInput.addEventListener('change', () => {
-    const files = Array.from(fileInput.files);
-
-    files.forEach(file => {
-
-        const allowed = ['application/pdf', 'image/jpeg', 'image/png'];
-        if (!allowed.includes(file.type)) {
-            alert(`Format tidak valid: ${file.name}`);
-            return;
-        }
-
-        if (file.size > 2 * 1024 * 1024) {
-            alert(`Ukuran file > 2MB: ${file.name}`);
-            return;
-        }
-
-        if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
-            return;
-        }
-
-        selectedFiles.push(file);
-
-        const wrapper = document.createElement('div');
-        wrapper.className =
-            'flex items-center justify-between bg-gray-100 rounded-lg p-3 border';
-
-        wrapper.innerHTML = `
-            <div>
-                <p class="text-sm font-semibold">${file.name}</p>
-                <p class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</p>
-            </div>
-            <div class="flex gap-2">
-                <button class="text-xs bg-sky-500 text-white px-3 py-1 rounded">Review</button>
-                <button class="text-xs bg-red-500 text-white px-3 py-1 rounded">Hapus</button>
-            </div>
-        `;
-
-        const [reviewBtn, deleteBtn] = wrapper.querySelectorAll('button');
-
-        reviewBtn.onclick = () => window.open(URL.createObjectURL(file), '_blank');
-        deleteBtn.onclick = () => {
-            selectedFiles = selectedFiles.filter(f => f !== file);
-            wrapper.remove();
-        };
-
-        filePreview.appendChild(wrapper);
-    });
-
-    fileInput.value = '';
-});
-
-// ================= DAERAH TUJUAN (DALAM / LUAR DAERAH) =================
-const wilayahSelect = document.getElementById('wilayah');
-const provSelect    = document.getElementById('provinsi');
-const kabSelect     = document.getElementById('kabkota');
-const provWrapper   = document.getElementById('provinsiWrapper');
-
-let dataWilayah = {};
-
-// default
-provWrapper.style.display = 'none';
-kabSelect.disabled = true;
-
-fetch('/data/kota_kabupaten.json')
-    .then(res => res.json())
-    .then(data => {
-        dataWilayah = data;
-
-        // isi provinsi (LUAR DAERAH SAJA, TANPA JAWA TENGAH)
-        Object.keys(data)
-            .filter(p => p !== 'Jawa Tengah')
-            .sort((a, b) => a.localeCompare(b, 'id'))
-            .forEach(prov => {
+            // Fungsi helper: inisialisasi Jawa Tengah
+            function initializeJatengCities() {
+                provSelect.innerHTML = '';
+                
                 const opt = document.createElement('option');
-                opt.value = prov;
-                opt.textContent = prov;
+                opt.value = 'Jawa Tengah';
+                opt.textContent = 'Jawa Tengah';
+                opt.selected = true;
                 provSelect.appendChild(opt);
+
+                // Isi kabupaten/kota Jawa Tengah
+                if (data['Jawa Tengah']) {
+                    kabSelect.innerHTML = '';
+                    
+                    const placeholder = document.createElement('option');
+                    placeholder.value = '';
+                    placeholder.textContent = 'Pilih Kabupaten/Kota';
+                    placeholder.disabled = true;
+                    placeholder.selected = true;
+                    kabSelect.appendChild(placeholder);
+
+                    data['Jawa Tengah']
+                        .sort((a, b) => a.localeCompare(b, 'id'))
+                        .forEach(kab => {
+                            const opt = document.createElement('option');
+                            opt.value = kab;
+                            opt.textContent = kab;
+                            kabSelect.appendChild(opt);
+                        });
+                }
+            }
+
+            // Saat provinsi dipilih
+            provSelect.addEventListener('change', () => {
+                const provinsiDipilih = provSelect.value;
+
+                kabSelect.innerHTML = '';
+                kabSelect.disabled = false;
+
+                // placeholder
+                const placeholder = document.createElement('option');
+                placeholder.value = '';
+                placeholder.textContent = 'Pilih Kab/Kota';
+                placeholder.disabled = true;
+                placeholder.selected = true;
+                kabSelect.appendChild(placeholder);
+
+                // isi kab/kota sesuai provinsi
+                if (data[provinsiDipilih]) {
+                    data[provinsiDipilih]
+                        .sort((a, b) => a.localeCompare(b, 'id'))
+                        .forEach(kab => {
+                            const opt = document.createElement('option');
+                            opt.value = kab;
+                            opt.textContent = kab;
+                            kabSelect.appendChild(opt);
+                        });
+                }
             });
-    });
-
-// pilih wilayah
-wilayahSelect.addEventListener('change', () => {
-    kabSelect.innerHTML = `<option disabled selected>Pilih Kabupaten/Kota</option>`;
-    kabSelect.disabled = false;
-
-    if (wilayahSelect.value === 'dalam') {
-        // DALAM DAERAH
-        provWrapper.style.display = 'none';
-
-        dataWilayah['Jawa Tengah']
-            .sort((a, b) => a.localeCompare(b, 'id'))
-            .forEach(kab => {
-                const opt = document.createElement('option');
-                opt.value = kab;
-                opt.textContent = kab;
-                kabSelect.appendChild(opt);
-            });
-
-    } else {
-        // LUAR DAERAH
-        provWrapper.style.display = 'block';
-        kabSelect.disabled = true;
-        provSelect.selectedIndex = 0;
-    }
+        })
+        .catch(err => console.error('Gagal memuat data wilayah:', err));
 });
 
-// pilih provinsi (LUAR DAERAH)
-provSelect.addEventListener('change', () => {
-    kabSelect.innerHTML = `<option disabled selected>Pilih Kabupaten/Kota</option>`;
-    kabSelect.disabled = false;
+//================= UPLOAD FILE PREVIEW =================
+document.addEventListener('DOMContentLoaded', () => {
+    const fileInput = document.getElementById('fileUpload');
+    const filePreview = document.getElementById('filePreview'); 
 
-    dataWilayah[provSelect.value]
-        .sort((a, b) => a.localeCompare(b, 'id'))
-        .forEach(kab => {
-            const opt = document.createElement('option');
-            opt.value = kab;
-            opt.textContent = kab;
-            kabSelect.appendChild(opt);
+    if (fileInput && filePreview) {
+        fileInput.addEventListener('change', () => {
+            // Bersihkan preview lama tiap kali user pilih file baru
+            filePreview.innerHTML = ''; 
+            const file = fileInput.files[0];
+
+            if (file) {
+                // 1. Validasi Ukuran (Max 10MB)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`Ukuran file terlalu besar (max 10MB). Ukuran file: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+                    fileInput.value = ''; // Reset input
+                    return;
+                }
+
+                // 2. Validasi Tipe (PDF Only)
+                if (!file.type.includes('pdf')) {
+                    alert('Hanya file PDF yang diterima');
+                    fileInput.value = ''; // Reset input
+                    return;
+                }
+
+                // 3. Render HTML Preview
+                const wrapper = document.createElement('div');
+                wrapper.className = 'flex items-center justify-between bg-lime-50 rounded-lg p-3 border border-lime-200';
+
+                // Bagian Info File
+                const info = document.createElement('div');
+                info.className = 'flex items-center gap-3';
+                info.innerHTML = `
+                    <div class="w-8 h-8 bg-lime-100 rounded flex items-center justify-center text-lime-600">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-800">${file.name}</p>
+                        <p class="text-xs text-gray-500">${(file.size / 1024).toFixed(1)} KB</p>
+                    </div>
+                `;
+
+                // Bagian Tombol Hapus (X)
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button'; // Penting biar gak submit form
+                removeBtn.className = 'text-red-400 hover:text-red-600 transition p-2';
+                removeBtn.innerHTML = '<i class="fa-solid fa-xmark text-lg"></i>';
+                
+                // Logic Hapus File
+                removeBtn.addEventListener('click', () => {
+                    fileInput.value = ''; // Kosongkan input file asli
+                    filePreview.innerHTML = ''; // Hapus tampilan preview
+                });
+
+                // Gabungkan elemen
+                wrapper.appendChild(info);
+                wrapper.appendChild(removeBtn);
+                filePreview.appendChild(wrapper);
+            }
         });
-});
-
-// ================= SIDEBAR =================
-const sidebar = document.getElementById('sidebar');
-const toggleBtn = document.getElementById('toggleSidebar');
-
-toggleBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('-translate-x-full');
+    }
 });
