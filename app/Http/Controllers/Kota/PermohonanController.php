@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Kota;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -22,24 +23,19 @@ class PermohonanController extends Controller
     {
         $user = Auth::user();
         
-        // Filter data (sama seperti sebelumnya)
+        // Filter data 
         if ($user->role === 'daerah') {
             $permohonans = Permohonan::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         } else {
             $permohonans = Permohonan::orderBy('created_at', 'desc')->get();
         }
 
-        // JANGAN PAKAI response()->json()!
-        // Gunakan return view agar menampilkan halaman desain kamu
         return view('kota.permohonan_kakot', [
             'title' => 'Daftar Permohonan',
             'permohonans' => $permohonans
         ]);
     }
-    /**
-     * Show a single permohonan detail
-     */
-// app/Http/Controllers/Kota/PermohonanController.php
+
 
     public function show($id)
     {
@@ -85,26 +81,36 @@ class PermohonanController extends Controller
             $filePath = Storage::url('permohonan/' . $fileName);
         }
 
-        // Create permohonan
-    $permohonan = Permohonan::create([
-        'user_id' => Auth::id(),
-        'nama_subjek' => $validated['nama_subjek'],
-        'daerah_asal' => $validated['daerah_asal'],
-        'wilayah' => $validated['wilayah'],
-        'wilayah_tujuan' => $validated['wilayah_tujuan'],
-        'daerah_tujuan' => $validated['daerah_tujuan'],
-        'nomor_surat' => $validated['nomor_surat'],
-        'tanggal_surat' => $validated['tanggal_surat'],
-        'file_path' => $filePath  , // Contoh fungsi upload
-        'status' => 'BELUM',
-        
-        // Pemetaan: Isi kolom 'jenis' di DB dengan data 'jenis_permohonan' dari form
-        'jenis' => $validated['jenis_permohonan'], 
-        'jenis_permohonan' => $validated['jenis_permohonan'],
-        'jenis_dokumen' => $validated['jenis_dokumen'],
-    ]);
+        $targetUserId = null; // Default null kalau luar provinsi
 
-        return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
+        if ($request->wilayah == 'dalam') {
+            $targetUser = User::where('name', $request->daerah_tujuan)
+                            ->where('role', 'daerah') 
+                            ->first();
+
+            if (!$targetUser) {
+                return back()->withErrors(['daerah_tujuan' => 'Akun untuk daerah tujuan ini belum dibuat oleh Superadmin. Hubungi Admin Provinsi.'])->withInput();
+            }
+            $targetUserId = $targetUser->id; 
+        }
+
+        // Create permohonan
+        $permohonan = Permohonan::create([
+            'user_id' => Auth::id(),
+            'nama_subjek' => $validated['nama_subjek'],
+            'daerah_asal' => Auth::user()->name,
+            'wilayah' => $validated['wilayah'],
+            'wilayah_tujuan' => $validated['wilayah_tujuan'],
+            'daerah_tujuan' => $validated['daerah_tujuan'],
+            'nomor_surat' => $validated['nomor_surat'],
+            'tanggal_surat' => $validated['tanggal_surat'],
+            'file_path' => $filePath  ,
+            'status' => 'BELUM',
+            'jenis_permohonan' => $validated['jenis_permohonan'],
+            'jenis_dokumen' => $validated['jenis_dokumen'],
+        ]);
+
+            return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
 
     }
 }
