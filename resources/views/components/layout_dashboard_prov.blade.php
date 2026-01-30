@@ -25,13 +25,13 @@ $role='provinsi';
     <main class="md:ml-48 flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header_prov>{{ $title }}</x-header_prov>
+        <x-header>{{ $title }}</x-header>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">
 
             <!-- STATUS CARD -->
-            <x-statuscard_prov></x-statuscard_prov>
+            <x-statuscard_prov :stat="$stat"></x-statuscard_prov>
 
             <!-- TABLE -->
             {{ $slot }}

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('tanggal_surat_selesai');
             $table->string('alasan')->nullable();
             $table->string('file_path');
-            $table->enum('hasil', ['TERCATAT', 'TIDAK TERCATAT', 'DISETUJUI', 'TIDAK DISETUJUI', 'LAINNYA']); 
+            $table->enum('hasil', ['TERCATAT', 'TIDAK TERCATAT', 'DISETUJUI', 'TIDAK DISETUJUI', 'LAINNYA'])->nullable(); 
             $table->timestamps();
         });
     }

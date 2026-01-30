@@ -1,7 +1,4 @@
 @php
-    $role = $role ?? 'kota';
-    $role = $role ?? 'provinsi';
-
     // CONTOH NOTIF (nanti bisa dari DB)
     $notifPenerbitan = 2;
     $notifBalasan = 5;
@@ -62,24 +59,24 @@
 
         @if($role === 'provinsi')
             <x-nav-link 
-                href="/dashboard_provinsi" 
+                href="{{ route('provinsi.dashboard') }}" 
                 icon="fa-solid fa-grip">
                 Dashboard
             </x-nav-link>
 
             <x-nav-link
-                href="/penerbitan-provinsi"
+                href="{{ route('penerbitanprov.index') }}"
                 icon="fa-print"
                 :count="$notifPenerbitan">
                 Penerbitan
             </x-nav-link>
 
-            <x-nav-link
-                href="/balasan_provinsi"
+            {{-- <x-nav-link
+                href="{{ route('balasanprov.index') }}"
                 icon="fa-pen-to-square"
                 :count="$notifBalasan">
                 Balasan
-            </x-nav-link>
+            </x-nav-link> --}}
 
             <x-nav-link 
                 href="/profil-provinsi" 

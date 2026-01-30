@@ -4,61 +4,61 @@ namespace App\Http\Controllers\Provinsi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
-use App\Models\BalasanProvinsi; // Panggil Model ini
+// Model BalasanProvinsi sudah tidak perlu diimport jika tidak digunakan lagi
 use Illuminate\Http\Request;
 
 class DashboardProvController extends Controller
 {
     public function index()
     {
-        // Gatekeeper hanya melihat yang statusnya 'BELUM'
+        // 1. Ambil data permohonan masuk untuk tabel
         $permohonanMasuk = Permohonan::where('status', 'BELUM')
-                                     ->orderBy('created_at', 'asc') // FIFO (First In First Out)
-                                     ->get();
+                                    ->orderBy('created_at', 'asc')
+                                    ->get();
+        
+        // 2. Hitung statistik untuk status card (Variabel $stat yang dicari Blade)
+        $stat = [
+            'total'    => Permohonan::where('status', 'BELUM')->count()
+        ];
 
+        // 3. Kirim $stat ke view
         return view('provinsi.dashboard_prov', [
             'title' => 'Dashboard Provinsi',
-            'permohonanMasuk' => $permohonanMasuk
+            'permohonanMasuk' => $permohonanMasuk,
+            'stat' => $stat // Tambahkan ini agar tidak undefined!
         ]);
     }
 
-    // --- AKSI 1: VERIFIKASI (LANJUT KE DAERAH TUJUAN) ---
+    // --- AKSI 1: VERIFIKASI ---
     public function verifikasi($id)
     {
         $permohonan = Permohonan::findOrFail($id);
         
-        // Ubah status jadi DIPROSES agar muncul di dashboard Kota Tujuan
         $permohonan->update([
-            'status' => 'DIPROSES'
+            'status' => 'DIPROSES',
+            'catatan' => null 
         ]);
 
         return redirect()->back()->with('success', 'Permohonan valid! Berkas diteruskan ke daerah tujuan.');
     }
 
-    // --- AKSI 2: TOLAK (SIMPAN ALASAN DI TABEL KHUSUS) ---
+    // --- AKSI 2: TOLAK ---
     public function tolak(Request $request, $id)
     {
-        // 1. Validasi Alasan Wajib Diisi
+        
         $request->validate([
             'alasan_tolak' => 'required|string|min:5'
         ]);
 
         $permohonan = Permohonan::findOrFail($id);
 
-        // 2. Ubah Status Utama jadi DITOLAK
         $permohonan->update([
-            'status' => 'DITOLAK'
-        ]);
-
-        // 3. Simpan Alasan ke Tabel balasan_provinsi
-        BalasanProvinsi::create([
-            'permohonan_id'    => $id,
-            'alasan_penolakan' => $request->alasan_tolak
+            'status'  => 'DITOLAK',
+            'catatan' => $request->alasan_tolak
         ]);
 
         return redirect()->back()->with('success', 'Permohonan dikembalikan ke pemohon (Ditolak).');
     }
-
 
     public function show($id)
     {
@@ -69,6 +69,4 @@ class DashboardProvController extends Controller
             'permohonan' => $permohonan
         ]);
     }
-
-
 }
