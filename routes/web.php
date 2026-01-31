@@ -10,6 +10,7 @@ use App\Http\Controllers\Kota\ProfilController;
 use App\Http\Controllers\Provinsi\DashboardProvController;
 use App\Http\Controllers\Provinsi\PenerbitanProv;
 use App\Http\Controllers\Provinsi\PermohonanProvController;
+use App\Http\Controllers\Provinsi\ProfilProvController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,19 +76,24 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/detail_permohonan_prov/{id}', [PermohonanProvController::class, 'show'])->name('permohonan.show');
         Route::get('/unggah_penerbitan_prov/proses/{id}', [PenerbitanProv::class, 'create'])->name('penerbitanprov.create');
         Route::post('/unggah_penerbitan_prov/proses', [PenerbitanProv::class, 'store'])->name('penerbitanprov.store');
+
+        //Route Profil
+        Route::get('/profil_provinsi', [ProfilProvController::class, 'index'])->name('profilprov.index');
+
+
         
 
 
-        Route::get('/balasan-provinsi', function () {
-            return view('provinsi.balasan_prov', ['title' => 'Balasan']);
-        });
-        Route::get('/detail-balasan-prov', function () {
-            return view('provinsi.detail_balasan_prov', ['title' => 'Detail balasan']);
-        });
+        // Route::get('/balasan-provinsi', function () {
+        //     return view('provinsi.balasan_prov', ['title' => 'Balasan']);
+        // });
+        // Route::get('/detail-balasan-prov', function () {
+        //     return view('provinsi.detail_balasan_prov', ['title' => 'Detail balasan']);
+        // });
 
-        Route::get('/profil-provinsi', function () {
-            return view('provinsi.profil_prov', ['title' => 'Profil']);
-        });
+        // Route::get('/profil-provinsi', function () {
+        //     return view('provinsi.profil_prov', ['title' => 'Profil']);
+        // });
     });
 
     //---USER SUPERADMIN---

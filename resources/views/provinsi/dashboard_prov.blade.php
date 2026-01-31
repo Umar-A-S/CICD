@@ -8,7 +8,7 @@
         </p>
 
         @if(session('success'))
-            <div style="background: #dcfce7; color: #166534; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #bbf7d0;">
+            <div style="background: #dcfce7; color: #166534; padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #bbf7d0; font-size: 14px;">
                 ✓ {{ session('success') }}
             </div>
         @endif
@@ -27,10 +27,10 @@
 
                 <tbody>
                     @forelse($permohonanMasuk as $item)
-                    <tr>
+                    {{-- Tambahkan data-id untuk dikenali JS --}}
+                    <tr data-id="{{ $item->id }}" data-status="pending">
                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                         <td>{{ $item->daerah_asal }}</td>
-                        
                         <td>
                             @if($item->wilayah == 'dalam')
                                 Jateng
@@ -38,32 +38,27 @@
                                 Luar Jateng
                             @endif
                         </td>
-                        
                         <td>{{ $item->daerah_tujuan }}</td>
-                        
                         <td class="aksi" style="display:flex;justify-content:center;gap:6px;">
-                            
-                            <form action="{{ route('provinsi.verifikasi', $item->id) }}" method="POST" 
-                                  onsubmit="return confirm('Apakah Anda yakin dokumen ini valid?')">
+                            {{-- Tombol Span sesuai model mentah --}}
+                            <span class="btn green">Verifikasi</span>
+                            <span class="btn red">Kembalikan</span>
+                            <span class="btn blue">Lihat Detail</span>
+
+                            {{-- Hidden Forms untuk Logika Backend --}}
+                            <form id="form-verifikasi-{{ $item->id }}" action="{{ route('provinsi.verifikasi', $item->id) }}" method="POST" class="hidden">
                                 @csrf
-                                <button type="submit" class="btn green" style="border:none; cursor:pointer; font-family:inherit; font-size:inherit;">
-                                    Verifikasi
-                                </button>
                             </form>
 
-                            <button type="button" class="btn red" style="border:none; cursor:pointer; font-family:inherit; font-size:inherit;"
-                                    onclick="bukaModalTolak('{{ route('provinsi.tolak', $item->id) }}')">
-                                Kembalikan
-                            </button>
-
-                            <a href="{{ route('penerbitanprov.show', $item->id) }}" class="btn blue" style="text-decoration: none;">
-                                Lihat Detail
-                            </a>
+                            <form id="form-tolak-{{ $item->id }}" action="{{ route('provinsi.tolak', $item->id) }}" method="POST" class="hidden">
+                                @csrf
+                                <input type="hidden" name="alasan_tolak" id="input-alasan-{{ $item->id }}">
+                            </form>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" style="padding: 20px; color: #888; font-style: italic;">
+                        <td colspan="5" style="padding: 40px; color: #888; font-style: italic;">
                             Tidak ada antrian berkas saat ini.
                         </td>
                     </tr>
@@ -73,53 +68,44 @@
         </div>
     </section>
 
+    <div id="modalVerifikasi" class="modal hidden">
+        <div class="modal-content">
+            <h3>Verifikasi Berkas</h3>
+            <p>Pastikan seluruh berkas telah lengkap dan sesuai</p>
+            <div class="modal-actions">
+                <button class="btn cancel" onclick="closeModalVerifikasi()">Batal</button>
+                <button class="btn green" onclick="submitVerifikasi()">Verifikasi</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notifVerifikasi" class="notif hidden">
+        <div class="notif-box">
+            <div class="checkmark" style="background:#22c55e">✓</div>
+            <p>Berkas berhasil diverifikasi</p>
+        </div>
+    </div>
+
     <div id="modalKembalikan" class="modal hidden">
         <div class="modal-content">
             <h3>Kembalikan Berkas</h3>
             <p>Silakan isi alasan pengembalian berkas</p>
+            <textarea id="alasanKembalikan" placeholder="Contoh: Berkas belum lengkap..."></textarea>
+            <div class="modal-actions">
+                <button class="btn cancel" onclick="closeModal()">Batal</button>
+                <button class="btn red" onclick="submitKembalikan()">Kembalikan</button>
+            </div>
+        </div>
+    </div>
 
-            <form id="formTolak" method="POST" action="">
-                @csrf
-                <textarea
-                    name="alasan_tolak"
-                    id="alasanKembalikan"
-                    placeholder="Contoh: Berkas belum lengkap / Data tidak sesuai..."
-                    required
-                    style="width: 100%; min-height: 100px; margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"
-                ></textarea>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn cancel" onclick="closeModal()">Batal</button>
-                    <button type="submit" class="btn red">Kembalikan</button>
-                </div>
-            </form>
+    <div id="notifSuccess" class="notif hidden">
+        <div class="notif-box">
+            <div class="checkmark">✓</div>
+            <p>Berkas berhasil dikembalikan</p>
         </div>
     </div>
 
     <script>
-        // Fungsi untuk membuka modal & set tujuan form (Action URL)
-        function bukaModalTolak(urlAction) {
-            // 1. Ambil Form
-            const form = document.getElementById('formTolak');
-            // 2. Set Action-nya sesuai tombol yg diklik (misal: /provinsi/tolak/5)
-            form.action = urlAction;
-            // 3. Reset isi textarea
-            document.getElementById('alasanKembalikan').value = '';
-            // 4. Munculkan Modal
-            document.getElementById('modalKembalikan').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('modalKembalikan').classList.add('hidden');
-        }
-
-        // Tutup modal kalau klik di luar area putih (Opsional/Bonus UX)
-        window.onclick = function(event) {
-            const modal = document.getElementById('modalKembalikan');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
+        window.detailBaseUrl = "{{ url('/detail_permohonan_prov') }}";
     </script>
-
 </x-layout_dashboard_prov>

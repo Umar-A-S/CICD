@@ -71,15 +71,10 @@
                 Penerbitan
             </x-nav-link>
 
-            {{-- <x-nav-link
-                href="{{ route('balasanprov.index') }}"
-                icon="fa-pen-to-square"
-                :count="$notifBalasan">
-                Balasan
-            </x-nav-link> --}}
+
 
             <x-nav-link 
-                href="/profil-provinsi" 
+                href="{{ route('profilprov.index') }}" 
                 icon="fa-solid fa-user">
                 Profil
             </x-nav-link>
