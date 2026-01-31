@@ -1,19 +1,21 @@
-# Dependency directories
+# --- Dependency Directories ---
 /node_modules
 /vendor
 
-# Sensitive files
+# --- Sensitive Files ---
+# Kita ignore .env asli agar tidak masuk ke image, 
+# karena CI/CD kamu sudah membuat .env sendiri saat build.
 .env
 .env.*
 !.env.example
 *.key
 
-# Git files
+# --- Git Files ---
 .git
 .gitignore
 .gitattributes
 
-# Laravel specific (logs & cache)
+# --- Laravel Logs & Cache ---
 storage/logs/*
 storage/framework/cache/*
 storage/framework/sessions/*
@@ -21,20 +23,26 @@ storage/framework/views/*
 bootstrap/cache/*
 !bootstrap/cache/.gitkeep
 
-# Testing & IDE
-tests/
-.phpunit.result.cache
-phpunit.xml
+# --- IDE & OS Files ---
 .idea/
 .vscode/
+.DS_Store
+Thumbs.db
 
-# Public assets (jika dicompile saat build)
+# --- Testing ---
+# PENTING: Jangan masukkan 'tests/' dan 'phpunit.xml' di sini 
+# karena CI/CD kamu butuh file ini untuk langkah "Install & Migrate (Testing)".
+.phpunit.result.cache
+
+# --- Public Assets (Sering di-ignore jika aset dicompile via CI) ---
 public/hot
 public/storage
 npm-debug.log
 yarn-error.log
 
-# Docker specific
+# --- Docker & CI/CD Config ---
+# Kita tidak butuh file config docker/ci ini di dalam image production.
 Dockerfile
 docker-compose.yml
 .dockerignore
+.github/
