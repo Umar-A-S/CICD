@@ -1,0 +1,40 @@
+# Dependency directories
+/node_modules
+/vendor
+
+# Sensitive files
+.env
+.env.*
+!.env.example
+*.key
+
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Laravel specific (logs & cache)
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+
+# Testing & IDE
+tests/
+.phpunit.result.cache
+phpunit.xml
+.idea/
+.vscode/
+
+# Public assets (jika dicompile saat build)
+public/hot
+public/storage
+npm-debug.log
+yarn-error.log
+
+# Docker specific
+Dockerfile
+docker-compose.yml
+.dockerignore
