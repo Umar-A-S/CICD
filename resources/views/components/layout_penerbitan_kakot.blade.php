@@ -1,6 +1,3 @@
-@php
-$role='kota'; 
-@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>

@@ -1,6 +1,3 @@
-<?php
-$role='kota';
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -20,12 +17,12 @@ $role='kota';
 <body class="flex h-screen overflow-hidden">
 
     <!-- SIDEBAR -->
-    <x-sidebar :role="$role"></x-sidebar>
+    <x-sidebar_kakot :role="$role"></x-sidebar_kakot>
 
     <main class="md:ml-48 flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header_kakot>{{ $title }}</x-header_kakot>
+        <x-header>{{ $title }}</x-header>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">

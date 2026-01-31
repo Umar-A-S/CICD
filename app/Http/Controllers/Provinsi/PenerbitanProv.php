@@ -18,8 +18,6 @@ class PenerbitanProv extends Controller
      */
     public function index()
     {
-        $daerahUser = Auth::user()->name; 
-
         // Data 1: Perlu Dibalas (Status bukan SELESAI dan ditujukan ke user ini)
         $permohonanPerlu = Permohonan::where('wilayah', 'luar')
             ->where('status', 'DIPROSES')
@@ -42,10 +40,15 @@ class PenerbitanProv extends Controller
     {
         $permohonan = Permohonan::findOrFail($id);
 
+        // --- SATPAM 0: Cek Authorization (Hanya permohonan luar Jateng yang boleh diproses Provinsi) ---
+        if ($permohonan->wilayah !== 'luar') {
+            abort(403, 'Hanya permohonan tujuan luar Jateng yang bisa diproses di menu ini.');
+        }
+
         // --- SATPAM 1: Cek Status ---
         // Kalau status sudah SELESAI, dilarang masuk form lagi!
         if ($permohonan->status == 'SELESAI') {
-            return redirect()->route('penerbitan.index')
+            return redirect()->route('penerbitanprov.index')
                 ->with('error', 'Permohonan ini sudah diselesaikan sebelumnya!');
         }
         // ----------------------------
@@ -112,6 +115,11 @@ class PenerbitanProv extends Controller
     public function show($id)
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
+
+        // Proteksi Keamanan: Hanya permohonan luar Jateng yang boleh dilihat di menu Penerbitan Provinsi
+        if ($permohonan->wilayah !== 'luar') {
+            abort(403, 'Anda tidak memiliki akses ke data ini.');
+        }
 
         return view('provinsi.detail_penerbitan_prov', [
             'title' => 'Detail Penerbitan',

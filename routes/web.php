@@ -44,6 +44,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Route Penerbitan
         Route::get('/penerbitan_kakot', [PenerbitanController::class, 'index'])->name('penerbitan.index');
+        Route::get('/detail_permohonan_penerbitan/{id}', [PenerbitanController::class, 'detailPermohonan'])->name('penerbitan.detailPermohonan');
         Route::get('/detail_penerbitan_kakot/{id}', [PenerbitanController::class, 'show'])->name('penerbitan.show');
         Route::get('/unggah_penerbitan_kakot/proses/{id}', [PenerbitanController::class, 'create'])->name('penerbitan.create');
         Route::post('/unggah_penerbitan_kakot/proses', [PenerbitanController::class, 'store'])->name('penerbitan.store');

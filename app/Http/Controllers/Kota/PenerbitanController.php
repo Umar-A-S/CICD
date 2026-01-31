@@ -42,6 +42,11 @@ class PenerbitanController extends Controller
     {
         $permohonan = Permohonan::findOrFail($id);
 
+        // --- SATPAM 0: Cek Authorization (Permohonan harus ditujukan ke daerah ini) ---
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Permohonan ini bukan untuk daerah Anda.');
+        }
+
         // --- SATPAM 1: Cek Status ---
         // Kalau status sudah SELESAI, dilarang masuk form lagi!
         if ($permohonan->status == 'SELESAI') {
@@ -65,7 +70,7 @@ class PenerbitanController extends Controller
         $request->validate([
             'permohonan_id' => 'required|exists:permohonan,id',
             'hasil'         => 'required|in:TERCATAT,TIDAK TERCATAT,DISETUJUI,DITOLAK,LAINNYA',
-            'alasan'        => 'required|string',
+            'alasan'        => 'nullable|string',
             'file_balasan'  => 'required|file|mimes:pdf|max:10240',
         ]);
 
@@ -107,11 +112,35 @@ class PenerbitanController extends Controller
         return redirect()->route('penerbitan.index')->with('success', 'Dokumen berhasil diproses!');
     }
     /**
-     * Menampilkan Detail (Opsional jika belum ada)
+     * Menampilkan Detail Permohonan dari Menu Penerbitan (untuk Daerah Tujuan)
+     * Dipisah dari PermohonanController karena context berbeda
+     */
+    public function detailPermohonan($id)
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        // Proteksi Keamanan: Hanya daerah tujuan yang bisa lihat detail di menu penerbitan
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Permohonan ini bukan untuk daerah Anda.');
+        }
+
+        return view('kota.detail_permohonan_kakot', [
+            'title' => 'Detail Permohonan (Penerbitan)',
+            'permohonan' => $permohonan
+        ]);
+    }
+
+    /**
+     * Menampilkan Detail Penerbitan (Balasan yang sudah diproses)
      */
     public function show($id)
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
+
+        // Proteksi Keamanan: Hanya daerah tujuan yang bisa melihat detail penerbitan
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Anda tidak memiliki akses ke data ini.');
+        }
 
         return view('kota.detail_penerbitan_kakot', [
             'title' => 'Detail Penerbitan',

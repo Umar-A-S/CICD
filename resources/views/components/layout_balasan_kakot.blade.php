@@ -1,4 +1,3 @@
-<?php $role = 'kota'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>

@@ -56,7 +56,7 @@ class PermohonanProvController extends Controller
      */
     public function store(Request $request)
     {
-            // Validasi input
+        // Validasi input
         $validated = $request->validate([
             'nama_subjek' => 'required|string',
             'daerah_asal' => 'required|string',
@@ -79,7 +79,9 @@ class PermohonanProvController extends Controller
             $filePath = Storage::url('permohonan/' . $fileName);
         }
 
-        $targetUserId = null; // Default null kalau luar provinsi
+        // Ambil user daerah tujuan untuk verifikasi & dapatkan kode wilayah
+        $targetUser = null;
+        $kodeWilayahTujuan = null;
 
         if ($request->wilayah == 'dalam') {
             $targetUser = User::where('name', $request->daerah_tujuan)
@@ -89,7 +91,8 @@ class PermohonanProvController extends Controller
             if (!$targetUser) {
                 return back()->withErrors(['daerah_tujuan' => 'Akun untuk daerah tujuan ini belum dibuat oleh Superadmin. Hubungi Admin Provinsi.'])->withInput();
             }
-            $targetUserId = $targetUser->id; 
+
+            $kodeWilayahTujuan = $targetUser->kode_wilayah;
         }
 
         // Create permohonan
@@ -100,15 +103,16 @@ class PermohonanProvController extends Controller
             'wilayah' => $validated['wilayah'],
             'wilayah_tujuan' => $validated['wilayah_tujuan'],
             'daerah_tujuan' => $validated['daerah_tujuan'],
+            'kode_daerah_tujuan' => $kodeWilayahTujuan,
             'nomor_surat' => $validated['nomor_surat'],
             'tanggal_surat' => $validated['tanggal_surat'],
-            'file_path' => $filePath  ,
+            'file_path' => $filePath,
             'status' => 'BELUM',
             'jenis_permohonan' => $validated['jenis_permohonan'],
             'jenis_dokumen' => $validated['jenis_dokumen'],
         ]);
 
-            return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
+        return redirect('/dashboard_provinsi')->with('success', 'Permohonan berhasil dikirim!');
 
     }
 }

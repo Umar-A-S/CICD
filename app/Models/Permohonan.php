@@ -21,6 +21,7 @@ class Permohonan extends Model
         'wilayah',
         'wilayah_tujuan',
         'daerah_tujuan',
+        'kode_daerah_tujuan',
         'daerah_asal',
         'jenis_permohonan',
         'jenis_dokumen',
