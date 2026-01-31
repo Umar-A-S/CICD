@@ -131,10 +131,18 @@ jobs:
           cat <<'EOF' > $target_dir/nginx/default.conf
           server {
               listen 80;
-              server_name /${{ secrets.APP_URL }};
+              server_name ${{ secrets.APP_URL }};
 
               root /var/www/html/selaksa-app/public;
               index index.php index.html index.htm;
+
+              location /storage/ {
+                  alias /var/www/html/selaksa-app/storage/app/public/;
+                  access_log off;
+                  expires 30d;
+                  add_header Cache-Control "public";
+              }
+
 
               location / {
                   try_files $uri $uri/ /index.php?$query_string;
