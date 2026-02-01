@@ -7,6 +7,8 @@ use App\Models\Permohonan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+use function Laravel\Prompts\alert;
+
 class DashboardKotaController extends Controller
 {
     public function index(): View
@@ -23,14 +25,9 @@ class DashboardKotaController extends Controller
             $permohonans = Permohonan::where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
-        } elseif ($user->role === 'provinsi') {
-            // Admin provinsi: tetap lihat permohonan status BELUM untuk divalidasi
-            $permohonans = Permohonan::where('status', 'BELUM')
-                ->orderBy('created_at', 'desc')
-                ->get();
         } else {
-            // Superadmin: lihat semua tanpa filter
-            $permohonans = Permohonan::orderBy('created_at', 'desc')->get();
+            abort(403, 'Akses tidak sah.');
+            
         }
 
         // // DEBUG
