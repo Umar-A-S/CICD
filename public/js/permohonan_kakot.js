@@ -139,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //================= UPLOAD FILE PREVIEW (TIDAK PERLU DIUBAH) =================
 document.addEventListener('DOMContentLoaded', () => {
-    // ... code upload preview kamu yang lama tetap aman ...
     const fileInput = document.getElementById('fileUpload');
     const filePreview = document.getElementById('filePreview'); 
 

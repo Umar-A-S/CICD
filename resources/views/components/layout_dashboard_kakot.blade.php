@@ -24,7 +24,7 @@ $role='kota';
     <main class="md:ml-48 flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header_kakot>{{ $title }}</x-header_kakot>
+        <x-header>{{ $title }}</x-header>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">

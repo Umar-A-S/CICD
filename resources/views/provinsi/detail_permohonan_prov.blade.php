@@ -1,4 +1,4 @@
-<x-layout_detail_permohonan_prov>
+<x-layout_detail_permohonan>
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="bg-gray-100 min-h-screen py-10 px-6">
@@ -79,7 +79,7 @@
                     </div>
 
                     <!-- BUTTON -->
-                    <button onclick="history.back()"
+                    <button onclick="javascript:history.back()"
                         class="mt-16 w-fit bg-lime-400 hover:bg-lime-500 text-black font-bold px-10 py-3 rounded-xl">
                         KEMBALI
                     </button>
@@ -146,4 +146,4 @@
             </div>
         </div>
     </div>
-</x-layout_detail_permohonan_prov>
+</x-layout_detail_permohonan>

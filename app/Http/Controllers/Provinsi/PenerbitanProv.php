@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Kota;
+namespace App\Http\Controllers\Provinsi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
@@ -11,28 +11,28 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class PenerbitanController extends Controller
+class PenerbitanProv extends Controller
 {
     /**
      * Menampilkan daftar penerbitan (Perlu Dibalas & Selesai)
      */
     public function index()
     {
-        $daerahUser = Auth::user()->name; // Asumsi: username = nama daerah (misal: admin_magelang)
+        $daerahUser = Auth::user()->name; 
 
         // Data 1: Perlu Dibalas (Status bukan SELESAI dan ditujukan ke user ini)
-        $permohonanPerlu = Permohonan::where('daerah_tujuan', $daerahUser)
+        $permohonanPerlu = Permohonan::where('wilayah', 'luar')
             ->where('status', 'DIPROSES')
             ->orderBy('created_at', 'asc')
             ->get();
 
         // Data 2: Selesai (Status SELESAI dan ditujukan ke user ini)
-        $permohonanSelesai = Permohonan::where('daerah_tujuan', $daerahUser)
+        $permohonanSelesai = Permohonan::where('wilayah', 'luar')
             ->whereIn('status', ['SELESAI', 'DITOLAK'])
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('kota.penerbitan_kakot', compact('permohonanPerlu', 'permohonanSelesai'));
+        return view('provinsi.penerbitan_prov', compact('permohonanPerlu', 'permohonanSelesai'));
     }
 
     /**
@@ -50,8 +50,8 @@ class PenerbitanController extends Controller
         }
         // ----------------------------
 
-        return view('kota.unggah_penerbitan_kakot', [
-            'title' => 'Proses Penerbitan',
+        return view('provinsi.unggah_penerbitan_prov', [
+            'title' => 'Penerbitan',
             'permohonan' => $permohonan
         ]);
     }
@@ -73,7 +73,7 @@ class PenerbitanController extends Controller
 
         // Cek agar tidak double input
         if (in_array($permohonan->status, ['SELESAI', 'DITOLAK'])) {
-            return redirect()->route('penerbitan.index')
+            return redirect()->route('penerbitanprov.index')
                 ->with('error', 'Data ini sudah selesai diproses!');
         }
 
@@ -104,7 +104,7 @@ class PenerbitanController extends Controller
             'catatan' => $request->alasan 
         ]);
 
-        return redirect()->route('penerbitan.index')->with('success', 'Dokumen berhasil diproses!');
+        return redirect()->route('penerbitanprov.index')->with('success', 'Dokumen berhasil diproses!');
     }
     /**
      * Menampilkan Detail (Opsional jika belum ada)
@@ -113,7 +113,7 @@ class PenerbitanController extends Controller
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
 
-        return view('kota.detail_penerbitan_kakot', [
+        return view('provinsi.detail_penerbitan_prov', [
             'title' => 'Detail Penerbitan',
             'permohonan' => $permohonan
         ]);
