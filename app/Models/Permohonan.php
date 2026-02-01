@@ -25,7 +25,8 @@ class Permohonan extends Model
         'jenis_permohonan',
         'jenis_dokumen',
         'file_path',
-        'status'
+        'status',
+        'catatan',
     ];
 
     // Cast untuk date
@@ -44,16 +45,17 @@ class Permohonan extends Model
     /**
      * Relationship: Permohonan has one BalasanProvinsi
      */
-    public function balasanProvinsi()
-    {
-        return $this->hasOne(BalasanProvinsi::class);
-    }
-
     /**
      * Relationship: Permohonan has one Penerbitan
      */
     public function penerbitan()
     {
-        return $this->hasOne(Penerbitan::class);
+        return $this->hasOne(Penerbitan::class)->withDefault([
+            'nomor_surat_selesai' => 'Belum Terbit',
+            'tanggal_surat_selesai' => now(),
+            'alasan' => '-',
+            'file_path' => '-',
+            'hasil' => '-', 
+        ]);
     }
 }
