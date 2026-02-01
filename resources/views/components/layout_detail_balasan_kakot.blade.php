@@ -22,7 +22,7 @@ $role='kota';
     <main class="flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header>{{ $title }}</x-header>
+        <x-header_kakot>{{ $title }}</x-header_kakot>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">

@@ -7,10 +7,6 @@ use App\Http\Controllers\Kota\PermohonanController;
 use App\Http\Controllers\Kota\BalasanController;    
 use App\Http\Controllers\Kota\PenerbitanController;
 use App\Http\Controllers\Kota\ProfilController;
-use App\Http\Controllers\Provinsi\DashboardProvController;
-use App\Http\Controllers\Provinsi\PenerbitanProv;
-use App\Http\Controllers\Provinsi\PermohonanProvController;
-use App\Http\Controllers\Provinsi\ProfilProvController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,14 +36,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/permohonan_kakot', [PermohonanController::class, 'index'])->name('permohonan.index');
         Route::get('/permohonan_kakot/create', [PermohonanController::class, 'create'])->name('permohonan.create');
         Route::post('/permohonan_kakot', [PermohonanController::class, 'store'])->name('permohonan.store');
-        Route::get('/detail_permohonan/{id}', [PermohonanController::class, 'show'])->name('permohonan.show');
+        Route::get('/detail_permohonan_kakot/{id}', [PermohonanController::class, 'show'])->name('permohonan.show');
 
         // Route Penerbitan
         Route::get('/penerbitan_kakot', [PenerbitanController::class, 'index'])->name('penerbitan.index');
         Route::get('/detail_penerbitan_kakot/{id}', [PenerbitanController::class, 'show'])->name('penerbitan.show');
         Route::get('/unggah_penerbitan_kakot/proses/{id}', [PenerbitanController::class, 'create'])->name('penerbitan.create');
         Route::post('/unggah_penerbitan_kakot/proses', [PenerbitanController::class, 'store'])->name('penerbitan.store');
-        
 
         // Route Balasan
         Route::get('/balasan_kakot', [BalasanController::class, 'index'])->name('balasan.index');
@@ -65,42 +60,40 @@ Route::middleware(['auth'])->group(function () {
     {  
         
         // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti
-        Route::get('/dashboard_provinsi', [DashboardProvController::class, 'index'])->name('provinsi.dashboard');
-        Route::post('/provinsi/verifikasi/{id}', [DashboardProvController::class, 'verifikasi'])->name('provinsi.verifikasi');
-        Route::post('/provinsi/tolak/{id}', [DashboardProvController::class, 'tolak'])->name('provinsi.tolak');
-        Route::get('/detail_permohonan_prov/{id}', [DashboardProvController::class, 'show'])->name('provinsi.detail');
+        Route::get('/dashboard_provinsi', function () {
+            return view('provinsi.dashboard_prov', ['title' => 'Dashboard']);
+        });
+        Route::get('/detail_permohonan_prov/{id}', [PermohonanController::class, 'show']);
 
-        // Route Penerbitan
-        Route::get('/penerbitan_provinsi', [PenerbitanProv::class, 'index'])->name('penerbitanprov.index');
-        Route::get('/detail_penerbitan_prov/{id}', [PenerbitanProv::class, 'show'])->name('penerbitanprov.show');
-        Route::get('/detail_permohonan_prov/{id}', [PermohonanProvController::class, 'show'])->name('permohonan.show');
-        Route::get('/unggah_penerbitan_prov/proses/{id}', [PenerbitanProv::class, 'create'])->name('penerbitanprov.create');
-        Route::post('/unggah_penerbitan_prov/proses', [PenerbitanProv::class, 'store'])->name('penerbitanprov.store');
+        Route::get('/penerbitan-provinsi', function () {
+            return view('provinsi.penerbitan_prov', ['title' => 'Penerbitan']);
+        });
+        Route::get('/detail-penerbitan-prov', function () {
+            return view('provinsi.detail_penerbitan_prov', ['title' => 'Detail Penerbitan']);
+        });
+        Route::get('/unggah-penerbitan-prov', function () {
+            return view('provinsi.unggah_penerbitan_prov', ['title' => 'Unggah Penerbitan']);
+        });
 
-        //Route Profil
-        Route::get('/profil_provinsi', [ProfilProvController::class, 'index'])->name('profilprov.index');
+        Route::get('/balasan-provinsi', function () {
+            return view('provinsi.balasan_prov', ['title' => 'Balasan']);
+        });
+        Route::get('/detail-balasan-prov', function () {
+            return view('provinsi.detail_balasan_prov', ['title' => 'Detail balasan']);
+        });
 
-
-        
-
-
-        // Route::get('/balasan-provinsi', function () {
-        //     return view('provinsi.balasan_prov', ['title' => 'Balasan']);
-        // });
-        // Route::get('/detail-balasan-prov', function () {
-        //     return view('provinsi.detail_balasan_prov', ['title' => 'Detail balasan']);
-        // });
-
-        // Route::get('/profil-provinsi', function () {
-        //     return view('provinsi.profil_prov', ['title' => 'Profil']);
-        // });
+        Route::get('/profil-provinsi', function () {
+            return view('provinsi.profil_prov', ['title' => 'Profil']);
+        });
     });
 
     //---USER SUPERADMIN---
     Route::middleware(['checkrole:superadmin'])->group(function () 
     {
         // 3. LEVEL SUPERADMIN - Tambahkan controller nanti
-
+        Route::get('/dashboard-admin', function () {
+            return "Halaman Dashboard Superadmin (Sedang dikembangkan)";
+        })->name('dashboard.admin');
 
     });
 

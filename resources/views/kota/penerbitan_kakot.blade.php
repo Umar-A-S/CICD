@@ -37,7 +37,7 @@
                                 {{ $item->tanggal_surat->format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <a href="/detail_permohonan/{{ $item->id }}" 
+                                <a href="/detail_penerbitan_kakot/{{ $item->id }}" 
                                    class="bg-lime-500 hover:bg-lime-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition inline-block">
                                     DETAIL
                                 </a>
