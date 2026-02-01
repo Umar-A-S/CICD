@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Kota;
+namespace App\Http\Controllers\Provinsi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class PermohonanController extends Controller
+class PermohonanProvController extends Controller
 {
     /**
      * Display a listing of permohonan for the authenticated user
@@ -23,14 +23,12 @@ class PermohonanController extends Controller
     {
         $user = Auth::user();
         
-        // Filter data 
-        if ($user->role === 'daerah') {
-            $permohonans = Permohonan::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
-        } else {
-            abort(403, 'Akses tidak sah.');
-        }
 
-        return view('kota.permohonan_kakot', [
+        $permohonans = Permohonan::where('user_id', $user->id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        return view('provinsi.permohonan_prov', [
             'title' => 'Permohonan',
             'permohonans' => $permohonans
         ]);
@@ -47,7 +45,7 @@ class PermohonanController extends Controller
         //     abort(403, 'Anda tidak memiliki akses ke data ini.');
         // }
 
-        return view('kota.detail_permohonan_kakot', [
+        return view('provinsi.detail_permohonan_prov', [
             'title' => 'Detail Permohonan',
             'permohonan' => $permohonan
         ]);

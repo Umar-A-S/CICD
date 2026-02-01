@@ -17,7 +17,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-            'username', // Ganti email jadi username
+            'username', 
+            'name',
             'password',
             'role',
             'kode_wilayah',

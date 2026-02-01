@@ -177,11 +177,11 @@
 
                 <!-- FOOTER -->
                 <div class="flex justify-between items-center mt-14">
-                    <button type="button" onclick="goBack()"
+                    {{-- <button type="button" onclick="goBack()"
                         class="bg-lime-400 hover:bg-lime-500
                         text-black font-bold px-6 py-2 rounded-xl">
                         KEMBALI
-                    </button>
+                    </button> --}}
 
                     <button type="submit" id="submitBtn"
                         class="bg-sky-500 hover:bg-sky-600
