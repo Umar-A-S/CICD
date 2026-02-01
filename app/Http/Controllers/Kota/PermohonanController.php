@@ -27,11 +27,11 @@ class PermohonanController extends Controller
         if ($user->role === 'daerah') {
             $permohonans = Permohonan::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         } else {
-            abort(403, 'Akses tidak sah.');
+            $permohonans = Permohonan::orderBy('created_at', 'desc')->get();
         }
 
         return view('kota.permohonan_kakot', [
-            'title' => 'Permohonan',
+            'title' => 'Daftar Permohonan',
             'permohonans' => $permohonans
         ]);
     }
@@ -42,10 +42,10 @@ class PermohonanController extends Controller
         // Ambil data permohonan berdasarkan ID, jika tidak ada muncul 404
         $permohonan = Permohonan::findOrFail($id);
 
-        // // Proteksi Keamanan: User daerah hanya boleh lihat miliknya sendiri
-        // if (Auth::user()->role === 'daerah' && $permohonan->user_id !== Auth::id()) {
-        //     abort(403, 'Anda tidak memiliki akses ke data ini.');
-        // }
+        // Proteksi Keamanan: User daerah hanya boleh lihat miliknya sendiri
+        if (Auth::user()->role === 'daerah' && $permohonan->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke data ini.');
+        }
 
         return view('kota.detail_permohonan_kakot', [
             'title' => 'Detail Permohonan',

@@ -140,7 +140,7 @@
 
                             <div>
                                 <label class="{{ $labelClass }}">Catatan / Keterangan</label>
-                                <textarea disabled rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black font-medium resize-none">{{ $permohonan->catatan }}</textarea>
+                                <textarea disabled rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black font-medium resize-none">{{ $permohonan->penerbitan->alasan }}</textarea>
                             </div>
                         </div>
                     </section>
