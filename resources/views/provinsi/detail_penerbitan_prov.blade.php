@@ -150,12 +150,12 @@
             </div>
 
             <div class="mt-20 flex justify-start">
-                <a href="{{ route('penerbitan.index') }}"
+                <button onclick="javascript:history.back()" 
                     class="bg-gray-800 hover:bg-black text-white font-bold px-12 py-3 rounded-xl transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                     <i class="fa-solid fa-arrow-left mr-2"></i> KEMBALI
-                </a>
+                </button>
             </div>
 
         </div>
     </div>
-</x-layout_detail_penerbitan_kakot>
+</x-layout_detail_penerbitan_prov>

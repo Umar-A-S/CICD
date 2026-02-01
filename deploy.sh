@@ -7,6 +7,8 @@ LOG="$PROJECT_DIR/deploy.log"
 # Mengarahkan output ke log
 exec >> "$LOG" 2>&1
 
+set -e
+
 # Mulai Hitung Waktu
 START_TIME=$(date +%s)
 
@@ -51,8 +53,8 @@ fi
 
 echo "⚙️  Optimizing Laravel inside container..."
 
-# Membersihkan cache dan optimasi (Tanpa Migration)
 docker compose exec -T app sh -c "
+    php artisan migrate --force && \
     php artisan config:clear && \
     php artisan route:clear && \
     php artisan view:clear && \
