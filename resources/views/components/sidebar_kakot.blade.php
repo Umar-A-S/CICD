@@ -70,6 +70,13 @@
             </x-nav-link>
 
             <x-nav-link
+                href="{{ route('provinsi.verifikasi.index') }}"
+                icon="fa-solid fa-check-double"
+                route="provinsi.verifikasi.index">
+                Verifikasi
+            </x-nav-link>
+
+            <x-nav-link
                 href="{{ route('penerbitanprov.index') }}"
                 icon="fa-print"
                 :count="$notifPenerbitan"

@@ -8,20 +8,20 @@
         </p>
 
         @if(session('success'))
-            <div style="background: #dcfce7; color: #166534; padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #bbf7d0; font-size: 14px;">
+            <div style="background: #dcfce7; color: #bfef45; padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #bbf7d0; font-size: 14px;">
                 ✓ {{ session('success') }}
             </div>
         @endif
 
         <div class="table-container">
             <table class="data-table" style="width: 100%; text-align: center;">
-                <thead>
+                <thead style="background-color: #bfef45; color: black; font-weight: 600; text-transform: uppercase; font-size: 0.875rem;">
                     <tr>
-                        <th>Tanggal Masuk</th>
-                        <th>Dukcapil Asal</th>
-                        <th>Wilayah</th>
-                        <th>Daerah Tujuan</th>
-                        <th>Aksi</th>
+                        <th style="padding: 12px 24px;">Tanggal Masuk</th>
+                        <th style="padding: 12px 24px;">Dukcapil Asal</th>
+                        <th style="padding: 12px 24px;">Wilayah</th>
+                        <th style="padding: 12px 24px;">Daerah Tujuan</th>
+                        <th style="padding: 12px 24px;">Aksi</th>
                     </tr>
                 </thead>
 
@@ -46,7 +46,7 @@
                             <span class="btn blue">Lihat Detail</span>
 
                             {{-- Hidden Forms untuk Logika Backend --}}
-                            <form id="form-verifikasi-{{ $item->id }}" action="{{ route('provinsi.verifikasi', $item->id) }}" method="POST" class="hidden">
+                            <form id="form-verifikasi-{{ $item->id }}" action="{{ route('provinsi.verifikasi.submit', $item->id) }}" method="POST" class="hidden">
                                 @csrf
                             </form>
 

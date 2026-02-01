@@ -117,4 +117,27 @@ class PermohonanController extends Controller
         return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
 
     }
+
+    /**
+     * SECURITY FIX: Download file permohonan dengan authorization check
+     * Untuk user pembuat permohonan
+     */
+    public function downloadFile($id)
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        // Authorization: Hanya pembuat permohonan yang bisa download file miliknya sendiri
+        if ($permohonan->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        }
+
+        if (!$permohonan->file_path) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        // Hapus /storage/ prefix jika ada, dan ubah ke path storage
+        $filePath = str_replace('/storage/', '', $permohonan->file_path);
+        
+        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
+    }
 }

@@ -148,6 +148,50 @@ class PenerbitanController extends Controller
         ]);
     }
 
+    /**
+     * SECURITY FIX: Download file penerbitan dengan authorization check
+     */
+    public function downloadPenerbitanFile($id)
+    {
+        $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
+
+        // Authorization check: Hanya daerah tujuan yang bisa download
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        }
+
+        // Cek apakah penerbitan sudah ada
+        if (!$permohonan->penerbitan || !$permohonan->penerbitan->file_path) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $filePath = str_replace('/storage/', '', $permohonan->penerbitan->file_path);
+        
+        // Download file dari storage
+        return Storage::download("public/{$filePath}", "Penerbitan_{$id}.pdf");
+    }
+
+    /**
+     * SECURITY FIX: Download file permohonan (asli) dengan authorization check
+     */
+    public function downloadPermohonanFile($id)
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        // Authorization check: Hanya daerah tujuan yang bisa download file permohonan yang ditujukan ke mereka
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        }
+
+        if (!$permohonan->file_path) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $filePath = str_replace('/storage/', '', $permohonan->file_path);
+        
+        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
+    }
+
     private function getRomawi($bulan) {
         $map = [1=>'I', 2=>'II', 3=>'III', 4=>'IV', 5=>'V', 6=>'VI', 7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'];
         return $map[$bulan];

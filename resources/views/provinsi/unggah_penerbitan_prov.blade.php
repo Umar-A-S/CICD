@@ -62,6 +62,10 @@
                             </div>
                         </section>
 
+                    </div>
+
+                    <div class="space-y-14">
+
                         <section>
                             <h2 class="text-lg font-extrabold tracking-wide mb-8 text-gray-800">
                                 PENERBITAN
@@ -93,61 +97,62 @@
 
                             </div>
                         </section>
-                    </div>
 
-                    <div>
-                        <h2 class="text-lg font-extrabold tracking-wide mb-8 text-gray-800">
-                            HASIL PEMERIKSAAN
-                        </h2>
+                        <section>
+                            <h2 class="text-lg font-extrabold tracking-wide mb-8 text-gray-800">
+                                HASIL PEMERIKSAAN
+                            </h2>
 
-                        <div class="space-y-5">
+                            <div class="space-y-5">
 
-                            <div>
-                                <label class="text-xs font-bold uppercase text-gray-600">
-                                    Hasil <span class="text-red-500">*</span>
-                                </label>
-                                <select name="hasil" required
-                                    class="w-full mt-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                    <option disabled selected value="">Pilih Hasil Pemeriksaan</option>
-                                    <option value="TERCATAT">TERCATAT</option>
-                                    <option value="TIDAK TERCATAT">TIDAK TERCATAT</option>
-                                    <option value="DISETUJUI">DISETUJUI</option>
-                                    <option value="DITOLAK">DITOLAK</option>
-                                    <option value="LAINNYA">LAINNYA</option>
-                                </select>
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">
+                                        Hasil <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="hasil" required
+                                        class="w-full mt-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                        <option disabled selected value="">Pilih Hasil Pemeriksaan</option>
+                                        <option value="TERCATAT">TERCATAT</option>
+                                        <option value="TIDAK TERCATAT">TIDAK TERCATAT</option>
+                                        <option value="DISETUJUI">DISETUJUI</option>
+                                        <option value="DITOLAK">DITOLAK</option>
+                                        <option value="LAINNYA">LAINNYA</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">
+                                        Keterangan / Alasan <span class="text-red-500">*</span>
+                                    </label>
+                                    <textarea name="alasan" required rows="4"
+                                        placeholder="Masukkan keterangan atau alasan..."
+                                        class="w-full mt-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                                </div>
+
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">
+                                        Unggah Berkas Balasan <span class="text-red-500">*</span>
+                                    </label>
+
+                                    <label for="fileUpload"
+                                        class="mt-3 cursor-pointer flex flex-col items-center justify-center
+                                        border-2 border-dashed border-sky-400 rounded-2xl h-40
+                                        hover:bg-sky-50 transition relative">
+
+                                        <i class="fa-solid fa-cloud-arrow-up text-sky-500 text-4xl mb-2"></i>
+                                        <span class="text-sm font-semibold text-gray-700">
+                                            Klik untuk upload PDF
+                                        </span>
+
+                                        <input id="fileUpload" name="file_balasan" type="file" class="hidden" accept=".pdf" required>
+                                    </label>
+
+                                    <div id="filePreview" class="mt-4 space-y-3"></div>
+                                </div>
+
                             </div>
+                        </section>
 
-                            <div>
-                                <label class="text-xs font-bold uppercase text-gray-600">
-                                    Keterangan / Alasan <span class="text-red-500">*</span>
-                                </label>
-                                <textarea name="alasan" required rows="4"
-                                    placeholder="Masukkan keterangan atau alasan..."
-                                    class="w-full mt-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
-                            </div>
-
-                            <div>
-                                <label class="text-xs font-bold uppercase text-gray-600">
-                                    Unggah Berkas Balasan <span class="text-red-500">*</span>
-                                </label>
-
-                                <label for="fileUpload"
-                                    class="mt-3 cursor-pointer flex flex-col items-center justify-center
-                                    border-2 border-dashed border-sky-400 rounded-2xl h-40
-                                    hover:bg-sky-50 transition relative">
-
-                                    <i class="fa-solid fa-cloud-arrow-up text-sky-500 text-4xl mb-2"></i>
-                                    <span class="text-sm font-semibold text-gray-700">
-                                        Klik untuk upload PDF
-                                    </span>
-
-                                    <input id="fileUpload" name="file_balasan" type="file" class="hidden" accept=".pdf" required>
-                                </label>
-
-                                <div id="filePreview" class="mt-4 space-y-3"></div>
-                            </div>
-
-                        </div>
                     </div>
                 </div>
 

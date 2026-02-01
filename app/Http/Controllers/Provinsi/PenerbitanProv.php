@@ -127,6 +127,50 @@ class PenerbitanProv extends Controller
         ]);
     }
 
+    /**
+     * SECURITY FIX: Download file penerbitan dengan authorization check
+     * Provinsi bisa download file penerbitan yang dia buat untuk permohonan luar
+     */
+    public function downloadPenerbitanFile($id)
+    {
+        $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
+
+        // Authorization check: Hanya permohonan luar (menu Penerbitan provinsi)
+        // Status bisa apapun (DIPROSES, SELESAI, DITOLAK) - yang penting sudah ada file-nya
+        if ($permohonan->wilayah !== 'luar') {
+            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        }
+
+        if (!$permohonan->penerbitan || !$permohonan->penerbitan->file_path) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $filePath = str_replace('/storage/', '', $permohonan->penerbitan->file_path);
+        
+        return Storage::download("public/{$filePath}", "Penerbitan_{$id}.pdf");
+    }
+
+    /**
+     * SECURITY FIX: Download file permohonan (asli) dengan authorization check
+     * Untuk semua permohonan - provinsi adalah gatekeeper
+     */
+    public function downloadPermohonanFile($id)
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        // Authorization check: Provinsi bisa download semua permohonan (baik dalam maupun luar)
+        // karena provinsi adalah gatekeeper/validator
+        // Jadi tidak ada restriction wilayah di sini
+
+        if (!$permohonan->file_path) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $filePath = str_replace('/storage/', '', $permohonan->file_path);
+        
+        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
+    }
+
     private function getRomawi($bulan) {
         $map = [1=>'I', 2=>'II', 3=>'III', 4=>'IV', 5=>'V', 6=>'VI', 7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'];
         return $map[$bulan];

@@ -8,6 +8,7 @@ use App\Http\Controllers\Kota\BalasanController;
 use App\Http\Controllers\Kota\PenerbitanController;
 use App\Http\Controllers\Kota\ProfilController;
 use App\Http\Controllers\Provinsi\DashboardProvController;
+use App\Http\Controllers\Provinsi\VerifikasiController;
 use App\Http\Controllers\Provinsi\PenerbitanProv;
 use App\Http\Controllers\Provinsi\PermohonanProvController;
 use App\Http\Controllers\Provinsi\ProfilProvController;
@@ -22,7 +23,10 @@ use App\Http\Controllers\Provinsi\ProfilProvController;
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [AuthController::class, 'showLogin']);
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+    
+    // SECURITY: Rate limit login attempts (5 per 15 minutes per IP)
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle:5,15');
 });
 
 // --- AUTH ROUTES (Hanya bisa diakses jika SUDAH login) ---
@@ -41,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/permohonan_kakot/create', [PermohonanController::class, 'create'])->name('permohonan.create');
         Route::post('/permohonan_kakot', [PermohonanController::class, 'store'])->name('permohonan.store');
         Route::get('/detail_permohonan/{id}', [PermohonanController::class, 'show'])->name('permohonan.show');
+        Route::get('/download_permohonan/{id}', [PermohonanController::class, 'downloadFile'])->name('permohonan.download');
 
         // Route Penerbitan
         Route::get('/penerbitan_kakot', [PenerbitanController::class, 'index'])->name('penerbitan.index');
@@ -48,6 +53,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/detail_penerbitan_kakot/{id}', [PenerbitanController::class, 'show'])->name('penerbitan.show');
         Route::get('/unggah_penerbitan_kakot/proses/{id}', [PenerbitanController::class, 'create'])->name('penerbitan.create');
         Route::post('/unggah_penerbitan_kakot/proses', [PenerbitanController::class, 'store'])->name('penerbitan.store');
+        Route::get('/download_penerbitan/{id}', [PenerbitanController::class, 'downloadPenerbitanFile'])->name('penerbitan.download');
+        Route::get('/download_permohonan_from_penerbitan/{id}', [PenerbitanController::class, 'downloadPermohonanFile'])->name('penerbitan.download_permohonan');
         
 
         // Route Balasan
@@ -65,11 +72,18 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['checkrole:provinsi'])->group(function () 
     {  
         
-        // 2. LEVEL PROVINSI (Admin Jateng) - Tambahkan controller nanti
+        // 2. LEVEL PROVINSI (Admin Jateng)
         Route::get('/dashboard_provinsi', [DashboardProvController::class, 'index'])->name('provinsi.dashboard');
-        Route::post('/provinsi/verifikasi/{id}', [DashboardProvController::class, 'verifikasi'])->name('provinsi.verifikasi');
-        Route::post('/provinsi/tolak/{id}', [DashboardProvController::class, 'tolak'])->name('provinsi.tolak');
-        Route::get('/detail_permohonan_prov/{id}', [DashboardProvController::class, 'show'])->name('provinsi.detail');
+        
+        // Route Verifikasi (NEW - Menu baru)
+        Route::get('/verifikasi', [VerifikasiController::class, 'index'])->name('provinsi.verifikasi.index');
+        Route::post('/verifikasi/{id}', [VerifikasiController::class, 'verifikasi'])->name('provinsi.verifikasi.submit');
+        Route::post('/verifikasi/tolak/{id}', [VerifikasiController::class, 'tolak'])->name('provinsi.tolak');
+        
+        // Old routes (backward compatibility)
+        Route::post('/provinsi/verifikasi/{id}', [DashboardProvController::class, 'verifikasi'])->name('provinsi.verifikasi.old');
+        Route::post('/provinsi/tolak/{id}', [DashboardProvController::class, 'tolak'])->name('provinsi.tolak.old');
+        Route::get('/detail_permohonan_dashboard/{id}', [DashboardProvController::class, 'show'])->name('provinsi.detail');
 
         // Route Penerbitan
         Route::get('/penerbitan_provinsi', [PenerbitanProv::class, 'index'])->name('penerbitanprov.index');
@@ -77,6 +91,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/detail_permohonan_prov/{id}', [PermohonanProvController::class, 'show'])->name('permohonan.show');
         Route::get('/unggah_penerbitan_prov/proses/{id}', [PenerbitanProv::class, 'create'])->name('penerbitanprov.create');
         Route::post('/unggah_penerbitan_prov/proses', [PenerbitanProv::class, 'store'])->name('penerbitanprov.store');
+        Route::get('/download_penerbitan_prov/{id}', [PenerbitanProv::class, 'downloadPenerbitanFile'])->name('penerbitanprov.download');
+        Route::get('/download_permohonan_prov/{id}', [PenerbitanProv::class, 'downloadPermohonanFile'])->name('penerbitanprov.download_permohonan');
 
         //Route Profil
         Route::get('/profil_provinsi', [ProfilProvController::class, 'index'])->name('profilprov.index');

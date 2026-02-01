@@ -67,13 +67,23 @@
                 <label class="block text-sm font-semibold mb-1">
                     Password
                 </label>
-                <input
-                    name="password"
-                    id="password" 
-                    type="password"
-                      placeholder="Password"
-                      class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm
-                              focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-lime-400">
+                <div class="relative">
+                    <input
+                        name="password"
+                        id="password" 
+                        type="password"
+                        placeholder="Password"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-2.5 pr-10 text-sm
+                                focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-lime-400">
+                    
+                    <!-- TOGGLE SHOW/HIDE PASSWORD -->
+                    <button
+                        type="button"
+                        id="togglePassword"
+                        class="absolute right-3 inset-y-0 flex items-center justify-center text-gray-500 hover:text-gray-700 transition cursor-pointer">
+                        <i class="fa-solid fa-eye" id="eyeIcon"></i>
+                    </button>
+                </div>
 
                 <!-- LUPA PASSWORD -->
                 <div class="mt-2 text-right">
@@ -101,6 +111,25 @@
 
     <!-- SCRIPT -->
     <script src="js/login.js"></script>
+
+    <!-- TOGGLE PASSWORD VISIBILITY -->
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function(e) {
+            e.preventDefault();
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
 
 </body>
 </html>

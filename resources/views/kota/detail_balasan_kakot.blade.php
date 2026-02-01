@@ -64,7 +64,7 @@
                             
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">Berkas</label>
                             @if($permohonan->file_path)
-                                <a href="{{ asset($permohonan->file_path) }}" target="_blank"
+                                <a href="{{ route('permohonan.download', $permohonan->id) }}" target="_blank"
                                     class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer hover:underline">
                                     <i class="fa-solid fa-file-lines"></i> Lihat Berkas Permohonan
                                 </a>
@@ -86,7 +86,7 @@
                         <div>
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">Berkas Balasan</label>
                             @if($penerbitanExists)
-                                <a href="{{ asset($permohonan->penerbitan->file_path) }}" target="_blank"
+                                <a href="{{ route('penerbitan.download', $permohonan->id) }}" target="_blank"
                                     class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer hover:underline">
                                     <i class="fa-solid fa-file-lines"></i> Lihat Berkas Balasan
                                 </a>
