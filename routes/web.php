@@ -12,6 +12,9 @@ use App\Http\Controllers\Provinsi\VerifikasiController;
 use App\Http\Controllers\Provinsi\PenerbitanProv;
 use App\Http\Controllers\Provinsi\PermohonanProvController;
 use App\Http\Controllers\Provinsi\ProfilProvController;
+use App\Http\Controllers\Superadmin\DashboardController as SuperadminDashboardController;
+use App\Http\Controllers\Superadmin\UserController as SuperadminUserController;
+use App\Http\Controllers\Superadmin\PermohonanMonitorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +27,9 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/', [AuthController::class, 'showLogin']);
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     
-    // SECURITY: Rate limit login attempts (5 per 15 minutes per IP)
+    // SECURITY: Rate limit login attempts (20 per 1 minute per IP - relaxed for development)
     Route::post('/login', [AuthController::class, 'login'])
-        ->middleware('throttle:5,15');
+        ->middleware('throttle:20,1');
 });
 
 // --- AUTH ROUTES (Hanya bisa diakses jika SUDAH login) ---
@@ -116,9 +119,31 @@ Route::middleware(['auth'])->group(function () {
     //---USER SUPERADMIN---
     Route::middleware(['checkrole:superadmin'])->group(function () 
     {
-        // 3. LEVEL SUPERADMIN - Tambahkan controller nanti
+        // 3. LEVEL SUPERADMIN
+        Route::get('/dashboard-admin', [SuperadminDashboardController::class, 'index'])
+            ->name('superadmin.dashboard');
 
+        // Manajemen User
+        Route::resource('/superadmin/users', SuperadminUserController::class, [
+            'names' => [
+                'index' => 'superadmin.users.index',
+                'create' => 'superadmin.users.create',
+                'store' => 'superadmin.users.store',
+                'show' => 'superadmin.users.show',
+                'edit' => 'superadmin.users.edit',
+                'update' => 'superadmin.users.update',
+                'destroy' => 'superadmin.users.destroy',
+            ]
+        ]);
 
+        // Monitor Permohonan (READ-ONLY)
+        Route::prefix('superadmin/permohonan')->group(function () {
+            Route::get('/', [PermohonanMonitorController::class, 'index'])->name('superadmin.permohonan.index');
+            Route::get('/{id}', [PermohonanMonitorController::class, 'show'])->name('superadmin.permohonan.show');
+            Route::get('/{id}/download', [PermohonanMonitorController::class, 'downloadFile'])->name('superadmin.permohonan.download');
+            Route::get('/penerbitan/{id}', [PermohonanMonitorController::class, 'showPenerbitan'])->name('superadmin.penerbitan.show');
+            Route::get('/penerbitan/{id}/download', [PermohonanMonitorController::class, 'downloadPenerbitan'])->name('superadmin.penerbitan.download');
+        });
     });
 
 });

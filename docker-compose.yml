@@ -14,13 +14,7 @@ services:
       - .env:/var/www/html/selaksa-app/.env
     depends_on:
       - mysql
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '0.50'
-        reservations:
-          memory: 128M
+
     logging:
       driver: "json-file"
       options:
@@ -37,11 +31,7 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-          cpus: '0.25'
+
   mysql:
     image: mariadb:10.6
     container_name: mysql_1
@@ -53,11 +43,6 @@ services:
       MYSQL_ROOT_PASSWORD: root313233
     volumes:
       - mysql_data:/var/lib/mysql
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-          cpus: '0.25'
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
