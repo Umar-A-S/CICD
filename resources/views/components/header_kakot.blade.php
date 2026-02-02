@@ -10,8 +10,13 @@
             </div>
             <div class="flex items-center gap-4">
                 <div class="text-right hidden sm:block">
+<<<<<<< HEAD:resources/views/components/header.blade.php
+                    <div class="text-sm font-bold text-black">{{ $authUser->name }}</div>
+                    <div class="text-xs text-black" id="userRoleLabel">{{ $authUser->role }}</div>
+=======
                     <div class="text-sm font-bold text-black">Admin Petugas</div>
                     <div class="text-xs text-black" id="userRoleLabel">Kota/Kabupaten</div>
+>>>>>>> stagging:resources/views/components/header_kakot.blade.php
                 </div>
                 <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-black" style="background-color: #f5f5f5; border: 1px solid #000000;">
                     <i class="fa-solid fa-user"></i>

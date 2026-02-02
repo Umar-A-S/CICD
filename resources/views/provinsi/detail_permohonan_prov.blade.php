@@ -125,7 +125,7 @@
                                 </label>
                                 
                                 @if($permohonan->file_path)
-                                    <a href="{{ asset($permohonan->file_path) }}" target="_blank" class="inline-block">
+                                    <a href="{{ route('penerbitanprov.download_permohonan', $permohonan->id) }}" target="_blank" class="inline-block">
                                         <span class="text-blue-600 font-semibold text-sm cursor-pointer hover:text-blue-800 transition">
                                             <i class="fa-solid fa-file-lines"></i>
                                             Lihat Berkas

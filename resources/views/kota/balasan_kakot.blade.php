@@ -12,7 +12,13 @@
                 targetTable="tableBalasan" 
                 placeholder="Cari nama, asal, atau nomor surat...">
             </x-search_input>
-            <table class="w-full text-left border-collapse overflow-hidden rounded-xl" id="tableBalasan">
+
+            <x-filter_bulan 
+                id="filterBulanBalasan" 
+                targetTable="tableBalasan" 
+            />
+
+            <table class="w-full text-left border-collapse overflow-hidden rounded-xl mt-4" id="tableBalasan">
                 <thead>
                     <tr class="bg-lime-400 text-black">
                         <th class="py-4 px-4 text-xs font-bold ">No</th>

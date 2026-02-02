@@ -29,7 +29,7 @@
                 </label>
                 <input
                     id="kodeWilayah"
-                    value="{{ $user->kode_wilayah }}"
+                    value="{{ $user->kode_wilayah ?? '-' }}"
                     disabled
                     class="w-full bg-gray-50 rounded-xl px-5 py-3
                         text-sm text-gray-700 border border-gray-100">
