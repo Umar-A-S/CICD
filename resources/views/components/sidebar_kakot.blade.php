@@ -1,6 +1,5 @@
 @php
-    // $notifPenerbitan dan $notifBalasan sudah di-share dari View Composer
-    $notifBalasan = 5;
+    // $notifPenerbitan sudah di-share dari View Composer
 @endphp
 
 <aside
@@ -48,7 +47,6 @@
             <x-nav-link
                 href="{{ route('balasan.index') }}"
                 icon="fa-pen-to-square"
-                :count="$notifBalasan"
                 route="balasan.index">
                 Balasan
             </x-nav-link>

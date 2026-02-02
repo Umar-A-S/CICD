@@ -88,7 +88,7 @@
                             <th class="px-6 py-3 font-semibold">Dukcapil Asal</th>
                             <th class="px-6 py-3 font-semibold">Nomor Surat</th>
                             <th class="px-6 py-3 font-semibold text-center">Jenis</th>
-                            <th class="px-6 py-3 font-semibold text-center">Tanggal</th>
+                            <th class="px-6 py-3 font-semibold text-center">Hasil</th>
                             <th class="px-6 py-3 font-semibold text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -99,7 +99,7 @@
                             <td class="px-6 py-4 ">{{ $item->daerah_asal }}</td>
                             <td class="px-6 py-4">{{ $item->nomor_surat }}</td>
                             <td class="px-6 py-4 text-center">{{ $item->jenis_permohonan }}</td>
-                            <td class="px-6 py-4 text-center">{{ $item->tanggal_surat->format('d/m/Y') }}</td>
+                            <td class="px-6 py-4 text-center">{{ $item->penerbitan->hasil }}</td>
                             <td class="px-6 py-4 text-center">
                                 <a href="{{ route('penerbitan.show', $item->id) }}" 
                                    class="bg-lime-500 hover:bg-lime-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition inline-block">

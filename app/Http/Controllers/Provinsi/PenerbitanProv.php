@@ -25,7 +25,8 @@ class PenerbitanProv extends Controller
             ->get();
 
         // Data 2: Selesai (Status SELESAI dan ditujukan ke user ini)
-        $permohonanSelesai = Permohonan::where('wilayah', 'luar')
+        $permohonanSelesai = Permohonan::with('penerbitan')
+            ->where('wilayah', 'luar')
             ->whereIn('status', ['SELESAI', 'DITOLAK'])
             ->orderBy('updated_at', 'desc')
             ->get();
