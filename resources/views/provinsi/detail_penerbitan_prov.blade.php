@@ -73,7 +73,7 @@
                         <div class="mt-5">
                             <label class="{{ $labelClass }}">Berkas Permohonan</label>
                             @if($permohonan->file_path)
-                                <a href="{{ route('penerbitan.download_permohonan', $permohonan->id) }}" target="_blank" 
+                                <a href="{{ route('penerbitanprov.download_permohonan', $permohonan->id) }}" target="_blank" 
                                    class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
                                     <i class="fa-solid fa-file-pdf text-xl"></i>
                                     Lihat Dokumen Asli
@@ -108,7 +108,7 @@
                             <div>
                                 <label class="{{ $labelClass }}">Berkas Balasan</label>
                                 @if($permohonan->penerbitan->file_path)
-                                        <a href="{{ route('penerbitan.download', $permohonan->id) }}" target="_blank"
+                                        <a href="{{ route('penerbitanprov.download', $permohonan->id) }}" target="_blank"
                                         class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
                                             <i class="fa-solid fa-file-circle-check text-xl"></i>
                                             Lihat Surat Balasan
@@ -140,7 +140,7 @@
 
                             <div>
                                 <label class="{{ $labelClass }}">Catatan / Keterangan</label>
-                                <textarea disabled rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black font-medium resize-none">{{ $permohonan->penerbitan->alasan }}</textarea>
+                                <textarea disabled rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black font-medium resize-none">{{ $permohonan->catatan }}</textarea>
                             </div>
                         </div>
                     </section>
@@ -150,12 +150,12 @@
             </div>
 
             <div class="mt-20 flex justify-start">
-                <a href="{{ route('penerbitan.index') }}"
+                <button onclick="javascript:history.back()" 
                     class="bg-gray-800 hover:bg-black text-white font-bold px-12 py-3 rounded-xl transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                     <i class="fa-solid fa-arrow-left mr-2"></i> KEMBALI
-                </a>
+                </button>
             </div>
 
         </div>
     </div>
-</x-layout_detail_penerbitan_kakot>
+</x-layout_detail_penerbitan_prov>

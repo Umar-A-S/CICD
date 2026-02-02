@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Kota;
+namespace App\Http\Controllers\Provinsi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
@@ -11,29 +11,27 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
-class PenerbitanController extends Controller
+class PenerbitanProv extends Controller
 {
     /**
      * Menampilkan daftar penerbitan (Perlu Dibalas & Selesai)
      */
     public function index()
     {
-        $daerahUser = Auth::user()->name; // Asumsi: username = nama daerah (misal: admin_magelang)
-
         // Data 1: Perlu Dibalas (Status bukan SELESAI dan ditujukan ke user ini)
-        $permohonanPerlu = Permohonan::where('daerah_tujuan', $daerahUser)
+        $permohonanPerlu = Permohonan::where('wilayah', 'luar')
             ->where('status', 'DIPROSES')
             ->orderBy('created_at', 'asc')
             ->get();
 
         // Data 2: Selesai (Status SELESAI dan ditujukan ke user ini)
         $permohonanSelesai = Permohonan::with('penerbitan')
-            ->where('daerah_tujuan', $daerahUser)
+            ->where('wilayah', 'luar')
             ->whereIn('status', ['SELESAI', 'DITOLAK'])
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('kota.penerbitan_kakot', compact('permohonanPerlu', 'permohonanSelesai'));
+        return view('provinsi.penerbitan_prov', compact('permohonanPerlu', 'permohonanSelesai'));
     }
 
     /**
@@ -43,21 +41,21 @@ class PenerbitanController extends Controller
     {
         $permohonan = Permohonan::findOrFail($id);
 
-        // --- SATPAM 0: Cek Authorization (Permohonan harus ditujukan ke daerah ini) ---
-        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
-            abort(403, 'Permohonan ini bukan untuk daerah Anda.');
+        // --- SATPAM 0: Cek Authorization (Hanya permohonan luar Jateng yang boleh diproses Provinsi) ---
+        if ($permohonan->wilayah !== 'luar') {
+            abort(403, 'Hanya permohonan tujuan luar Jateng yang bisa diproses di menu ini.');
         }
 
         // --- SATPAM 1: Cek Status ---
         // Kalau status sudah SELESAI, dilarang masuk form lagi!
         if ($permohonan->status == 'SELESAI') {
-            return redirect()->route('penerbitan.index')
+            return redirect()->route('penerbitanprov.index')
                 ->with('error', 'Permohonan ini sudah diselesaikan sebelumnya!');
         }
         // ----------------------------
 
-        return view('kota.unggah_penerbitan_kakot', [
-            'title' => 'Proses Penerbitan',
+        return view('provinsi.unggah_penerbitan_prov', [
+            'title' => 'Penerbitan',
             'permohonan' => $permohonan
         ]);
     }
@@ -71,7 +69,7 @@ class PenerbitanController extends Controller
         $request->validate([
             'permohonan_id' => 'required|exists:permohonan,id',
             'hasil'         => 'required|in:TERCATAT,TIDAK TERCATAT,DISETUJUI,DITOLAK,LAINNYA',
-            'alasan'        => 'nullable|string',
+            'alasan'        => 'required|string',
             'file_balasan'  => 'required|file|mimes:pdf|max:10240',
         ]);
 
@@ -79,7 +77,7 @@ class PenerbitanController extends Controller
 
         // Cek agar tidak double input
         if (in_array($permohonan->status, ['SELESAI', 'DITOLAK'])) {
-            return redirect()->route('penerbitan.index')
+            return redirect()->route('penerbitanprov.index')
                 ->with('error', 'Data ini sudah selesai diproses!');
         }
 
@@ -110,40 +108,21 @@ class PenerbitanController extends Controller
             'catatan' => $request->alasan 
         ]);
 
-        return redirect()->route('penerbitan.index')->with('success', 'Dokumen berhasil diproses!');
+        return redirect()->route('penerbitanprov.index')->with('success', 'Dokumen berhasil diproses!');
     }
     /**
-     * Menampilkan Detail Permohonan dari Menu Penerbitan (untuk Daerah Tujuan)
-     * Dipisah dari PermohonanController karena context berbeda
-     */
-    public function detailPermohonan($id)
-    {
-        $permohonan = Permohonan::findOrFail($id);
-
-        // Proteksi Keamanan: Hanya daerah tujuan yang bisa lihat detail di menu penerbitan
-        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
-            abort(403, 'Permohonan ini bukan untuk daerah Anda.');
-        }
-
-        return view('kota.detail_permohonan_kakot', [
-            'title' => 'Detail Permohonan (Penerbitan)',
-            'permohonan' => $permohonan
-        ]);
-    }
-
-    /**
-     * Menampilkan Detail Penerbitan (Balasan yang sudah diproses)
+     * Menampilkan Detail (Opsional jika belum ada)
      */
     public function show($id)
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
 
-        // Proteksi Keamanan: Hanya daerah tujuan yang bisa melihat detail penerbitan
-        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+        // Proteksi Keamanan: Hanya permohonan luar Jateng yang boleh dilihat di menu Penerbitan Provinsi
+        if ($permohonan->wilayah !== 'luar') {
             abort(403, 'Anda tidak memiliki akses ke data ini.');
         }
 
-        return view('kota.detail_penerbitan_kakot', [
+        return view('provinsi.detail_penerbitan_prov', [
             'title' => 'Detail Penerbitan',
             'permohonan' => $permohonan
         ]);
@@ -151,38 +130,38 @@ class PenerbitanController extends Controller
 
     /**
      * SECURITY FIX: Download file penerbitan dengan authorization check
+     * Provinsi bisa download file penerbitan yang dia buat untuk permohonan luar
      */
     public function downloadPenerbitanFile($id)
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
 
-        // Authorization check: Hanya daerah tujuan yang bisa download
-        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+        // Authorization check: Hanya permohonan luar (menu Penerbitan provinsi)
+        // Status bisa apapun (DIPROSES, SELESAI, DITOLAK) - yang penting sudah ada file-nya
+        if ($permohonan->wilayah !== 'luar') {
             abort(403, 'Anda tidak memiliki akses ke file ini.');
         }
 
-        // Cek apakah penerbitan sudah ada
         if (!$permohonan->penerbitan || !$permohonan->penerbitan->file_path) {
             abort(404, 'File tidak ditemukan.');
         }
 
         $filePath = str_replace('/storage/', '', $permohonan->penerbitan->file_path);
         
-        // Download file dari storage
         return Storage::download("public/{$filePath}", "Penerbitan_{$id}.pdf");
     }
 
     /**
      * SECURITY FIX: Download file permohonan (asli) dengan authorization check
+     * Untuk semua permohonan - provinsi adalah gatekeeper
      */
     public function downloadPermohonanFile($id)
     {
         $permohonan = Permohonan::findOrFail($id);
 
-        // Authorization check: Hanya daerah tujuan yang bisa download file permohonan yang ditujukan ke mereka
-        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
+        // Authorization check: Provinsi bisa download semua permohonan (baik dalam maupun luar)
+        // karena provinsi adalah gatekeeper/validator
+        // Jadi tidak ada restriction wilayah di sini
 
         if (!$permohonan->file_path) {
             abort(404, 'File tidak ditemukan.');

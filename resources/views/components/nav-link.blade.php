@@ -2,11 +2,19 @@
     'href' => '#',
     'icon' => 'fa-circle',
     'count' => null, // ⬅️ NOTIF ANGKA
+    'route' => null, // ⬅️ ROUTE NAME (opsional, untuk detect active)
 ])
 
 @php
-    // Cek menu aktif
-    $isActive = request()->is(trim($href, '/') . '*');
+    // Cek menu aktif - prioritas: route name > URL path
+    if ($route) {
+        // Jika route name diberikan, cek match dengan current route
+        $isActive = Route::currentRouteName() === $route || 
+                    str_starts_with(Route::currentRouteName(), $route . '.');
+    } else {
+        // Fallback ke URL path matching
+        $isActive = request()->is(trim($href, '/') . '*');
+    }
 @endphp
 
 <style>

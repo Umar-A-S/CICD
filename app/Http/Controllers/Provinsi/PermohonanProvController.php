@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Kota;
+namespace App\Http\Controllers\Provinsi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class PermohonanController extends Controller
+class PermohonanProvController extends Controller
 {
     /**
      * Display a listing of permohonan for the authenticated user
@@ -23,14 +23,12 @@ class PermohonanController extends Controller
     {
         $user = Auth::user();
         
-        // Filter data 
-        if ($user->role === 'daerah') {
-            $permohonans = Permohonan::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
-        } else {
-            abort(403, 'Akses tidak sah.');
-        }
 
-        return view('kota.permohonan_kakot', [
+        $permohonans = Permohonan::where('user_id', $user->id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+        return view('provinsi.permohonan_prov', [
             'title' => 'Permohonan',
             'permohonans' => $permohonans
         ]);
@@ -42,12 +40,12 @@ class PermohonanController extends Controller
         // Ambil data permohonan berdasarkan ID, jika tidak ada muncul 404
         $permohonan = Permohonan::findOrFail($id);
 
-        // Proteksi Keamanan: User daerah hanya boleh lihat miliknya sendiri (yang dibuat user ini)
-        if (Auth::user()->role === 'daerah' && $permohonan->user_id !== Auth::id()) {
-            abort(403, 'Anda tidak memiliki akses ke data ini.');
-        }
+        // // Proteksi Keamanan: User daerah hanya boleh lihat miliknya sendiri
+        // if (Auth::user()->role === 'daerah' && $permohonan->user_id !== Auth::id()) {
+        //     abort(403, 'Anda tidak memiliki akses ke data ini.');
+        // }
 
-        return view('kota.detail_permohonan_kakot', [
+        return view('provinsi.detail_permohonan_prov', [
             'title' => 'Detail Permohonan',
             'permohonan' => $permohonan
         ]);
@@ -114,30 +112,7 @@ class PermohonanController extends Controller
             'jenis_dokumen' => $validated['jenis_dokumen'],
         ]);
 
-        return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
+        return redirect('/dashboard_provinsi')->with('success', 'Permohonan berhasil dikirim!');
 
-    }
-
-    /**
-     * SECURITY FIX: Download file permohonan dengan authorization check
-     * Untuk user pembuat permohonan
-     */
-    public function downloadFile($id)
-    {
-        $permohonan = Permohonan::findOrFail($id);
-
-        // Authorization: Hanya pembuat permohonan yang bisa download file miliknya sendiri
-        if ($permohonan->user_id !== Auth::id()) {
-            abort(403, 'Anda tidak memiliki akses ke file ini.');
-        }
-
-        if (!$permohonan->file_path) {
-            abort(404, 'File tidak ditemukan.');
-        }
-
-        // Hapus /storage/ prefix jika ada, dan ubah ke path storage
-        $filePath = str_replace('/storage/', '', $permohonan->file_path);
-        
-        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
     }
 }

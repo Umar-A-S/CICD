@@ -5,7 +5,7 @@
 
         <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-md px-12 py-12">
 
-            <form method="POST" action="{{ route('penerbitan.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('penerbitanprov.store') }}" enctype="multipart/form-data">
                 @csrf
                 
                 <input type="hidden" name="permohonan_id" value="{{ $permohonan->id }}">
@@ -122,10 +122,10 @@
 
                                 <div>
                                     <label class="text-xs font-bold uppercase text-gray-600">
-                                        Keterangan / Alasan
+                                        Keterangan / Alasan <span class="text-red-500">*</span>
                                     </label>
-                                    <textarea name="alasan" rows="4"
-                                        placeholder="Masukkan keterangan atau alasan (opsional)..."
+                                    <textarea name="alasan" required rows="4"
+                                        placeholder="Masukkan keterangan atau alasan..."
                                         class="w-full mt-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
                                 </div>
 
@@ -157,7 +157,7 @@
                 </div>
 
                 <div class="flex justify-between items-center mt-16 pt-6 border-t border-gray-200">
-                    <a href="{{ route('penerbitan.index') }}"
+                    <a href="{{ route('penerbitanprov.index') }}"
                         class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-8 py-3 rounded-xl shadow-sm transition">
                         BATAL
                     </a>
