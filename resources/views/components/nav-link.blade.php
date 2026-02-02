@@ -7,10 +7,17 @@
 
 @php
     // Cek menu aktif - prioritas: route name > URL path
+    $currentRoute = Route::currentRouteName();
+    
     if ($route) {
         // Jika route name diberikan, cek match dengan current route
-        $isActive = Route::currentRouteName() === $route || 
-                    str_starts_with(Route::currentRouteName(), $route . '.');
+        // Support wildcard dengan * (contoh: superadmin.users.*)
+        if (str_ends_with($route, '.*')) {
+            $prefix = rtrim($route, '.*');
+            $isActive = str_starts_with($currentRoute, $prefix);
+        } else {
+            $isActive = $currentRoute === $route;
+        }
     } else {
         // Fallback ke URL path matching
         $isActive = request()->is(trim($href, '/') . '*');

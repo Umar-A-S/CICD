@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         // Share authenticated user to all views
         View::composer('*', function ($view) {
             $view->with('role', Auth::user()?->role);
-            $view->with('user', Auth::user());
+            $view->with('authUser', Auth::user());
             
             // Hitung notif Penerbitan
             $notifPenerbitan = 0;

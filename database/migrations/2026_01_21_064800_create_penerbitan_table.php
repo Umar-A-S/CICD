@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('permohonan_id')->constrained('permohonan')->onDelete('cascade');
             $table->string('nomor_surat_selesai');
             $table->timestamp('tanggal_surat_selesai');
+            $table->text('alasan')->nullable();
             $table->string('file_path');
-            $table->enum('hasil', ['TERCATAT', 'TIDAK TERCATAT', 'DISETUJUI', 'TIDAK DISETUJUI', 'LAINNYA'])->nullable(); 
+            $table->string('hasil')->nullable();
             $table->timestamps();
         });
     }
