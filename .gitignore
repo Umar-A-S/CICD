@@ -23,7 +23,7 @@ npm-debug.log*
 
 # Build
 dist/
-build/
+
 *.min.js
 *.min.css
 
