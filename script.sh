@@ -2,7 +2,7 @@
 set -e
 
 # ================= CONFIG =================
-DRY_RUN=true            # set false untuk eksekusi beneran
+DRY_RUN=${DRY_RUN:-true}            # set false untuk eksekusi beneran
 STAGING_BRANCH="stagging"
 MAIN_BRANCH="main"
 # =========================================
