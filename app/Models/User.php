@@ -19,7 +19,6 @@ class User extends Authenticatable
     protected $fillable = [
             'username', // Ganti email jadi username
             'password',
-            'role',
             'kode_wilayah',
         ];
 

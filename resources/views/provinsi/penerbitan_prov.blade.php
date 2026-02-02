@@ -1,7 +1,7 @@
-<x-layout_penerbitan_kakot
+<x-layout_penerbitan_prov
 :permohonanPerlu="$permohonanPerlu" 
 :permohonanSelesai="$permohonanSelesai">
-    <x-slot:title>Penerbitan Kota/Kabupaten</x-slot:title>
+    <x-slot:title>Penerbitan Provinsi</x-slot:title>
 
     <div class="max-w-7xl mx-auto space-y-10">
 
@@ -14,13 +14,7 @@
                 targetTable="tablePerlu" 
                 placeholder="Cari nama, asal, atau nomor surat..." 
             />
-
-            <x-filter_bulan 
-                id="filterBulanPerlu" 
-                targetTable="tablePerlu" 
-            />
-
-            <div class="border rounded-xl overflow-hidden mt-4">
+            <div class="border rounded-xl overflow-hidden">
                 <table class="w-full text-left border-collapse" id ="tablePerlu">
                     <thead class="bg-lime-300 text-black text-sm uppercase">
                         <tr>
@@ -43,11 +37,11 @@
                                 {{ $item->tanggal_surat->format('d/m/Y') }}
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <a href="{{ route('penerbitan.detailPermohonan', $item->id) }}" 
+                                <a href="/detail_permohonan_prov/{{ $item->id }}" 
                                    class="bg-lime-500 hover:bg-lime-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition inline-block">
                                     DETAIL
                                 </a>
-                                <a href="{{ route('penerbitan.create', $item->id) }}" 
+                                <a href="/unggah_penerbitan_prov/proses/{{ $item->id }}" 
                                    class="bg-sky-500 hover:bg-sky-600 text-white px-5 py-2 rounded-lg text-xs font-bold transition inline-flex items-center gap-2 shadow-sm hover:shadow-md">
                                     <i class="fa-solid fa-upload"></i> BALAS
                                 </a>
@@ -74,13 +68,7 @@
                 targetTable="tableSelesai" 
                 placeholder="Cari nama, asal, atau nomor surat..." 
             />
-
-            <x-filter_bulan 
-                id="filterBulanSelesai" 
-                targetTable="tableSelesai" 
-            />
-
-            <div class="border rounded-xl overflow-hidden mt-4">
+            <div class="border rounded-xl overflow-hidden">
                 <table class="w-full text-left border-collapse" id="tableSelesai">
                     <thead class="bg-lime-300 text-black text-sm uppercase">
                         <tr>
@@ -101,7 +89,7 @@
                             <td class="px-6 py-4 text-center">{{ $item->jenis_permohonan }}</td>
                             <td class="px-6 py-4 text-center">{{ $item->penerbitan->hasil }}</td>
                             <td class="px-6 py-4 text-center">
-                                <a href="{{ route('penerbitan.show', $item->id) }}" 
+                                <a href="/detail_penerbitan_prov/{{ $item->id }}" 
                                    class="bg-lime-500 hover:bg-lime-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition inline-block">
                                     DETAIL
                                 </a>
@@ -121,4 +109,4 @@
         </div>
 
     </div>
-</x-layout_penerbitan_kakot>
+</x-layout_penerbitan_prov>

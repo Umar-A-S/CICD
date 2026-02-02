@@ -1,10 +1,5 @@
 @php
-    $role = $role ?? 'kota';
-    $role = $role ?? 'provinsi';
-
-    // CONTOH NOTIF (nanti bisa dari DB)
-    $notifPenerbitan = 2;
-    $notifBalasan = 5;
+    // $notifPenerbitan sudah di-share dari View Composer
 @endphp
 
 <aside
@@ -26,64 +21,71 @@
     <!-- MENU -->
     <nav class="flex-1 mt-4 px-2 space-y-1 overflow-y-auto">
 
-        @if($role === 'kota')
+        @if($role === 'daerah')
             <x-nav-link 
                 href="/dashboard_kakot" 
-                icon="fa-solid fa-table-cells-large">
+                icon="fa-solid fa-table-cells-large"
+                route="dashboard.kakot">
                 Dashboard
             </x-nav-link>
 
             <x-nav-link
                 href="{{ route('penerbitan.index') }}"
                 icon="fa-print"
-                :count="$notifPenerbitan">
+                :count="$notifPenerbitan"
+                route="penerbitan.index">
                 Penerbitan
             </x-nav-link>
 
             <x-nav-link 
                 href="{{ route('permohonan.index') }}" 
-                icon="fa-solid fa-file">
+                icon="fa-solid fa-file"
+                route="permohonan.index">
                 Permohonan
             </x-nav-link>
 
             <x-nav-link
                 href="{{ route('balasan.index') }}"
                 icon="fa-pen-to-square"
-                :count="$notifBalasan">
+                route="balasan.index">
                 Balasan
             </x-nav-link>
 
             <x-nav-link 
                 href="{{ route('profil.index') }}" 
-                icon="fa-solid fa-user">
+                icon="fa-solid fa-user"
+                route="profil.index">
                 Profil
             </x-nav-link>
         @endif
 
         @if($role === 'provinsi')
             <x-nav-link 
-                href="/dashboard_provinsi" 
-                icon="fa-solid fa-grip">
+                href="{{ route('provinsi.dashboard') }}" 
+                icon="fa-solid fa-grip"
+                route="provinsi.dashboard">
                 Dashboard
             </x-nav-link>
 
             <x-nav-link
-                href="/penerbitan-provinsi"
-                icon="fa-print"
-                :count="$notifPenerbitan">
-                Penerbitan
+                href="{{ route('provinsi.verifikasi.index') }}"
+                icon="fa-solid fa-check-double"
+                route="provinsi.verifikasi.index">
+                Verifikasi
             </x-nav-link>
 
             <x-nav-link
-                href="/balasan_provinsi"
-                icon="fa-pen-to-square"
-                :count="$notifBalasan">
-                Balasan
+                href="{{ route('penerbitanprov.index') }}"
+                icon="fa-print"
+                :count="$notifPenerbitan"
+                route="penerbitanprov.index">
+                Penerbitan
             </x-nav-link>
 
             <x-nav-link 
-                href="/profil-provinsi" 
-                icon="fa-solid fa-user">
+                href="{{ route('profilprov.index') }}" 
+                icon="fa-solid fa-user"
+                route="profilprov.index">
                 Profil
             </x-nav-link>
         @endif

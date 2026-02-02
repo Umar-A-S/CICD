@@ -1,42 +1,22 @@
-# Dependencies
-node_modules/
-vendor/
-composer.lock
-
-# Environment variables
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
 .env
-.env.local
-.env.*.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-
-# Build
-dist/
-build/
-*.min.js
-*.min.css
-
-# OS
-Thumbs.db
-.DS_Store
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-
-# Cache
-.cache/
-__pycache__/
-*.pyc
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+LOGIN_SECURITY_IMPROVEMENTS.md
+CRITICAL_FIXES_IMPLEMENTATION.md
+SECURITY_AUDIT_REPORT.md
