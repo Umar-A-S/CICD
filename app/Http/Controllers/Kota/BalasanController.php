@@ -16,10 +16,11 @@ class BalasanController extends Controller
     {
         $user = Auth::user();
 
-        // ambil permohonan yang dibuat oleh user ini dan statusnya SELESAI atau DITOLAK
+        // Kita ambil permohonan yang dibuat oleh user ini dan statusnya SELESAI
+        // Gunakan eager loading 'penerbitan' agar data balasan langsung terbawa
         $permohonans = Permohonan::with('penerbitan')
             ->where('user_id', $user->id)
-            ->whereIn('status', ['SELESAI','DITOLAK'])
+            ->where('status', 'SELESAI')
             ->orderBy('updated_at', 'desc')
             ->get();
 
@@ -37,6 +38,7 @@ class BalasanController extends Controller
         // Ambil data permohonan beserta relasi penerbitannya
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
 
+        // Keamanan: Pastikan hanya pemilik permohonan yang bisa melihat balasannya
         if ($permohonan->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses ke data balasan ini.');
         }

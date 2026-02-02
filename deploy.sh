@@ -35,6 +35,12 @@ CHANGES_IN_COMPOSER=$(git diff --name-only $LOCAL $REMOTE | grep 'composer.')
 echo "📦 Changes detected! Starting pull..."
 git pull origin main
 
+echo "📦 Installing Node dependencies..."
+npm install
+
+echo "⚡ Building assets with Vite..."
+npm run build
+
 # Jalankan Composer Install HANYA jika ada perubahan library
 if [ ! -z "$CHANGES_IN_COMPOSER" ]; then
     echo "📦 Composer changes detected. Installing dependencies..."

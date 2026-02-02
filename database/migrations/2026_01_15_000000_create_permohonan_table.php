@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('jenis_dokumen');
             $table->string('file_path');
             $table->enum('status', ['BELUM', 'DIPROSES', 'DITOLAK', 'SELESAI'])->default('BELUM');
-            $table->text('catatan')->nullable();
             $table->timestamps();
         });
     }

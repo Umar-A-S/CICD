@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="css/style_permohonan_kakot.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/img/logo_selaksa.png" sizes="32x32">
-    @vite('resources/css/style_kakot.css')
 </head>
 
 <body class="flex h-screen overflow-hidden">
@@ -22,7 +21,7 @@
     <main class="md:ml-48 flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header>{{ $title }}</x-header>
+        <x-header_kakot>{{ $title }}</x-header_kakot>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">
