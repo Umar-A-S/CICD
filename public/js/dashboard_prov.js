@@ -1,56 +1,55 @@
-// public/js/dashboard_prov.js
-
 document.addEventListener('DOMContentLoaded', function () {
-
     let selectedRow = null;
 
     document.querySelectorAll('tbody tr').forEach(row => {
-
         const btnVerifikasi = row.querySelector('.btn.green');
         const btnKembalikan = row.querySelector('.btn.red');
         const btnDetail     = row.querySelector('.btn.blue');
 
-        // ================= VERIFIKASI =================
-        btnVerifikasi.addEventListener('click', () => {
-            selectedRow = row;
-            document.getElementById('modalVerifikasi').classList.remove('hidden');
-        });
+        // ================= TRIGGER MODAL =================
+        if(btnVerifikasi) {
+            btnVerifikasi.addEventListener('click', () => {
+                selectedRow = row;
+                document.getElementById('modalVerifikasi').classList.remove('hidden');
+            });
+        }
 
-        // ================= KEMBALIKAN =================
-        btnKembalikan.addEventListener('click', () => {
-            selectedRow = row;
-            document.getElementById('modalKembalikan').classList.remove('hidden');
-        });
+        if(btnKembalikan) {
+            btnKembalikan.addEventListener('click', () => {
+                selectedRow = row;
+                document.getElementById('modalKembalikan').classList.remove('hidden');
+            });
+        }
 
-        // ================= DETAIL =================
-        btnDetail.addEventListener('click', () => {
-            window.location.href = '/detail_permohonan_prov';
-        });
+        // ================= DETAIL REDIRECT =================
+        if(btnDetail) {
+            btnDetail.addEventListener('click', () => {
+                const id = row.dataset.id;
+                window.location.href = `${window.detailBaseUrl}/${id}`;
+            });
+        }
     });
 
-    // ================= MODAL VERIFIKASI =================
+    // ================= LOGIKA VERIFIKASI =================
     window.closeModalVerifikasi = function () {
         document.getElementById('modalVerifikasi').classList.add('hidden');
     };
 
     window.submitVerifikasi = function () {
         if (selectedRow) {
-            selectedRow.setAttribute('data-status', 'verified');
-            selectedRow.classList.remove('bg-red-50');
-            selectedRow.classList.add('bg-green-50');
+            const id = selectedRow.dataset.id;
+            // Tampilkan Notif Visual (Opsional sebelum reload)
+            document.getElementById('notifVerifikasi').classList.remove('hidden');
+            
+            // Submit Form Backend setelah jeda singkat agar notif terlihat
+            setTimeout(() => {
+                document.getElementById(`form-verifikasi-${id}`).submit();
+            }, 800);
         }
-
         closeModalVerifikasi();
-
-        const notif = document.getElementById('notifVerifikasi');
-        notif.classList.remove('hidden');
-
-        setTimeout(() => {
-            notif.classList.add('hidden');
-        }, 2000);
     };
 
-    // ================= MODAL KEMBALIKAN =================
+    // ================= LOGIKA KEMBALIKAN (TOLAK) =================
     window.closeModal = function () {
         document.getElementById('modalKembalikan').classList.add('hidden');
         document.getElementById('alasanKembalikan').value = '';
@@ -58,22 +57,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.submitKembalikan = function () {
         const alasan = document.getElementById('alasanKembalikan').value.trim();
-        if (!alasan) return;
+        if (!alasan) return alert('Alasan wajib diisi');
 
         if (selectedRow) {
-            selectedRow.setAttribute('data-status', 'returned');
-            selectedRow.classList.remove('bg-green-50');
-            selectedRow.classList.add('bg-red-50');
+            const id = selectedRow.dataset.id;
+            
+            // Masukkan alasan dari textarea modal ke hidden input di form
+            document.getElementById(`input-alasan-${id}`).value = alasan;
+
+            // Tampilkan Notif Visual
+            document.getElementById('notifSuccess').classList.remove('hidden');
+
+            // Submit Form Backend
+            setTimeout(() => {
+                document.getElementById(`form-tolak-${id}`).submit();
+            }, 800);
         }
-
         closeModal();
-
-        const notif = document.getElementById('notifSuccess');
-        notif.classList.remove('hidden');
-
-        setTimeout(() => {
-            notif.classList.add('hidden');
-        }, 2000);
     };
-
 });

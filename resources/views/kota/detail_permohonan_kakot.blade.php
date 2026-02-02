@@ -1,4 +1,4 @@
-<x-layout_detail_permohonan_kakot>
+<x-layout_detail_permohonan>
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <div class="bg-gray-100 min-h-screen py-10 px-6">
@@ -79,10 +79,12 @@
                     </div>
 
                     <!-- BUTTON -->
-                    <button onclick="history.back()"
-                        class="mt-16 w-fit bg-lime-400 hover:bg-lime-500 text-black font-bold px-10 py-3 rounded-xl">
-                        KEMBALI
-                    </button>
+                <div class="mt-20 flex justify-start">
+                    <button onclick="javascript:history.back()"
+                        class="bg-gray-800 hover:bg-black text-white font-bold px-12 py-3 rounded-xl transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> KEMBALI
+                    </a>
+                </div>
 
                 </div>
 
@@ -125,7 +127,7 @@
                                 </label>
                                 
                                 @if($permohonan->file_path)
-                                    <a href="{{ asset($permohonan->file_path) }}" target="_blank" class="inline-block">
+                                    <a href="{{ route('permohonan.download', $permohonan->id) }}" target="_blank" class="inline-block">
                                         <span class="text-blue-600 font-semibold text-sm cursor-pointer hover:text-blue-800 transition">
                                             <i class="fa-solid fa-file-lines"></i>
                                             Lihat Berkas
@@ -146,4 +148,4 @@
             </div>
         </div>
     </div>
-</x-layout_detail_permohonan_kakot>
+</x-layout_detail_permohonan>

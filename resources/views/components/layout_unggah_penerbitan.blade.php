@@ -1,12 +1,9 @@
-<?php
-$role='kota';
-?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unggah Penerbitan Kota/Kabupaten</title>
+    <title>{{ $role }}</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
@@ -20,7 +17,7 @@ $role='kota';
     <main class="flex-1 flex flex-col relative overflow-hidden">
 
         <!-- HEADER -->
-        <x-header_kakot>{{ $title }}</x-header_kakot>
+        <x-header>{{ $title }}</x-header>
 
         <!-- CONTENT -->
         <div class="flex-1 overflow-auto p-8 relative scrollbar-hide">

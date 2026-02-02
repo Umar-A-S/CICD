@@ -27,8 +27,9 @@ class PenerbitanController extends Controller
             ->get();
 
         // Data 2: Selesai (Status SELESAI dan ditujukan ke user ini)
-        $permohonanSelesai = Permohonan::where('daerah_tujuan', $daerahUser)
-            ->where('status', 'SELESAI')
+        $permohonanSelesai = Permohonan::with('penerbitan')
+            ->where('daerah_tujuan', $daerahUser)
+            ->whereIn('status', ['SELESAI', 'DITOLAK'])
             ->orderBy('updated_at', 'desc')
             ->get();
 
@@ -41,6 +42,11 @@ class PenerbitanController extends Controller
     public function create($id)
     {
         $permohonan = Permohonan::findOrFail($id);
+
+        // --- SATPAM 0: Cek Authorization (Permohonan harus ditujukan ke daerah ini) ---
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Permohonan ini bukan untuk daerah Anda.');
+        }
 
         // --- SATPAM 1: Cek Status ---
         // Kalau status sudah SELESAI, dilarang masuk form lagi!
@@ -61,58 +67,81 @@ class PenerbitanController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validasi Input (Sesuai name di form)
+        // 1. Validasi Input
         $request->validate([
             'permohonan_id' => 'required|exists:permohonan,id',
             'hasil'         => 'required|in:TERCATAT,TIDAK TERCATAT,DISETUJUI,DITOLAK,LAINNYA',
-            'alasan'        => 'required|string',
-            'file_balasan'  => 'required|file|mimes:pdf|max:10240', // Max 10MB
+            'alasan'        => 'nullable|string',
+            'file_balasan'  => 'required|file|mimes:pdf|max:10240',
         ]);
 
-        $cekPermohonan = Permohonan::findOrFail($request->permohonan_id);
-    
-        if ($cekPermohonan->status == 'SELESAI') {
-             return redirect()->route('penerbitan.index')
-                ->with('error', 'Eits, data ini sudah selesai diproses. Tidak bisa double input!');
-     }
+        $permohonan = Permohonan::findOrFail($request->permohonan_id);
+
+        // Cek agar tidak double input
+        if (in_array($permohonan->status, ['SELESAI', 'DITOLAK'])) {
+            return redirect()->route('penerbitan.index')
+                ->with('error', 'Data ini sudah selesai diproses!');
+        }
 
         // 2. Proses Upload File
         $file = $request->file('file_balasan');
-        // Format nama file: TIME_JUDUL_RANDOM.pdf
         $fileName = time() . '_balasan_' . Str::random(5) . '.pdf';
-        // Simpan ke storage/app/public/penerbitan
-        $path = $file->storeAs('public/penerbitan', $fileName); 
+        $file->storeAs('public/penerbitan', $fileName); 
 
-        // 3. Generate Nomor Surat Otomatis (Format: NO/BLS/THN)
-        // Kalau mau manual, nanti tambahkan input di form view-nya
+        // 3. Generate Nomor Surat
         $bulanRomawi = $this->getRomawi(date('n'));
         $tahun = date('Y');
         $nomorSurat = "470/" . rand(100, 999) . "/BALASAN/" . $bulanRomawi . "/" . $tahun;
 
-        // 4. Simpan ke Database Penerbitan
+        // 4. Simpan ke Database Penerbitan 
         Penerbitan::create([
             'permohonan_id'         => $request->permohonan_id,
             'hasil'                 => $request->hasil,
-            'alasan'                => $request->alasan,
             'nomor_surat_selesai'   => $nomorSurat,
-            'tanggal_surat_selesai' => Carbon::now(),
-            'file_path'             => '/storage/penerbitan/' . $fileName, // Path untuk diakses di view
+            'tanggal_surat_selesai' => $request->tanggal_surat_selesai ?? Carbon::now(),
+            'file_path'             => '/storage/penerbitan/' . $fileName,
         ]);
 
-        // 5. Update Status Permohonan jadi SELESAI
-        $permohonan = Permohonan::find($request->permohonan_id);
-        $permohonan->update(['status' => 'SELESAI']);
+        // 5. UPDATE TABEL PERMOHONAN (Pusat Data)
+        $statusFinal = ($request->hasil == 'DITOLAK') ? 'DITOLAK' : 'SELESAI';
 
-        // 6. Redirect dengan Pesan Sukses
-        return redirect()->route('penerbitan.index')->with('success', 'Dokumen berhasil diterbitkan dan dikirim!');
+        $permohonan->update([
+            'status'  => $statusFinal,
+            'catatan' => $request->alasan 
+        ]);
+
+        return redirect()->route('penerbitan.index')->with('success', 'Dokumen berhasil diproses!');
+    }
+    /**
+     * Menampilkan Detail Permohonan dari Menu Penerbitan (untuk Daerah Tujuan)
+     * Dipisah dari PermohonanController karena context berbeda
+     */
+    public function detailPermohonan($id)
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        // Proteksi Keamanan: Hanya daerah tujuan yang bisa lihat detail di menu penerbitan
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Permohonan ini bukan untuk daerah Anda.');
+        }
+
+        return view('kota.detail_permohonan_kakot', [
+            'title' => 'Detail Permohonan (Penerbitan)',
+            'permohonan' => $permohonan
+        ]);
     }
 
     /**
-     * Menampilkan Detail (Opsional jika belum ada)
+     * Menampilkan Detail Penerbitan (Balasan yang sudah diproses)
      */
     public function show($id)
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
+
+        // Proteksi Keamanan: Hanya daerah tujuan yang bisa melihat detail penerbitan
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Anda tidak memiliki akses ke data ini.');
+        }
 
         return view('kota.detail_penerbitan_kakot', [
             'title' => 'Detail Penerbitan',
@@ -120,7 +149,50 @@ class PenerbitanController extends Controller
         ]);
     }
 
-    // Helper kecil buat angka romawi bulan
+    /**
+     * SECURITY FIX: Download file penerbitan dengan authorization check
+     */
+    public function downloadPenerbitanFile($id)
+    {
+        $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
+
+        // Authorization check: Hanya daerah tujuan yang bisa download
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        }
+
+        // Cek apakah penerbitan sudah ada
+        if (!$permohonan->penerbitan || !$permohonan->penerbitan->file_path) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $filePath = str_replace('/storage/', '', $permohonan->penerbitan->file_path);
+        
+        // Download file dari storage
+        return Storage::download("public/{$filePath}", "Penerbitan_{$id}.pdf");
+    }
+
+    /**
+     * SECURITY FIX: Download file permohonan (asli) dengan authorization check
+     */
+    public function downloadPermohonanFile($id)
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        // Authorization check: Hanya daerah tujuan yang bisa download file permohonan yang ditujukan ke mereka
+        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        }
+
+        if (!$permohonan->file_path) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $filePath = str_replace('/storage/', '', $permohonan->file_path);
+        
+        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
+    }
+
     private function getRomawi($bulan) {
         $map = [1=>'I', 2=>'II', 3=>'III', 4=>'IV', 5=>'V', 6=>'VI', 7=>'VII', 8=>'VIII', 9=>'IX', 10=>'X', 11=>'XI', 12=>'XII'];
         return $map[$bulan];

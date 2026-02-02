@@ -17,11 +17,13 @@ return new class extends Migration
             $table->enum('wilayah', ['dalam', 'luar']);
             $table->string('wilayah_tujuan');
             $table->string('daerah_tujuan');    
+            $table->string('kode_daerah_tujuan')->nullable();
             $table->string('daerah_asal');
             $table->string('jenis_permohonan');
             $table->string('jenis_dokumen');
             $table->string('file_path');
             $table->enum('status', ['BELUM', 'DIPROSES', 'DITOLAK', 'SELESAI'])->default('BELUM');
+            $table->text('catatan')->nullable();
             $table->timestamps();
         });
     }

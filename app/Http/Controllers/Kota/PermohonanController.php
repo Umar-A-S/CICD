@@ -27,11 +27,11 @@ class PermohonanController extends Controller
         if ($user->role === 'daerah') {
             $permohonans = Permohonan::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         } else {
-            $permohonans = Permohonan::orderBy('created_at', 'desc')->get();
+            abort(403, 'Akses tidak sah.');
         }
 
         return view('kota.permohonan_kakot', [
-            'title' => 'Daftar Permohonan',
+            'title' => 'Permohonan',
             'permohonans' => $permohonans
         ]);
     }
@@ -42,7 +42,7 @@ class PermohonanController extends Controller
         // Ambil data permohonan berdasarkan ID, jika tidak ada muncul 404
         $permohonan = Permohonan::findOrFail($id);
 
-        // Proteksi Keamanan: User daerah hanya boleh lihat miliknya sendiri
+        // Proteksi Keamanan: User daerah hanya boleh lihat miliknya sendiri (yang dibuat user ini)
         if (Auth::user()->role === 'daerah' && $permohonan->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses ke data ini.');
         }
@@ -58,7 +58,7 @@ class PermohonanController extends Controller
      */
     public function store(Request $request)
     {
-            // Validasi input
+        // Validasi input
         $validated = $request->validate([
             'nama_subjek' => 'required|string',
             'daerah_asal' => 'required|string',
@@ -81,7 +81,9 @@ class PermohonanController extends Controller
             $filePath = Storage::url('permohonan/' . $fileName);
         }
 
-        $targetUserId = null; // Default null kalau luar provinsi
+        // Ambil user daerah tujuan untuk verifikasi & dapatkan kode wilayah
+        $targetUser = null;
+        $kodeWilayahTujuan = null;
 
         if ($request->wilayah == 'dalam') {
             $targetUser = User::where('name', $request->daerah_tujuan)
@@ -91,7 +93,8 @@ class PermohonanController extends Controller
             if (!$targetUser) {
                 return back()->withErrors(['daerah_tujuan' => 'Akun untuk daerah tujuan ini belum dibuat oleh Superadmin. Hubungi Admin Provinsi.'])->withInput();
             }
-            $targetUserId = $targetUser->id; 
+
+            $kodeWilayahTujuan = $targetUser->kode_wilayah;
         }
 
         // Create permohonan
@@ -102,15 +105,39 @@ class PermohonanController extends Controller
             'wilayah' => $validated['wilayah'],
             'wilayah_tujuan' => $validated['wilayah_tujuan'],
             'daerah_tujuan' => $validated['daerah_tujuan'],
+            'kode_daerah_tujuan' => $kodeWilayahTujuan,
             'nomor_surat' => $validated['nomor_surat'],
             'tanggal_surat' => $validated['tanggal_surat'],
-            'file_path' => $filePath  ,
+            'file_path' => $filePath,
             'status' => 'BELUM',
             'jenis_permohonan' => $validated['jenis_permohonan'],
             'jenis_dokumen' => $validated['jenis_dokumen'],
         ]);
 
-            return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
+        return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
 
+    }
+
+    /**
+     * SECURITY FIX: Download file permohonan dengan authorization check
+     * Untuk user pembuat permohonan
+     */
+    public function downloadFile($id)
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        // Authorization: Hanya pembuat permohonan yang bisa download file miliknya sendiri
+        if ($permohonan->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses ke file ini.');
+        }
+
+        if (!$permohonan->file_path) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        // Hapus /storage/ prefix jika ada, dan ubah ke path storage
+        $filePath = str_replace('/storage/', '', $permohonan->file_path);
+        
+        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
     }
 }

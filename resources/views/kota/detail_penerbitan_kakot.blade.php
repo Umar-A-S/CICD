@@ -73,7 +73,7 @@
                         <div class="mt-5">
                             <label class="{{ $labelClass }}">Berkas Permohonan</label>
                             @if($permohonan->file_path)
-                                <a href="{{ asset($permohonan->file_path) }}" target="_blank" 
+                                <a href="{{ route('penerbitan.download_permohonan', $permohonan->id) }}" target="_blank" 
                                    class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
                                     <i class="fa-solid fa-file-pdf text-xl"></i>
                                     Lihat Dokumen Asli
@@ -108,7 +108,7 @@
                             <div>
                                 <label class="{{ $labelClass }}">Berkas Balasan</label>
                                 @if($permohonan->penerbitan->file_path)
-                                        <a href="{{ asset($permohonan->penerbitan->file_path) }}" target="_blank"
+                                        <a href="{{ route('penerbitan.download', $permohonan->id) }}" target="_blank"
                                         class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
                                             <i class="fa-solid fa-file-circle-check text-xl"></i>
                                             Lihat Surat Balasan
@@ -140,7 +140,7 @@
 
                             <div>
                                 <label class="{{ $labelClass }}">Catatan / Keterangan</label>
-                                <textarea disabled rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black font-medium resize-none">{{ $permohonan->penerbitan->alasan }}</textarea>
+                                <textarea disabled rows="4" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-black font-medium resize-none">{{ $permohonan->catatan }}</textarea>
                             </div>
                         </div>
                     </section>

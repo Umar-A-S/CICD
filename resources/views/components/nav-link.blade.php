@@ -2,11 +2,26 @@
     'href' => '#',
     'icon' => 'fa-circle',
     'count' => null, // ⬅️ NOTIF ANGKA
+    'route' => null, // ⬅️ ROUTE NAME (opsional, untuk detect active)
 ])
 
 @php
-    // Cek menu aktif
-    $isActive = request()->is(trim($href, '/') . '*');
+    // Cek menu aktif - prioritas: route name > URL path
+    $currentRoute = Route::currentRouteName();
+    
+    if ($route) {
+        // Jika route name diberikan, cek match dengan current route
+        // Support wildcard dengan * (contoh: superadmin.users.*)
+        if (str_ends_with($route, '.*')) {
+            $prefix = rtrim($route, '.*');
+            $isActive = str_starts_with($currentRoute, $prefix);
+        } else {
+            $isActive = $currentRoute === $route;
+        }
+    } else {
+        // Fallback ke URL path matching
+        $isActive = request()->is(trim($href, '/') . '*');
+    }
 @endphp
 
 <style>
