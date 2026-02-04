@@ -122,7 +122,7 @@
                     <tr>
                         <th class="px-6 py-4">No. Permohonan</th>
                         <th class="px-6 py-4">Daerah Asal</th>
-                        <th class="px-6 py-4">Pemohon</th>
+                        <th class="px-6 py-4">Nama Subjek</th>
                         <th class="px-6 py-4">Jenis</th>
                         <th class="px-6 py-4">Status</th>
                         <th class="px-6 py-4">Tanggal</th>

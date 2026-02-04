@@ -21,18 +21,22 @@ class PenerbitanProv extends Controller
         // Data 1: Perlu Dibalas (Status bukan SELESAI dan ditujukan ke user ini)
         $permohonanPerlu = Permohonan::where('wilayah', 'luar')
             ->where('status', 'DIPROSES')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('updated_at', 'desc')
             ->get();
 
         // Data 2: Selesai (Status SELESAI dan ditujukan ke user ini)
         $permohonanSelesai = Permohonan::with('penerbitan')
-            ->where('wilayah', 'luar')
-            ->whereIn('status', ['SELESAI', 'DITOLAK'])
-            ->orderBy('updated_at', 'desc')
+            ->select('permohonan.*') 
+            ->join('penerbitan', 'permohonan.id', '=', 'penerbitan.permohonan_id')
+            ->where('permohonan.wilayah', 'luar')
+            ->whereIn('permohonan.status', ['SELESAI', 'DITOLAK'])
+            ->orderByRaw("FIELD(penerbitan.hasil, 'TERCATAT', 'TIDAK TERCATAT', 'DISETUJUI', 'DITOLAK', 'LAINNYA') ASC")
+            ->orderBy('permohonan.updated_at', 'desc')
             ->get();
+            return view('provinsi.penerbitan_prov', compact('permohonanPerlu', 'permohonanSelesai'));
+            }
 
-        return view('provinsi.penerbitan_prov', compact('permohonanPerlu', 'permohonanSelesai'));
-    }
+            
 
     /**
      * Menampilkan Form Unggah Balasan
@@ -69,8 +73,8 @@ class PenerbitanProv extends Controller
         $request->validate([
             'permohonan_id' => 'required|exists:permohonan,id',
             'hasil'         => 'required|in:TERCATAT,TIDAK TERCATAT,DISETUJUI,DITOLAK,LAINNYA',
-            'alasan'        => 'required|string',
-            'file_balasan'  => 'required|file|mimes:pdf|max:10240',
+            'alasan'        => 'nullable|string',
+            'file_balasan'  => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $permohonan = Permohonan::findOrFail($request->permohonan_id);
@@ -81,10 +85,14 @@ class PenerbitanProv extends Controller
                 ->with('error', 'Data ini sudah selesai diproses!');
         }
 
-        // 2. Proses Upload File
-        $file = $request->file('file_balasan');
-        $fileName = time() . '_balasan_' . Str::random(5) . '.pdf';
-        $file->storeAs('public/penerbitan', $fileName); 
+        // 2. Proses Upload File (hanya jika ada file yang diupload)
+        $filePath = null;
+        if ($request->hasFile('file_balasan')) {
+            $file = $request->file('file_balasan');
+            $fileName = time() . '_balasan_' . Str::random(5) . '.pdf';
+            $file->storeAs('public/penerbitan', $fileName);
+            $filePath = '/storage/penerbitan/' . $fileName;
+        } 
 
         // 3. Generate Nomor Surat
         $bulanRomawi = $this->getRomawi(date('n'));
@@ -97,7 +105,7 @@ class PenerbitanProv extends Controller
             'hasil'                 => $request->hasil,
             'nomor_surat_selesai'   => $nomorSurat,
             'tanggal_surat_selesai' => $request->tanggal_surat_selesai ?? Carbon::now(),
-            'file_path'             => '/storage/penerbitan/' . $fileName,
+            'file_path'             => $filePath, // Bisa null jika tidak ada file
         ]);
 
         // 5. UPDATE TABEL PERMOHONAN (Pusat Data)
@@ -105,7 +113,7 @@ class PenerbitanProv extends Controller
 
         $permohonan->update([
             'status'  => $statusFinal,
-            'catatan' => $request->alasan 
+            'catatan' => $request->alasan // Bisa null jika tidak diisi
         ]);
 
         return redirect()->route('penerbitanprov.index')->with('success', 'Dokumen berhasil diproses!');
@@ -117,9 +125,13 @@ class PenerbitanProv extends Controller
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
 
-        // Proteksi Keamanan: Hanya permohonan luar Jateng yang boleh dilihat di menu Penerbitan Provinsi
-        if ($permohonan->wilayah !== 'luar') {
-            abort(403, 'Anda tidak memiliki akses ke data ini.');
+        // Provinsi bisa akses semua penerbitan yang sudah SELESAI
+        // Baik wilayah 'luar' (penerbitan provinsi) maupun 'dalam' (verifikasi dari kota)
+        if (!in_array($permohonan->status, ['SELESAI', 'DITOLAK'])) {
+            // Jika belum selesai dan bukan penerbitan luar, tolak akses
+            if ($permohonan->wilayah !== 'luar') {
+                abort(403, 'Anda tidak memiliki akses ke data ini.');
+            }
         }
 
         return view('provinsi.detail_penerbitan_prov', [
@@ -129,10 +141,10 @@ class PenerbitanProv extends Controller
     }
 
     /**
-     * SECURITY FIX: Download file penerbitan dengan authorization check
-     * Provinsi bisa download file penerbitan yang dia buat untuk permohonan luar
+     * Preview file penerbitan dengan authorization check
+     * Provinsi bisa preview file penerbitan yang dia buat untuk permohonan luar
      */
-    public function downloadPenerbitanFile($id)
+    public function lihatBerkasPenerbitan($id)
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
 
@@ -147,19 +159,25 @@ class PenerbitanProv extends Controller
         }
 
         $filePath = str_replace('/storage/', '', $permohonan->penerbitan->file_path);
+        $fullPath = storage_path("app/public/{$filePath}");
         
-        return Storage::download("public/{$filePath}", "Penerbitan_{$id}.pdf");
+        // Preview di tab baru (bukan download)
+        if (!file_exists($fullPath)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+        
+        return response()->file($fullPath);
     }
 
     /**
-     * SECURITY FIX: Download file permohonan (asli) dengan authorization check
+     * Preview file permohonan (asli) dengan authorization check
      * Untuk semua permohonan - provinsi adalah gatekeeper
      */
-    public function downloadPermohonanFile($id)
+    public function lihatBerkasPermohonan($id)
     {
         $permohonan = Permohonan::findOrFail($id);
 
-        // Authorization check: Provinsi bisa download semua permohonan (baik dalam maupun luar)
+        // Authorization check: Provinsi bisa preview semua permohonan (baik dalam maupun luar)
         // karena provinsi adalah gatekeeper/validator
         // Jadi tidak ada restriction wilayah di sini
 
@@ -168,8 +186,14 @@ class PenerbitanProv extends Controller
         }
 
         $filePath = str_replace('/storage/', '', $permohonan->file_path);
+        $fullPath = storage_path("app/public/{$filePath}");
         
-        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
+        // Preview di tab baru (bukan download)
+        if (!file_exists($fullPath)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+        
+        return response()->file($fullPath);
     }
 
     private function getRomawi($bulan) {

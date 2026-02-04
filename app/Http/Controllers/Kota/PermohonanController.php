@@ -54,10 +54,52 @@ class PermohonanController extends Controller
     }
 
     /**
-     * Store a new permohonan
+     * Show form for resubmitting rejected permohonan with pre-filled data
+     */
+    public function resubmit($id)
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        // Authorization: only owner can resubmit
+        if ($permohonan->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengajukan ulang permohonan ini.');
+        }
+
+        // Only DITOLAK status can be resubmitted
+        if ($permohonan->status !== 'DITOLAK') {
+            return redirect()->route('balasan.index')->with('error', 'Hanya permohonan yang ditolak yang dapat diajukan ulang.');
+        }
+
+        return view('kota.permohonan_kakot', [
+            'title' => 'Ajukan Ulang Permohonan',
+            'permohonan' => $permohonan,
+            'isResubmit' => true
+        ]);
+    }
+
+    /**
+     * Store a new permohonan or update existing (resubmit)
      */
     public function store(Request $request)
     {
+        // Cek apakah ini mode resubmit (update) atau create baru
+        $isResubmit = $request->has('resubmit_id');
+        $permohonanLama = null;
+
+        if ($isResubmit) {
+            $permohonanLama = Permohonan::findOrFail($request->resubmit_id);
+            
+            // Authorization: hanya pembuat yang bisa update
+            if ($permohonanLama->user_id !== Auth::id()) {
+                abort(403, 'Anda tidak memiliki akses untuk mengupdate permohonan ini.');
+            }
+
+            // Hanya permohonan DITOLAK yang bisa diajukan ulang
+            if ($permohonanLama->status !== 'DITOLAK') {
+                return back()->withErrors(['error' => 'Hanya permohonan yang ditolak yang dapat diajukan ulang.'])->withInput();
+            }
+        }
+
         // Validasi input
         $validated = $request->validate([
             'nama_subjek' => 'required|string',
@@ -69,12 +111,21 @@ class PermohonanController extends Controller
             'jenis_dokumen' => 'required|string',       
             'nomor_surat' => 'required|string',
             'tanggal_surat' => 'required|date',
-            'file' => 'required|file|mimes:pdf|max:10240',
+            'file' => $isResubmit ? 'nullable|file|mimes:pdf|max:10240' : 'required|file|mimes:pdf|max:10240',
         ]);
 
         // Handle file upload
-        $filePath = null;
+        $filePath = $isResubmit ? $permohonanLama->file_path : null;
         if ($request->hasFile('file')) {
+            // Jika resubmit, hapus file lama
+            if ($isResubmit && $permohonanLama->file_path) {
+                $oldFilePath = str_replace('/storage/', '', $permohonanLama->file_path);
+                $oldFullPath = storage_path("app/public/{$oldFilePath}");
+                if (file_exists($oldFullPath)) {
+                    unlink($oldFullPath);
+                }
+            }
+
             $file = $request->file('file');
             $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('public/permohonan', $fileName);
@@ -97,8 +148,7 @@ class PermohonanController extends Controller
             $kodeWilayahTujuan = $targetUser->kode_wilayah;
         }
 
-        // Create permohonan
-        $permohonan = Permohonan::create([
+        $data = [
             'user_id' => Auth::id(),
             'nama_subjek' => $validated['nama_subjek'],
             'daerah_asal' => Auth::user()->name,
@@ -112,9 +162,20 @@ class PermohonanController extends Controller
             'status' => 'BELUM',
             'jenis_permohonan' => $validated['jenis_permohonan'],
             'jenis_dokumen' => $validated['jenis_dokumen'],
-        ]);
+            'catatan' => null, // Clear rejection reason
+        ];
 
-        return redirect('/dashboard_kakot')->with('success', 'Permohonan berhasil dikirim!');
+        if ($isResubmit) {
+            // UPDATE permohonan lama
+            $permohonanLama->update($data);
+            $message = 'Permohonan berhasil diajukan ulang!';
+        } else {
+            // CREATE permohonan baru
+            Permohonan::create($data);
+            $message = 'Permohonan berhasil dikirim!';
+        }
+
+        return redirect('/dashboard_kakot')->with('success', $message);
 
     }
 
@@ -126,8 +187,13 @@ class PermohonanController extends Controller
     {
         $permohonan = Permohonan::findOrFail($id);
 
-        // Authorization: Hanya pembuat permohonan yang bisa download file miliknya sendiri
-        if ($permohonan->user_id !== Auth::id()) {
+        // Authorization: Bisa diakses oleh:
+        // 1. Pembuat permohonan (user_id)
+        // 2. Daerah tujuan (kode_daerah_tujuan)
+        $isPembuat = $permohonan->user_id === Auth::id();
+        $isDaerahTujuan = $permohonan->kode_daerah_tujuan === Auth::user()->kode_wilayah;
+        
+        if (!$isPembuat && !$isDaerahTujuan) {
             abort(403, 'Anda tidak memiliki akses ke file ini.');
         }
 
@@ -137,7 +203,13 @@ class PermohonanController extends Controller
 
         // Hapus /storage/ prefix jika ada, dan ubah ke path storage
         $filePath = str_replace('/storage/', '', $permohonan->file_path);
+        $fullPath = storage_path("app/public/{$filePath}");
         
-        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
+        // Preview di tab baru (bukan download)
+        if (!file_exists($fullPath)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+        
+        return response()->file($fullPath);
     }
 }

@@ -16,17 +16,31 @@ class BalasanController extends Controller
     {
         $user = Auth::user();
 
+<<<<<<< HEAD
         // Kita ambil permohonan yang dibuat oleh user ini dan statusnya SELESAI
         // Gunakan eager loading 'penerbitan' agar data balasan langsung terbawa
         $permohonans = Permohonan::with('penerbitan')
             ->where('user_id', $user->id)
             ->where('status', 'SELESAI')
+=======
+        // Tabel 1: Permohonan yang sedang diproses (BELUM, DIPROSES)
+        $permohonanDiproses = Permohonan::where('user_id', $user->id)
+            ->whereIn('status', ['BELUM', 'DIPROSES'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Tabel 2: Riwayat balasan (SELESAI, DITOLAK)
+        $permohonanSelesai = Permohonan::with('penerbitan')
+            ->where('user_id', $user->id)
+            ->whereIn('status', ['SELESAI', 'DITOLAK'])
+>>>>>>> af618b02e7a04f6af95ed3dcb5d444268f083dc6
             ->orderBy('updated_at', 'desc')
             ->get();
 
         return view('kota.balasan_kakot', [
             'title' => 'Daftar Balasan Permohonan',
-            'permohonans' => $permohonans
+            'permohonanDiproses' => $permohonanDiproses,
+            'permohonanSelesai' => $permohonanSelesai
         ]);
     }
 

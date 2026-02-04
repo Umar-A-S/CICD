@@ -4,10 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Permohonan;
-use App\Models\Penerbitan;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -82,128 +79,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        echo "\n✅ Created 35 daerah accounts + 1 provinsi + 1 superadmin\n";
-
-        // 4. GENERATE DUMMY PERMOHONAN
-        $this->generateDummyPermohonan($users);
-    }
-
-    /**
-     * Generate realistic dummy permohonan data
-     */
-    private function generateDummyPermohonan($users)
-    {
-        $jenisDokumen = [
-            'Akta Kelahiran',
-            'Akta Kematian',
-            'Akta Perkawinan',
-            'Akta Perceraian',
-            'Kartu Keluarga',
-            'KTP',
-        ];
-
-        $namaPemohon = [
-            'Budi Santoso', 'Siti Nurhaliza', 'Ahmad Dhani', 'Dewi Lestari',
-            'Rudi Hartono', 'Ani Yudhoyono', 'Joko Widodo', 'Mega Sari',
-            'Bambang Pamungkas', 'Rina Susanti', 'Hendra Wijaya', 'Maya Sari',
-            'Agus Salim', 'Fitri Handayani', 'Dedi Corbuzier', 'Nia Ramadhani',
-            'Eko Patrio', 'Sandra Dewi', 'Ridwan Kamil', 'Syahrini',
-        ];
-
-        // Daerah di luar Jawa Tengah (contoh berbagai provinsi)
-        $daerahLuarJateng = [
-            ['nama' => 'Kabupaten Badung', 'provinsi' => 'Bali'],
-            ['nama' => 'Kota Denpasar', 'provinsi' => 'Bali'],
-            ['nama' => 'Kabupaten Bantul', 'provinsi' => 'DI Yogyakarta'],
-            ['nama' => 'Kota Yogyakarta', 'provinsi' => 'DI Yogyakarta'],
-            ['nama' => 'Kabupaten Bogor', 'provinsi' => 'Jawa Barat'],
-            ['nama' => 'Kota Bandung', 'provinsi' => 'Jawa Barat'],
-            ['nama' => 'Kabupaten Malang', 'provinsi' => 'Jawa Timur'],
-            ['nama' => 'Kota Surabaya', 'provinsi' => 'Jawa Timur'],
-            ['nama' => 'Kabupaten Kotawaringin Barat', 'provinsi' => 'Kalimantan Tengah'],
-            ['nama' => 'Kota Palangkaraya', 'provinsi' => 'Kalimantan Tengah'],
-            ['nama' => 'Kabupaten Barito Kuala', 'provinsi' => 'Kalimantan Selatan'],
-            ['nama' => 'Kota Banjarmasin', 'provinsi' => 'Kalimantan Selatan'],
-            ['nama' => 'Kabupaten Tangerang', 'provinsi' => 'Banten'],
-            ['nama' => 'Kota Tangerang Selatan', 'provinsi' => 'Banten'],
-            ['nama' => 'Kabupaten Lampung Selatan', 'provinsi' => 'Lampung'],
-            ['nama' => 'Kota Bandar Lampung', 'provinsi' => 'Lampung'],
-        ];
-
-        $statusList = ['BELUM', 'DIPROSES', 'SELESAI', 'DITOLAK'];
-        $wilayahList = ['dalam', 'luar'];
-
-        $permohonanCounter = 1;
-
-        // Generate 80 permohonan dari berbagai daerah
-        for ($i = 0; $i < 80; $i++) {
-            $user = $users[array_rand($users)];
-            $wilayah = $wilayahList[array_rand($wilayahList)];
-            $status = $statusList[array_rand($statusList)];
-            
-            // Random date dalam 3 bulan terakhir
-            $createdAt = Carbon::now()->subDays(rand(1, 90));
-            
-            $daerahTujuan = null;
-            $kodeDaerahTujuan = null;
-            $wilayahTujuan = null;
-            
-            if ($wilayah === 'dalam') {
-                // Untuk dalam wilayah: pilih daerah lain di Jawa Tengah
-                $targetUser = $users[array_rand($users)];
-                $daerahTujuan = $targetUser->name;
-                $kodeDaerahTujuan = $targetUser->kode_wilayah;
-                $wilayahTujuan = 'Jawa Tengah';
-            } else {
-                // Untuk luar wilayah: pilih dari daerah luar Jawa Tengah
-                $targetDaerah = $daerahLuarJateng[array_rand($daerahLuarJateng)];
-                $daerahTujuan = $targetDaerah['nama'];
-                $wilayahTujuan = $targetDaerah['provinsi'];
-                $kodeDaerahTujuan = null; // Luar jateng tidak punya kode 33.xx
-            }
-
-            $permohonan = Permohonan::create([
-                'user_id' => $user->id,
-                'nomor_surat' => 'PRM/' . $user->kode_wilayah . '/' . str_pad($permohonanCounter++, 4, '0', STR_PAD_LEFT) . '/' . $createdAt->format('Y'),
-                'nama_subjek' => $namaPemohon[array_rand($namaPemohon)],
-                'tanggal_surat' => $createdAt->format('Y-m-d'),
-                'daerah_asal' => $user->name,
-                'wilayah' => $wilayah,
-                'wilayah_tujuan' => $wilayahTujuan,
-                'daerah_tujuan' => $daerahTujuan,
-                'kode_daerah_tujuan' => $kodeDaerahTujuan,
-                'jenis_permohonan' => 'Verifikasi Dokumen',
-                'jenis_dokumen' => $jenisDokumen[array_rand($jenisDokumen)],
-                'file_path' => 'permohonan/dummy_' . $i . '.pdf',
-                'status' => $status,
-                'catatan' => $status === 'DIPROSES' ? 'Sedang dalam proses verifikasi oleh tim.' : null,
-                'created_at' => $createdAt,
-                'updated_at' => $createdAt,
-            ]);
-
-            // Generate Penerbitan untuk status SELESAI atau DITOLAK
-            if ($status === 'SELESAI' || $status === 'DITOLAK') {
-                $tanggalTerbit = $createdAt->copy()->addDays(rand(3, 14));
-                
-                Penerbitan::create([
-                    'permohonan_id' => $permohonan->id,
-                    'nomor_surat_selesai' => 'SRT/' . $user->kode_wilayah . '/' . str_pad($permohonan->id, 4, '0', STR_PAD_LEFT) . '/' . $tanggalTerbit->format('Y'),
-                    'tanggal_surat_selesai' => $tanggalTerbit,
-                    'hasil' => $status === 'SELESAI' ? 'SAH' : 'TIDAK SAH',
-                    'alasan' => $status === 'DITOLAK' ? 'Dokumen tidak memenuhi persyaratan administrasi yang ditentukan.' : null,
-                    'file_path' => 'penerbitan/dummy_penerbitan_' . $permohonan->id . '.pdf',
-                    'created_at' => $tanggalTerbit,
-                    'updated_at' => $tanggalTerbit,
-                ]);
-            }
-        }
-
-        echo "✅ Generated 80 dummy permohonan with realistic data\n\n";
-        echo "📊 Summary:\n";
-        echo "   - Total Users: " . (count($users) + 2) . " (35 daerah + 1 provinsi + 1 superadmin)\n";
-        echo "   - Total Permohonan: 80\n";
-        echo "   - Credentials: username=daerah_name, password=password\n";
-        echo "   - Superadmin: username=superadmin, password=password123\n";
-        echo "   - Provinsi: username=adminjateng, password=password\n\n";
+        echo "\n✅ Seeded 37 user accounts:\n";
+        echo "   - 1 Superadmin (username: superadmin, password: password123)\n";
+        echo "   - 1 Provinsi (username: adminjateng, password: password)\n";
+        echo "   - 35 Daerah (username: nama_daerah, password: password)\n\n";
     }
 }
