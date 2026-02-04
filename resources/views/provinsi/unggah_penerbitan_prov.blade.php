@@ -62,6 +62,50 @@
                             </div>
                         </section>
 
+                        <section>
+                            <h2 class="text-lg font-extrabold tracking-wide mb-8 text-gray-800">
+                                PERMOHONAN
+                            </h2>
+
+                            <div class="space-y-5">
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">Tanggal Permohonan</label>
+                                    <input type="text" value="{{ $permohonan->created_at->format('d-m-Y') }}" disabled
+                                        class="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">Nomor Surat</label>
+                                    <input type="text" value="{{ $permohonan->nomor_surat }}" disabled
+                                        class="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">Tanggal Surat</label>
+                                    <input type="text" value="{{ $permohonan->tanggal_surat->format('d-m-Y') }}" disabled
+                                        class="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">Berkas</label>
+                                    @if($permohonan->file_path)
+                                        <div>
+                                            <a href="{{ route('penerbitanprov.preview_permohonan', $permohonan->id) }}" target="_blank" 
+                                           class="inline-flex items-center gap-2 mt-2 text-blue-600 font-semibold text-sm hover:text-blue-800 transition">
+                                            <i class="fa-solid fa-file"></i>
+                                            <span>Lihat Berkas</span>
+                                        </div>
+                                        </a>
+                                    @else
+                                        <div class="mt-2 text-red-500 font-semibold text-sm italic flex items-center gap-2">
+                                            <i class="fa-solid fa-circle-xmark"></i>
+                                            <span>Berkas tidak ditemukan</span>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </section>
+
                     </div>
 
                     <div class="space-y-14">
@@ -72,11 +116,6 @@
                             </h2>
 
                             <div class="space-y-5">
-                                <div>
-                                    <label class="text-xs font-bold uppercase text-gray-600">Nomor Surat Masuk</label>
-                                    <input type="text" value="{{ $permohonan->nomor_surat }}" disabled
-                                        class="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
-                                </div>
                                 
                                 <div>
                                     <label class="text-xs font-bold uppercase text-gray-600">
@@ -89,7 +128,7 @@
                                 
                                 <div>
                                     <label class="text-xs font-bold uppercase text-gray-600">
-                                        Tanggal Selesai <span class="text-red-500">*</span>
+                                        Tanggal Surat Selesai <span class="text-red-500">*</span>
                                     </label>
                                     <input type="date" name="tanggal_surat_selesai" required
                                         class="w-full mt-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
@@ -122,16 +161,16 @@
 
                                 <div>
                                     <label class="text-xs font-bold uppercase text-gray-600">
-                                        Keterangan / Alasan <span class="text-red-500">*</span>
+                                        Keterangan / Alasan <span class="text-gray-400">(Opsional)</span>
                                     </label>
-                                    <textarea name="alasan" required rows="4"
-                                        placeholder="Masukkan keterangan atau alasan..."
+                                    <textarea name="alasan" rows="4"
+                                        placeholder="Masukkan keterangan atau alasan (jika ada)..."
                                         class="w-full mt-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
                                 </div>
 
                                 <div>
                                     <label class="text-xs font-bold uppercase text-gray-600">
-                                        Unggah Berkas Balasan <span class="text-red-500">*</span>
+                                        Unggah Berkas Balasan <span class="text-gray-400">(Opsional)</span>
                                     </label>
 
                                     <label for="fileUpload"
@@ -141,10 +180,10 @@
 
                                         <i class="fa-solid fa-cloud-arrow-up text-sky-500 text-4xl mb-2"></i>
                                         <span class="text-sm font-semibold text-gray-700">
-                                            Klik untuk upload PDF
+                                            Klik untuk upload PDF (jika ada)
                                         </span>
 
-                                        <input id="fileUpload" name="file_balasan" type="file" class="hidden" accept=".pdf" required>
+                                        <input id="fileUpload" name="file_balasan" type="file" class="hidden" accept=".pdf">
                                     </label>
 
                                     <div id="filePreview" class="mt-4 space-y-3"></div>

@@ -29,7 +29,7 @@ class PenerbitanController extends Controller
         // Data 2: Selesai (Status SELESAI dan ditujukan ke user ini)
         $permohonanSelesai = Permohonan::with('penerbitan')
             ->where('daerah_tujuan', $daerahUser)
-            ->whereIn('status', ['SELESAI', 'DITOLAK'])
+            ->where('status', 'SELESAI')
             ->orderBy('updated_at', 'desc')
             ->get();
 
@@ -69,10 +69,12 @@ class PenerbitanController extends Controller
     {
         // 1. Validasi Input
         $request->validate([
-            'permohonan_id' => 'required|exists:permohonan,id',
-            'hasil'         => 'required|in:TERCATAT,TIDAK TERCATAT,DISETUJUI,DITOLAK,LAINNYA',
-            'alasan'        => 'nullable|string',
-            'file_balasan'  => 'required|file|mimes:pdf|max:10240',
+            'permohonan_id'         => 'required|exists:permohonan,id',
+            'nomor_surat_selesai'   => 'required|string',
+            'tanggal_surat_selesai' => 'required|date',
+            'hasil'                 => 'required|in:TERCATAT,TIDAK TERCATAT,DISETUJUI,DITOLAK,LAINNYA',
+            'alasan'                => 'nullable|string',
+            'file_balasan'          => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $permohonan = Permohonan::findOrFail($request->permohonan_id);
@@ -83,26 +85,25 @@ class PenerbitanController extends Controller
                 ->with('error', 'Data ini sudah selesai diproses!');
         }
 
-        // 2. Proses Upload File
-        $file = $request->file('file_balasan');
-        $fileName = time() . '_balasan_' . Str::random(5) . '.pdf';
-        $file->storeAs('public/penerbitan', $fileName); 
+        // 2. Proses Upload File (hanya jika ada file yang diupload)
+        $filePath = null;
+        if ($request->hasFile('file_balasan')) {
+            $file = $request->file('file_balasan');
+            $fileName = time() . '_balasan_' . Str::random(5) . '.pdf';
+            $file->storeAs('public/penerbitan', $fileName);
+            $filePath = '/storage/penerbitan/' . $fileName;
+        } 
 
-        // 3. Generate Nomor Surat
-        $bulanRomawi = $this->getRomawi(date('n'));
-        $tahun = date('Y');
-        $nomorSurat = "470/" . rand(100, 999) . "/BALASAN/" . $bulanRomawi . "/" . $tahun;
-
-        // 4. Simpan ke Database Penerbitan 
+        // 3. Simpan ke Database Penerbitan 
         Penerbitan::create([
             'permohonan_id'         => $request->permohonan_id,
             'hasil'                 => $request->hasil,
-            'nomor_surat_selesai'   => $nomorSurat,
-            'tanggal_surat_selesai' => $request->tanggal_surat_selesai ?? Carbon::now(),
-            'file_path'             => '/storage/penerbitan/' . $fileName,
+            'nomor_surat_selesai'   => $request->nomor_surat_selesai,
+            'tanggal_surat_selesai' => $request->tanggal_surat_selesai,
+            'file_path'             => $filePath, // Bisa null jika tidak ada file
         ]);
 
-        // 5. UPDATE TABEL PERMOHONAN (Pusat Data)
+        // 4. UPDATE TABEL PERMOHONAN (Pusat Data)
         $statusFinal = ($request->hasil == 'DITOLAK') ? 'DITOLAK' : 'SELESAI';
 
         $permohonan->update([
@@ -156,8 +157,13 @@ class PenerbitanController extends Controller
     {
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
 
-        // Authorization check: Hanya daerah tujuan yang bisa download
-        if ($permohonan->kode_daerah_tujuan !== Auth::user()->kode_wilayah) {
+        // Authorization check: Bisa diakses oleh:
+        // 1. Pembuat permohonan (yang menerima balasan)
+        // 2. Daerah tujuan (yang mengurus permohonan dan membuat penerbitan)
+        $isPembuat = $permohonan->user_id === Auth::id();
+        $isDaerahTujuan = $permohonan->kode_daerah_tujuan === Auth::user()->kode_wilayah;
+        
+        if (!$isPembuat && !$isDaerahTujuan) {
             abort(403, 'Anda tidak memiliki akses ke file ini.');
         }
 
@@ -167,9 +173,14 @@ class PenerbitanController extends Controller
         }
 
         $filePath = str_replace('/storage/', '', $permohonan->penerbitan->file_path);
+        $fullPath = storage_path("app/public/{$filePath}");
         
-        // Download file dari storage
-        return Storage::download("public/{$filePath}", "Penerbitan_{$id}.pdf");
+        // Preview di tab baru (bukan download)
+        if (!file_exists($fullPath)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+        
+        return response()->file($fullPath);
     }
 
     /**
@@ -189,8 +200,14 @@ class PenerbitanController extends Controller
         }
 
         $filePath = str_replace('/storage/', '', $permohonan->file_path);
+        $fullPath = storage_path("app/public/{$filePath}");
         
-        return Storage::download("public/{$filePath}", "Permohonan_{$id}.pdf");
+        // Preview di tab baru (bukan download)
+        if (!file_exists($fullPath)) {
+            abort(404, 'File tidak ditemukan di server.');
+        }
+        
+        return response()->file($fullPath);
     }
 
     private function getRomawi($bulan) {

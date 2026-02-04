@@ -15,7 +15,6 @@ class Penerbitan extends Model
         'permohonan_id',
         'nomor_surat_selesai',
         'tanggal_surat_selesai',
-        'alasan',
         'file_path',
         'hasil',
     ];

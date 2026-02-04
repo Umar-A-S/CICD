@@ -28,14 +28,26 @@
                 const selectedMonth = filterSelect.value;
                 const rows = targetTable.querySelectorAll('tbody tr');
                 
+                // Regex pattern untuk mendeteksi format tanggal dd/mm/yyyy atau dd/m/yyyy
+                const datePattern = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+                
                 rows.forEach(row => {
                     // Skip empty state row
                     if (row.querySelector('td[colspan]')) {
                         return;
                     }
                     
-                    // Cari kolom tanggal (biasanya kolom ke-5, index 4)
-                    const dateCell = row.querySelector('td:nth-child(5)');
+                    // Cari kolom yang berisi tanggal (loop semua td)
+                    const cells = row.querySelectorAll('td');
+                    let dateCell = null;
+                    
+                    for (let cell of cells) {
+                        const cellText = cell.textContent.trim();
+                        if (datePattern.test(cellText)) {
+                            dateCell = cell;
+                            break;
+                        }
+                    }
                     
                     if (!dateCell) return;
                     

@@ -12,13 +12,20 @@ class VerifikasiController extends Controller
     public function index()
     {
         // Tabel 1: Permohonan yang perlu diverifikasi (status = BELUM)
-        $permohonanBelum = Permohonan::where('status', 'BELUM')
-                                    ->orderBy('created_at', 'asc')
+        // Urutkan berdasarkan yang terbaru dulu
+        $permohonanBelum = Permohonan::with('penerbitan')->where('status', 'BELUM')
+                                    ->orderBy('updated_at', 'desc')
                                     ->get();
 
         // Tabel 2: Permohonan yang sudah diverifikasi (status = DIPROSES atau DITOLAK)
-        $permohonanDiproses = Permohonan::whereIn('status', ['DIPROSES', 'DITOLAK'])
-                                        ->orderBy('created_at', 'desc')
+        // Urutkan berdasarkan status (DIPROSES→DITOLAK→SELESAI) lalu tanggal update terbaru
+        $permohonanDiproses = Permohonan::whereIn('status', ['DIPROSES', 'DITOLAK', 'SELESAI'])
+                                        ->orderByRaw("CASE 
+                                            WHEN status = 'DIPROSES' THEN 1 
+                                            WHEN status = 'DITOLAK' THEN 2 
+                                            WHEN status = 'SELESAI' THEN 3 
+                                        END")
+                                        ->orderBy('updated_at', 'desc')
                                         ->get();
 
         return view('provinsi.verifikasi', [

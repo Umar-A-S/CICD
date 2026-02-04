@@ -69,23 +69,33 @@
                 targetTable="tableBelum" 
                 placeholder="Cari nama, asal, atau nomor surat..." 
             />
-            <div class="border rounded-xl overflow-hidden">
-                <table class="w-full text-left border-collapse" id="tableBelum">
-                    <thead class="bg-lime-300 text-black text-sm uppercase">
-                        <tr>
-                            <th class="px-6 py-3 font-semibold">No</th>
-                            <th class="px-6 py-3 font-semibold">Daerah Asal</th>
-                            <th class="px-6 py-3 font-semibold">Daerah Tujuan</th>
-                            <th class="px-6 py-3 font-semibold text-center">Wilayah</th>
-                            <th class="px-6 py-3 font-semibold text-center">Tanggal</th>
-                            <th class="px-6 py-3 font-semibold text-center">Aksi</th>
-                        </tr>
-                    </thead>
+
+            <x-filter_bulan 
+                id="filterBulanBelum" 
+                targetTable="tableBelum" 
+            />
+
+            <div class="border rounded-xl overflow-hidden mt-4">
+                <div class="max-h-[600px] overflow-y-auto">
+                    <table class="w-full text-left border-collapse" id="tableBelum">
+                            <thead class="bg-lime-300 text-black text-sm uppercase sticky top-0">
+                                <tr>
+                                    <th class="px-6 py-3 font-semibold">No</th>
+                                    <th class="px-6 py-3 font-semibold">Daerah Asal</th>
+                                    <th class="px-6 py-3 font-semibold">Daerah Tujuan</th>
+                                    <th class="px-6 py-3 font-semibold text-center">Wilayah</th>
+                                    <th class="px-6 py-3 font-semibold text-center">Tanggal</th>
+                                    <th class="px-6 py-3 font-semibold text-center">Aksi</th>
+                                </tr>
+                            </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse($permohonanBelum as $item)
                         <tr class="hover:bg-gray-50 transition text-sm text-black" data-id="{{ $item->id }}">
                             <td class="px-6 py-4 font-medium">{{ $loop->iteration }}</td>
-                            <td class="px-6 py-4">{{ $item->daerah_asal }}</td>
+                            <td class="px-6 py-4 max-w-[180px]">
+                                <p class="text-sm font-semibold text-gray-800 truncate">{{ $item->daerah_asal }}</p>
+                                <p class="text-[10px] text-gray-500 truncate">{{ $item->nama_subjek }}</p>
+                            </td>
                             <td class="px-6 py-4">{{ $item->daerah_tujuan }}</td>
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
@@ -135,6 +145,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
 
@@ -148,23 +159,45 @@
                 targetTable="tableDiproses" 
                 placeholder="Cari nama, asal, atau nomor surat..." 
             />
-            <div class="border rounded-xl overflow-hidden">
-                <table class="w-full text-left border-collapse" id="tableDiproses">
-                    <thead class="bg-lime-300 text-black text-sm uppercase">
-                        <tr>
-                            <th class="px-6 py-3 font-semibold">No</th>
-                            <th class="px-6 py-3 font-semibold">Daerah Asal</th>
-                            <th class="px-6 py-3 font-semibold">Daerah Tujuan</th>
-                            <th class="px-6 py-3 font-semibold text-center">Wilayah</th>
-                            <th class="px-6 py-3 font-semibold text-center">Tanggal</th>
-                            <th class="px-6 py-3 font-semibold text-center">Aksi</th>
-                        </tr>
-                    </thead>
+            
+            <x-status_filter 
+                :statuses="[
+                    'all' => 'Semua',
+                    'diproses' => 'Diproses',
+                    'selesai' => 'Selesai',
+                    'ditolak' => 'Ditolak'
+                ]"
+                targetTable="tableDiproses"
+            />
+
+            <x-filter_bulan 
+                id="filterBulanDiproses" 
+                targetTable="tableDiproses" 
+            />
+            
+            <div class="border rounded-xl overflow-hidden mt-4">
+                <div class="max-h-[600px] overflow-y-auto">
+                    <table class="w-full text-left border-collapse" id="tableDiproses">
+                            <thead class="bg-lime-300 text-black text-sm uppercase sticky top-0">
+                                <tr>
+                                    <th class="px-6 py-3 font-semibold">No</th>
+                                    <th class="px-6 py-3 font-semibold">Daerah Asal</th>
+                                    <th class="px-6 py-3 font-semibold">Daerah Tujuan</th>
+                                    <th class="px-6 py-3 font-semibold text-center">Wilayah</th>
+                                    <th class="px-6 py-3 font-semibold text-center">Hasil Verifikasi</th>
+                                    <th class="px-6 py-3 font-semibold text-center">Status</th>
+                                    <th class="px-6 py-3 font-semibold text-center">Tanggal</th>
+                                    <th class="px-6 py-3 font-semibold text-center">Aksi</th>
+                                </tr>
+                            </thead>
                     <tbody class="divide-y divide-gray-200">
                         @forelse($permohonanDiproses as $item)
-                        <tr class="bg-gray-50/50 text-sm">
+                        <tr class="bg-gray-50/50 text-sm" data-status="{{ strtolower($item->status) }}">
                             <td class="px-6 py-4">{{ $loop->iteration }}</td>
-                            <td class="px-6 py-4">{{ $item->daerah_asal }}</td>
+                            <td class="px-6 py-4 max-w-[180px]">
+                                <p class="text-sm font-semibold text-gray-800 truncate">{{ $item->daerah_asal }}</p>
+                                <p class="text-[15px] text-gray-500 truncate">{{ $item->nama_subjek }}</p>
+                            </td>
                             <td class="px-6 py-4">{{ $item->daerah_tujuan }}</td>
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold
@@ -173,24 +206,62 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
+                                @if($item->catatan && $item->status === 'DITOLAK')
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                                        <i class="fa-solid fa-circle-xmark mr-1"></i>DIKEMBALIKAN
+                                    </span>
+                                @else
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                        <i class="fa-solid fa-circle-check mr-1"></i>DIVERIFIKASI
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <a href="{{ route('provinsi.detail', $item->id) }}" 
-                                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition inline-block">
-                                    DETAIL
-                                </a>
+                                @if($item->status === 'DIPROSES')
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                        DIPROSES
+                                    </span>
+                                @elseif($item->status === 'SELESAI')
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                        SELESAI
+                                    </span>
+                                @elseif($item->status === 'DITOLAK')
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                                        DITOLAK
+                                    </span>
+                                @else
+                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                                        {{ $item->status }}
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-center text-gray-500">
+                                {{ $item->updated_at->format('d/m/Y') }}
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                @if($item->status === 'SELESAI')
+                                    <a href="{{ route('penerbitanprov.show', $item->id) }}" 
+                                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition inline-block">
+                                        DETAIL
+                                    </a>
+                                @else
+                                    <a href="{{ route('provinsi.detail', $item->id) }}" 
+                                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold transition inline-block">
+                                        DETAIL
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="p-10 text-center text-gray-400 italic">
+                            <td colspan="8" class="p-10 text-center text-gray-400 italic">
                                 Belum ada riwayat verifikasi.
                             </td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
 

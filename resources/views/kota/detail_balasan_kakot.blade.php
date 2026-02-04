@@ -19,6 +19,7 @@
     
     // TANGGAL & NOMOR: Ambil dari relasi penerbitan jika ada
     $tglTerbit = $penerbitanExists ? $permohonan->penerbitan->created_at->format('d-m-Y') : '-';
+    $tglSuratSelesai = $penerbitanExists ? \Carbon\Carbon::parse($permohonan->penerbitan->tanggal_surat_selesai)->format('d-m-Y') : '-';
     $noSuratTerbit = $penerbitanExists ? $permohonan->penerbitan->nomor_surat_selesai : '-';
     
     // HASIL: Jika ada data penerbitan pakai kolom hasil, jika tidak pakai status utama (DITOLAK)
@@ -61,10 +62,11 @@
                         <div class="space-y-5">
                             {!! input('Tanggal Permohonan', 'tglPermohonan', $permohonan->created_at->format('d-m-Y')) !!}
                             {!! input('Nomor Surat', 'noSuratPermohonan', $permohonan->nomor_surat) !!}
+                            {!! input('Tanggal Surat', 'tglSuratPermohonan', $permohonan->tanggal_surat ? \Carbon\Carbon::parse($permohonan->tanggal_surat)->format('d-m-Y') : '-') !!}
                             
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">Berkas</label>
                             @if($permohonan->file_path)
-                                <a href="{{ route('permohonan.download', $permohonan->id) }}" target="_blank"
+                                <a href="{{ route('permohonan.preview', $permohonan->id) }}" target="_blank"
                                     class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer hover:underline">
                                     <i class="fa-solid fa-file-lines"></i> Lihat Berkas Permohonan
                                 </a>
@@ -80,13 +82,14 @@
                 <div>
                     <h2 class="text-xl font-extrabold tracking-wide mb-8 text-gray-800">PENERBITAN</h2>
                     <div class="space-y-5">
-                        {!! input('Tanggal Penerbitan', 'tglTerbit', $tglTerbit) !!}
+                        {!! input('Tanggal Diterbitkan di Sistem', 'tglTerbit', $tglTerbit) !!}
+                        {!! input('Tanggal Surat Selesai', 'tglSuratSelesai', $tglSuratSelesai) !!}
                         {!! input('Nomor Surat', 'noSuratTerbit', $noSuratTerbit) !!}
 
                         <div>
                             <label class="block text-xs font-bold mb-2 uppercase text-gray-600">Berkas Balasan</label>
                             @if($penerbitanExists)
-                                <a href="{{ route('penerbitan.download', $permohonan->id) }}" target="_blank"
+                                <a href="{{ route('penerbitan.preview', $permohonan->id) }}" target="_blank"
                                     class="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm cursor-pointer hover:underline">
                                     <i class="fa-solid fa-file-lines"></i> Lihat Berkas Balasan
                                 </a>
@@ -116,11 +119,18 @@
             </div>
         </div>
 
-        <div class="mt-20 flex justify-start">
+        <div class="mt-20 flex justify-between items-center">
             <a href="{{ route('balasan.index') }}"
                 class="bg-gray-800 hover:bg-black text-white font-bold px-12 py-3 rounded-xl transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                 <i class="fa-solid fa-arrow-left mr-2"></i> KEMBALI
             </a>
+
+            @if($permohonan->status === 'DITOLAK')
+                <a href="{{ route('permohonan.resubmit', $permohonan->id) }}"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold px-12 py-3 rounded-xl transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> AJUKAN ULANG
+                </a>
+            @endif
         </div>
     </div>
 </div>

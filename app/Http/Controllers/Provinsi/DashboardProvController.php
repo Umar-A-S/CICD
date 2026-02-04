@@ -13,7 +13,7 @@ class DashboardProvController extends Controller
     {
         // 1. Ambil data permohonan masuk untuk tabel
         $permohonanMasuk = Permohonan::where('status', 'BELUM')
-                                    ->orderBy('created_at', 'asc')
+                                    ->orderBy('created_at', 'desc')
                                     ->get();
         
         // 2. Hitung statistik untuk status card (Variabel $stat yang dicari Blade)

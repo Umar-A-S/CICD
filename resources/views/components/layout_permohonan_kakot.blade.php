@@ -33,7 +33,7 @@
     </main>
 
     <!-- SCRIPT -->
-    <script src="js/permohonan_kakot.js"></script>
+    <script src="/js/permohonan_kakot.js"></script>
 
 </body>
 </html>

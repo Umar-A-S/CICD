@@ -73,10 +73,10 @@
                         <div class="mt-5">
                             <label class="{{ $labelClass }}">Berkas Permohonan</label>
                             @if($permohonan->file_path)
-                                <a href="{{ route('penerbitanprov.download_permohonan', $permohonan->id) }}" target="_blank" 
+                                <a href="{{ route('penerbitanprov.preview_permohonan', $permohonan->id) }}" target="_blank" 
                                    class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
-                                    <i class="fa-solid fa-file-pdf text-xl"></i>
-                                    Lihat Dokumen Asli
+                                    <i class="fa-solid fa-file text-xl"></i>
+                                    Lihat Berkas
                                 </a>
                             @else
                                 <span class="text-red-500 text-sm italic">Tidak ada berkas terlampir</span>
@@ -108,7 +108,7 @@
                             <div>
                                 <label class="{{ $labelClass }}">Berkas Balasan</label>
                                 @if($permohonan->penerbitan->file_path)
-                                        <a href="{{ route('penerbitanprov.download', $permohonan->id) }}" target="_blank"
+                                        <a href="{{ route('penerbitanprov.preview', $permohonan->id) }}" target="_blank"
                                         class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
                                             <i class="fa-solid fa-file-circle-check text-xl"></i>
                                             Lihat Surat Balasan
@@ -134,8 +134,7 @@
                         <div class="space-y-5">
                             <div>
                                 <label class="{{ $labelClass }}">Status Keputusan</label>
-                                <input value="{{ $permohonan->penerbitan->hasil }}" disabled 
-                                    class="{{ $inputClass }} {{ $permohonan->penerbitan->hasil == 'TERCATAT' ? 'text-green-600 font-extrabold bg-green-50 border-green-200' : 'text-red-600 font-extrabold bg-red-50 border-red-200' }}">
+                                <input value="{{ $permohonan->penerbitan->hasil }}" disabled class="{{ $inputClass }}">
                             </div>
 
                             <div>

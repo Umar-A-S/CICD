@@ -14,9 +14,10 @@
         @endif
 
         <div class="table-container">
-            <table class="data-table" style="width: 100%; text-align: center;">
-                <thead style="background-color: #bfef45; color: black; font-weight: 600; text-transform: uppercase; font-size: 0.875rem;">
-                    <tr>
+            <div style="max-height: 600px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 12px;">
+                <table class="data-table" style="width: 100%; text-align: center;">
+                    <thead style="background-color: #bfef45; color: black; font-weight: 600; text-transform: uppercase; font-size: 0.875rem; position: sticky; top: 0; z-index: 10;">
+                        <tr>
                         <th style="padding: 12px 24px;">Tanggal Masuk</th>
                         <th style="padding: 12px 24px;">Dukcapil Asal</th>
                         <th style="padding: 12px 24px;">Wilayah</th>
@@ -65,6 +66,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
         </div>
     </section>
 

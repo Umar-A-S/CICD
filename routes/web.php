@@ -47,8 +47,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/permohonan_kakot', [PermohonanController::class, 'index'])->name('permohonan.index');
         Route::get('/permohonan_kakot/create', [PermohonanController::class, 'create'])->name('permohonan.create');
         Route::post('/permohonan_kakot', [PermohonanController::class, 'store'])->name('permohonan.store');
+        Route::get('/permohonan_kakot/{id}/resubmit', [PermohonanController::class, 'resubmit'])->name('permohonan.resubmit');
         Route::get('/detail_permohonan/{id}', [PermohonanController::class, 'show'])->name('permohonan.show');
-        Route::get('/download_permohonan/{id}', [PermohonanController::class, 'downloadFile'])->name('permohonan.download');
+        Route::get('/download_permohonan/{id}', [PermohonanController::class, 'downloadFile'])->name('permohonan.preview');
 
         // Route Penerbitan
         Route::get('/penerbitan_kakot', [PenerbitanController::class, 'index'])->name('penerbitan.index');
@@ -56,8 +57,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/detail_penerbitan_kakot/{id}', [PenerbitanController::class, 'show'])->name('penerbitan.show');
         Route::get('/unggah_penerbitan_kakot/proses/{id}', [PenerbitanController::class, 'create'])->name('penerbitan.create');
         Route::post('/unggah_penerbitan_kakot/proses', [PenerbitanController::class, 'store'])->name('penerbitan.store');
-        Route::get('/download_penerbitan/{id}', [PenerbitanController::class, 'downloadPenerbitanFile'])->name('penerbitan.download');
-        Route::get('/download_permohonan_from_penerbitan/{id}', [PenerbitanController::class, 'downloadPermohonanFile'])->name('penerbitan.download_permohonan');
+        Route::get('/download_penerbitan/{id}', [PenerbitanController::class, 'downloadPenerbitanFile'])->name('penerbitan.preview');
+        Route::get('/download_permohonan_from_penerbitan/{id}', [PenerbitanController::class, 'downloadPermohonanFile'])->name('penerbitan.preview_permohonan');
         
 
         // Route Balasan
@@ -94,8 +95,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/detail_permohonan_prov/{id}', [PermohonanProvController::class, 'show'])->name('permohonan.show');
         Route::get('/unggah_penerbitan_prov/proses/{id}', [PenerbitanProv::class, 'create'])->name('penerbitanprov.create');
         Route::post('/unggah_penerbitan_prov/proses', [PenerbitanProv::class, 'store'])->name('penerbitanprov.store');
-        Route::get('/download_penerbitan_prov/{id}', [PenerbitanProv::class, 'downloadPenerbitanFile'])->name('penerbitanprov.download');
-        Route::get('/download_permohonan_prov/{id}', [PenerbitanProv::class, 'downloadPermohonanFile'])->name('penerbitanprov.download_permohonan');
+        Route::get('/download_penerbitan_prov/{id}', [PenerbitanProv::class, 'lihatBerkasPenerbitan'])->name('penerbitanprov.preview');
+        Route::get('/download_permohonan_prov/{id}', [PenerbitanProv::class, 'lihatBerkasPermohonan'])->name('penerbitanprov.preview_permohonan');
 
         //Route Profil
         Route::get('/profil_provinsi', [ProfilProvController::class, 'index'])->name('profilprov.index');

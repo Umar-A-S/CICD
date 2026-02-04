@@ -73,7 +73,7 @@
                         <div class="mt-5">
                             <label class="{{ $labelClass }}">Berkas Permohonan</label>
                             @if($permohonan->file_path)
-                                <a href="{{ route('penerbitan.download_permohonan', $permohonan->id) }}" target="_blank" 
+                                <a href="{{ route('penerbitan.preview_permohonan', $permohonan->id) }}" target="_blank" 
                                    class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
                                     <i class="fa-solid fa-file-pdf text-xl"></i>
                                     Lihat Dokumen Asli
@@ -108,7 +108,7 @@
                             <div>
                                 <label class="{{ $labelClass }}">Berkas Balasan</label>
                                 @if($permohonan->penerbitan->file_path)
-                                        <a href="{{ route('penerbitan.download', $permohonan->id) }}" target="_blank"
+                                        <a href="{{ route('penerbitan.preview', $permohonan->id) }}" target="_blank"
                                         class="inline-flex items-center gap-2 text-sky-600 hover:text-sky-800 font-bold text-sm transition">
                                             <i class="fa-solid fa-file-circle-check text-xl"></i>
                                             Lihat Surat Balasan
