@@ -152,11 +152,11 @@
                             </span>
                         </div>
 
-                        @if ($penerbitan->alasan)
+                        @if ($permohonan->catatan)
                             <div class="border-b pb-3">
-                                <p class="text-xs text-gray-500 uppercase font-semibold">Alasan</p>
+                                <p class="text-xs text-gray-500 uppercase font-semibold">Keterangan/Alasan</p>
                                 <div class="bg-red-50 p-3 rounded-lg mt-2">
-                                    <p class="text-gray-700">{{ $penerbitan->alasan }}</p>
+                                    <p class="text-gray-700">{{ $permohonan->catatan }}</p>
                                 </div>
                             </div>
                         @endif
