@@ -7,7 +7,7 @@
                 return;
             }
 
-            const nomorAdmin = '6281993726802'; // GANTI nomor admin
+            const nomorAdmin = '6281993726802'; 
 
             const pesan = `Halo Admin SELAKSA,
             Saya lupa password akun saya.

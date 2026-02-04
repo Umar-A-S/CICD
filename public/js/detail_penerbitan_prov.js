@@ -5,7 +5,6 @@ function goBack() {
 }
 
 // ================= ACTION BUTTONS =================
-
 function lihatDokumen(url) {
     if (url && url !== '#') {
         window.open(url, '_blank');
@@ -14,9 +13,7 @@ function lihatDokumen(url) {
     }
 }
 
-/**
- * Fungsi opsional jika nanti kamu ingin menambahkan tombol print
- */
+
 function cetakHalaman() {
     window.print();
 }

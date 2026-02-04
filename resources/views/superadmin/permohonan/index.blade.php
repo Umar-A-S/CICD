@@ -121,7 +121,8 @@
                 <thead class="bg-lime-300 text-black text-sm uppercase font-bold">
                     <tr>
                         <th class="px-6 py-4">No. Permohonan</th>
-                        <th class="px-6 py-4">Daerah Asal</th>
+                        <th class="px-6 py-4">Dukcapil Asal</th>
+                        <th class="px-6 py-4">Dukcapil Tujuan</th>
                         <th class="px-6 py-4">Nama Subjek</th>
                         <th class="px-6 py-4">Jenis</th>
                         <th class="px-6 py-4">Status</th>
@@ -136,6 +137,7 @@
                                 <code class="text-xs bg-gray-100 px-2 py-1 rounded font-mono">{{ $item->nomor_surat }}</code>
                             </td>
                             <td class="px-6 py-4 font-semibold text-gray-800">{{ $item->daerah_asal }}</td>
+                            <td class="px-6 py-4 font-semibold text-gray-800">{{ $item->daerah_tujuan }}</td>
                             <td class="px-6 py-4 text-gray-600">{{ $item->nama_subjek }}</td>
                             <td class="px-6 py-4">
                                 <span class="px-3 py-1 rounded-full text-xs font-bold
@@ -162,11 +164,6 @@
                                         class="text-blue-600 hover:text-blue-800 transition" 
                                         title="Lihat Detail">
                                         <i class="fa-solid fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('superadmin.permohonan.download', $item->id) }}" 
-                                        class="text-green-600 hover:text-green-800 transition" 
-                                        title="Download File">
-                                        <i class="fa-solid fa-download"></i>
                                     </a>
                                 </div>
                             </td>

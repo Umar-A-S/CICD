@@ -28,7 +28,6 @@
 
                 <tbody>
                     @forelse($permohonanMasuk as $item)
-                    {{-- Tambahkan data-id untuk dikenali JS --}}
                     <tr data-id="{{ $item->id }}" data-status="pending">
                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
                         <td>{{ $item->daerah_asal }}</td>
