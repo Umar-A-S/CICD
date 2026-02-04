@@ -60,17 +60,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/download_penerbitan/{id}', [PenerbitanController::class, 'downloadPenerbitanFile'])->name('penerbitan.preview');
         Route::get('/download_permohonan_from_penerbitan/{id}', [PenerbitanController::class, 'downloadPermohonanFile'])->name('penerbitan.preview_permohonan');
         
-
         // Route Balasan
         Route::get('/balasan_kakot', [BalasanController::class, 'index'])->name('balasan.index');
         Route::get('/detail_balasan_kakot/{id}', [BalasanController::class, 'show'])->name('balasan.show');
          // Route Profil Instansi
         Route::get('/profil_kakot', [ProfilController::class, 'index'])->name('profil.index');
     
-
     });
-
-
 
     //---USER PROVINSI---
     Route::middleware(['checkrole:provinsi'])->group(function () 
@@ -100,21 +96,6 @@ Route::middleware(['auth'])->group(function () {
 
         //Route Profil
         Route::get('/profil_provinsi', [ProfilProvController::class, 'index'])->name('profilprov.index');
-
-
-        
-
-
-        // Route::get('/balasan-provinsi', function () {
-        //     return view('provinsi.balasan_prov', ['title' => 'Balasan']);
-        // });
-        // Route::get('/detail-balasan-prov', function () {
-        //     return view('provinsi.detail_balasan_prov', ['title' => 'Detail balasan']);
-        // });
-
-        // Route::get('/profil-provinsi', function () {
-        //     return view('provinsi.profil_prov', ['title' => 'Profil']);
-        // });
     });
 
     //---USER SUPERADMIN---
