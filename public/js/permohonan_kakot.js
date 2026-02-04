@@ -1,10 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // ====================================================================
-    // BAGIAN DAERAH ASAL DIHAPUS 
-    // (Karena sekarang sudah jadi Input Readonly dari Database)
-    // ====================================================================
-
     // Fetch Data JSON hanya untuk Provinsi & Kota Tujuan
     fetch('/data/kota_kabupaten.json')
         .then(res => res.json())
@@ -95,8 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 Object.keys(data)
                     .sort((a, b) => a.localeCompare(b, 'id'))
                     .forEach(prov => {
-                        // Skip Jawa Tengah agar tidak duplikat (opsional)
-                        // if (prov === 'Jawa Tengah') return; 
 
                         const opt = document.createElement('option');
                         opt.value = prov;

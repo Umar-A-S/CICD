@@ -10,8 +10,6 @@
     $currentRoute = Route::currentRouteName();
     
     if ($route) {
-        // Jika route name diberikan, cek match dengan current route
-        // Support wildcard dengan * (contoh: superadmin.users.*)
         if (str_ends_with($route, '.*')) {
             $prefix = rtrim($route, '.*');
             $isActive = str_starts_with($currentRoute, $prefix);

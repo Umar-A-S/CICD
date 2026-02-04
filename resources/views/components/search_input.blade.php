@@ -17,7 +17,6 @@
 @once
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Event Delegation agar aman untuk element yang dinamis
         document.body.addEventListener('keyup', function(e) {
             // Cek apakah yang diketik adalah element dengan class 'table-search'
             if (e.target && e.target.classList.contains('table-search')) {

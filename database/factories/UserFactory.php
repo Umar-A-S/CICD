@@ -25,10 +25,10 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'username' => fake()->unique()->userName(), // Menggunakan username untuk login
-            'password' => static::$password ??= Hash::make('password'), // Password default: password
-            'role' => fake()->randomElement(['superadmin', 'provinsi', 'daerah']), // Role acak
-            'kode_wilayah' => null, // Diisi manual jika rolenya daerah
+            'username' => fake()->unique()->userName(), 
+            'password' => static::$password ??= Hash::make('password'), 
+            'role' => fake()->randomElement(['superadmin', 'provinsi', 'daerah']), 
+            'kode_wilayah' => null, 
             'remember_token' => Str::random(10),
         ];
     }
