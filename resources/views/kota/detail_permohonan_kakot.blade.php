@@ -127,15 +127,15 @@
                                 </label>
                                 
                                 @if($permohonan->file_path)
-                                    <a href="{{ route('permohonan.download', $permohonan->id) }}" target="_blank" class="inline-block">
+                                    <a href="{{ route('permohonan.preview', $permohonan->id) }}" target="_blank" class="inline-block">
                                         <span class="text-blue-600 font-semibold text-sm cursor-pointer hover:text-blue-800 transition">
-                                            <i class="fa-solid fa-file-lines"></i>
+                                            <i class="fa-solid fa-eye"></i>
                                             Lihat Berkas
                                         </span>
                                     </a>
                                 @else
                                     <span class="text-red-500 font-semibold text-sm italic">
-                                        <i class="fa-solid fa-circle-exmark"></i>
+                                        <i class="fa-solid fa-circle-xmark"></i>
                                         Berkas tidak ditemukan
                                     </span>
                                 @endif

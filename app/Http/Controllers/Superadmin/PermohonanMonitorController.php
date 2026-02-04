@@ -146,9 +146,6 @@ class PermohonanMonitorController extends Controller
             $content .= "No. Penerbitan: {$penerbitan->nomor_surat_selesai}\n";
             $content .= "Tanggal Terbit: {$penerbitan->tanggal_surat_selesai}\n";
             $content .= "Hasil: {$penerbitan->hasil}\n";
-            if ($penerbitan->alasan) {
-                $content .= "Alasan: {$penerbitan->alasan}\n";
-            }
             $content .= "\nCatatan: Ini adalah data dummy untuk demonstrasi.\n";
             $content .= "File penerbitan asli akan tersedia setelah proses penerbitan nyata.";
             

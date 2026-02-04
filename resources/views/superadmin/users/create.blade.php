@@ -31,7 +31,7 @@
             <!-- Nama Lengkap -->
             <div>
                 <label for="name" class="block text-sm font-bold text-gray-800 mb-2">
-                    Nama Lengkap <span class="text-red-600">*</span>
+                    Nama Dukcapil <span class="text-red-600">*</span>
                 </label>
                 <input type="text" id="name" name="name" value="{{ old('name') }}" required
                     class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400"

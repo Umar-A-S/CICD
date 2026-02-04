@@ -62,6 +62,44 @@
                             </div>
                         </section>
 
+                        <section>
+                            <h2 class="text-lg font-extrabold tracking-wide mb-8 text-gray-800">
+                                PERMOHONAN
+                            </h2>
+
+                            <div class="space-y-5">
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">Nomor Surat</label>
+                                    <input type="text" value="{{ $permohonan->nomor_surat }}" disabled
+                                        class="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">Tanggal Surat</label>
+                                    <input type="text" value="{{ \Carbon\Carbon::parse($permohonan->tanggal_surat)->format('d/m/Y') }}" disabled
+                                        class="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
+                                </div>
+
+                                <div>
+                                    <label class="text-xs font-bold uppercase text-gray-600">Berkas Permohonan</label>
+                                    @if($permohonan->file_path)
+                                       <div>
+                                        <a href="{{ route('penerbitan.preview_permohonan', $permohonan->id) }}" target="_blank" 
+                                            class="inline-flex items-center gap-2 mt-2 text-blue-600 font-semibold text-sm cursor-pointer hover:text-blue-800 transition">
+                                            <i class="fa-solid fa-eye"></i>
+                                            Lihat Berkas
+                                        </a>
+                                    </div> 
+                                    @else
+                                        <span class="block mt-2 text-red-500 font-semibold text-sm italic">
+                                            <i class="fa-solid fa-circle-xmark"></i>
+                                            Berkas tidak ditemukan
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </section>
+
                     </div>
 
                     <div class="space-y-14">
@@ -72,11 +110,6 @@
                             </h2>
 
                             <div class="space-y-5">
-                                <div>
-                                    <label class="text-xs font-bold uppercase text-gray-600">Nomor Surat Masuk</label>
-                                    <input type="text" value="{{ $permohonan->nomor_surat }}" disabled
-                                        class="w-full mt-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm">
-                                </div>
                                 
                                 <div>
                                     <label class="text-xs font-bold uppercase text-gray-600">
@@ -122,16 +155,16 @@
 
                                 <div>
                                     <label class="text-xs font-bold uppercase text-gray-600">
-                                        Keterangan / Alasan
+                                        Keterangan / Alasan <span class="text-gray-400">(Opsional)</span>
                                     </label>
                                     <textarea name="alasan" rows="4"
-                                        placeholder="Masukkan keterangan atau alasan (opsional)..."
+                                        placeholder="Masukkan keterangan atau alasan (jika ada)..."
                                         class="w-full mt-1 bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
                                 </div>
 
                                 <div>
                                     <label class="text-xs font-bold uppercase text-gray-600">
-                                        Unggah Berkas Balasan <span class="text-red-500">*</span>
+                                        Unggah Berkas Balasan <span class="text-gray-400">(Opsional)</span>
                                     </label>
 
                                     <label for="fileUpload"
@@ -141,10 +174,10 @@
 
                                         <i class="fa-solid fa-cloud-arrow-up text-sky-500 text-4xl mb-2"></i>
                                         <span class="text-sm font-semibold text-gray-700">
-                                            Klik untuk upload PDF
+                                            Klik untuk upload PDF (jika ada)
                                         </span>
 
-                                        <input id="fileUpload" name="file_balasan" type="file" class="hidden" accept=".pdf" required>
+                                        <input id="fileUpload" name="file_balasan" type="file" class="hidden" accept=".pdf">
                                     </label>
 
                                     <div id="filePreview" class="mt-4 space-y-3"></div>

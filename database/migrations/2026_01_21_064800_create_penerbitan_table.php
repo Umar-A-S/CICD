@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nomor_surat_selesai');
             $table->timestamp('tanggal_surat_selesai');
             $table->text('alasan')->nullable();
-            $table->string('file_path');
+            $table->string('file_path')->nullable();
             $table->string('hasil')->nullable();
             $table->timestamps();
         });
