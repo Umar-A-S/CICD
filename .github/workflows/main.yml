@@ -109,6 +109,8 @@ jobs:
           
           cat <<EOF > .env
 
+          APP_NAME=Laravel_App
+          APP_DEBUG=false
           APP_KEY=${{ secrets.APP_KEY }}
           APP_URL=http://localhost
 
@@ -131,7 +133,7 @@ jobs:
           cat <<'EOF' > $target_dir/nginx/default.conf
           server {
               listen 80;
-              server_name umaralfis.my.id;
+              server_name _;
 
               root /var/www/html/selaksa-app/public;
               index index.php index.html index.htm;
@@ -149,7 +151,6 @@ jobs:
               }
 
               location ~ \.php$ {
-                try_files $uri =404;
                 fastcgi_split_path_info ^(.+\.php)(/.+)$;
                 fastcgi_pass app:9000;
                 fastcgi_index index.php;
