@@ -60,7 +60,7 @@
                                                     </span>
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    <a href="/detail_permohonan/{{ $permohonan->id }}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                                    <a href="/detail_permohonan_kakot/{{ $permohonan->id }}" class="text-blue-600 hover:text-blue-800 font-semibold">
                                                         Lihat Detail
                                                     </a>
                                                 </td>

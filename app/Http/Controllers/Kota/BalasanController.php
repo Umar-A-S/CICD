@@ -44,6 +44,7 @@ class BalasanController extends Controller
         // Ambil data permohonan beserta relasi penerbitannya
         $permohonan = Permohonan::with('penerbitan')->findOrFail($id);
 
+        // Keamanan: Pastikan hanya pemilik permohonan yang bisa melihat balasannya
         if ($permohonan->user_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses ke data balasan ini.');
         }

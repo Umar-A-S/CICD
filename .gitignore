@@ -1,9 +1,10 @@
-# Dependencies
-node_modules/
-vendor/
-composer.lock
-
-# Environment variables
+/.phpunit.cache
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
 .env
 .env.local
 .env.*.local
