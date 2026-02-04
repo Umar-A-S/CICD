@@ -216,19 +216,6 @@
                 <h4 class="text-lg font-bold text-gray-800 mb-4">Aksi</h4>
                 
                 <div class="space-y-3">
-                    <a href="{{ route('superadmin.permohonan.download', $permohonan->id) }}" 
-                        class="w-full flex items-center justify-center gap-2 bg-lime-400 hover:bg-lime-500 text-black px-4 py-3 rounded-lg font-bold transition">
-                        <i class="fa-solid fa-download"></i>
-                        Download File
-                    </a>
-
-                    @if ($penerbitan)
-                        <a href="{{ route('superadmin.penerbitan.download', $penerbitan->id) }}" 
-                            class="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg font-bold transition">
-                            <i class="fa-solid fa-file-pdf"></i>
-                            Download Penerbitan
-                        </a>
-                    @endif
 
                     <a href="{{ route('superadmin.permohonan.index') }}" 
                         class="w-full flex items-center justify-center gap-2 bg-gray-300 hover:bg-gray-400 text-black px-4 py-3 rounded-lg font-bold transition">
