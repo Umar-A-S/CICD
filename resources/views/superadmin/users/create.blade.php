@@ -28,14 +28,21 @@
                 </div>
             @endif
 
-            <!-- Nama Lengkap -->
+            <!-- Nama Dukcapil -->
             <div>
                 <label for="name" class="block text-sm font-bold text-gray-800 mb-2">
                     Nama Dukcapil <span class="text-red-600">*</span>
                 </label>
-                <input type="text" id="name" name="name" value="{{ old('name') }}" required
-                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400"
-                    placeholder="Contoh: Kabupaten Magelang">
+                <select id="name" name="name" required
+                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400">
+                    <option value="">-- Pilih Kabupaten/Kota --</option>
+                    @foreach($kabupatenJateng as $kabupaten)
+                        <option value="{{ $kabupaten }}" {{ old('name') === $kabupaten ? 'selected' : '' }}>
+                            {{ $kabupaten }}
+                        </option>
+                    @endforeach
+                </select>
+                <p class="text-gray-500 text-xs mt-1">ℹ️ Pilih nama kabupaten/kota sesuai data resmi Jawa Tengah</p>
                 @error('name')
                     <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
                 @enderror

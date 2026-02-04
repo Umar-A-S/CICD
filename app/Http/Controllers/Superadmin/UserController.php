@@ -30,11 +30,34 @@ class UserController extends Controller
      */
     public function create()
     {
+        // Load kabupaten/kota Jawa Tengah untuk dropdown name
+        $kabupatenJateng = $this->getKabupatenJateng();
+        
         return view('superadmin.users.create', [
             'title' => 'Tambah User',
             'roles' => ['daerah' => 'User Daerah', 'provinsi' => 'User Provinsi'],
-            'wilayahOptions' => $this->getWilayahOptions()
+            'wilayahOptions' => $this->getWilayahOptions(),
+            'kabupatenJateng' => $kabupatenJateng
         ]);
+    }
+
+    /**
+     * Get list kabupaten/kota di Jawa Tengah dari JSON
+     */
+    private function getKabupatenJateng()
+    {
+        $jsonPath = public_path('data/kota_kabupaten.json');
+        
+        if (!file_exists($jsonPath)) {
+            return [];
+        }
+        
+        $data = json_decode(file_get_contents($jsonPath), true);
+        
+        // Return kabupaten/kota Jawa Tengah yang sudah sorted
+        return isset($data['Jawa Tengah']) 
+            ? collect($data['Jawa Tengah'])->sort()->values()->toArray()
+            : [];
     }
 
     /**
