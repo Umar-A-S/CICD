@@ -33,7 +33,7 @@ class PermohonanSelesaiSeeder extends Seeder
             'tanggal_surat_selesai' => Carbon::now(),
             'nomor_surat_selesai' => 'SRT/2026/001/SELESAI',
             'alasan' => 'Data ditemukan dan sudah sesuai dengan database kependudukan.',
-            'file_path' => '/storage/penerbitan/hasil_balasan_dummy.pdf', // Path file hasil
+            'file_path' => '/storage/penerbitan/hasil-balasan_dummy.pdf', // Path file hasil
             'hasil' => 'TERCATAT', // Berdasarkan enum di migration
         ]);
     }

@@ -29,7 +29,7 @@ class BalasanController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('kota.balasan_kakot', [
+        return view('kota.balasan-kakot', [
             'title' => 'Daftar Balasan Permohonan',
             'permohonanDiproses' => $permohonanDiproses,
             'permohonanSelesai' => $permohonanSelesai
@@ -49,7 +49,7 @@ class BalasanController extends Controller
             abort(403, 'Anda tidak memiliki akses ke data balasan ini.');
         }
 
-        return view('kota.detail_balasan_kakot', [
+        return view('kota.detail-balasan-kakot', [
             'title' => 'Detail Balasan Dokumen',
             'permohonan' => $permohonan
         ]);

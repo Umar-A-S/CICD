@@ -1,4 +1,4 @@
-<x-layout_superadmin>
+<x-layout-superadmin>
     <x-slot:title>{{ $title }}</x-slot:title>
 
     {{-- <!-- WELCOME SECTION -->
@@ -296,4 +296,4 @@
         });
     </script>
 
-</x-layout_superadmin>
+</x-layout-superadmin>

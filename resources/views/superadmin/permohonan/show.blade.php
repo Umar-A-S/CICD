@@ -1,4 +1,4 @@
-<x-layout_superadmin>
+<x-layout-superadmin>
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- BREADCRUMB -->
@@ -229,4 +229,4 @@
 
     </div>
 
-</x-layout_superadmin>
+</x-layout-superadmin>

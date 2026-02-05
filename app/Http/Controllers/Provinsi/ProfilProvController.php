@@ -9,7 +9,7 @@ class ProfilProvController extends Controller
 {
     public function index()
     {
-        return view('provinsi.profil_prov', [
+        return view('provinsi.profil-prov', [
             'title' => 'Profil Instansi',
             'user' => Auth::user(), 
         ]);

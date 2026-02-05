@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class statuscard_prov extends Component
+class statuscard-prov extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class statuscard_prov extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.statuscard_prov');
+        return view('components.statuscard-prov');
     }
 }

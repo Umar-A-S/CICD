@@ -22,7 +22,7 @@ class DashboardProvController extends Controller
         ];
 
         // 3. Kirim $stat ke view
-        return view('provinsi.dashboard_prov', [
+        return view('provinsi.dashboard-prov', [
             'title' => 'Dashboard Provinsi',
             'permohonanMasuk' => $permohonanMasuk,
             'stat' => $stat // Tambahkan ini agar tidak undefined!
@@ -64,7 +64,7 @@ class DashboardProvController extends Controller
     {
         $permohonan = Permohonan::findOrFail($id);
 
-        return view('provinsi.detail_permohonan_prov', [
+        return view('provinsi.detail-permohonan-prov', [
             'title' => 'Detail Permohonan Masuk',
             'permohonan' => $permohonan
         ]);

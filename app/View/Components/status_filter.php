@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class status_filter extends Component
+class status-filter extends Component
 {
     public $statuses;
     public $targetTable;
@@ -27,6 +27,6 @@ class status_filter extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.status_filter');
+        return view('components.status-filter');
     }
 }

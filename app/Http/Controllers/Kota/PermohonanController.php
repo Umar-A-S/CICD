@@ -30,7 +30,7 @@ class PermohonanController extends Controller
             abort(403, 'Akses tidak sah.');
         }
 
-        return view('kota.permohonan_kakot', [
+        return view('kota.permohonan-kakot', [
             'title' => 'Permohonan',
             'permohonans' => $permohonans
         ]);
@@ -47,7 +47,7 @@ class PermohonanController extends Controller
             abort(403, 'Anda tidak memiliki akses ke data ini.');
         }
 
-        return view('kota.detail_permohonan_kakot', [
+        return view('kota.detail-permohonan-kakot', [
             'title' => 'Detail Permohonan',
             'permohonan' => $permohonan
         ]);
@@ -70,7 +70,7 @@ class PermohonanController extends Controller
             return redirect()->route('balasan.index')->with('error', 'Hanya permohonan yang ditolak yang dapat diajukan ulang.');
         }
 
-        return view('kota.permohonan_kakot', [
+        return view('kota.permohonan-kakot', [
             'title' => 'Ajukan Ulang Permohonan',
             'permohonan' => $permohonan,
             'isResubmit' => true
@@ -175,7 +175,7 @@ class PermohonanController extends Controller
             $message = 'Permohonan berhasil dikirim!';
         }
 
-        return redirect('/dashboard_kakot')->with('success', $message);
+        return redirect('/dashboard-kakot')->with('success', $message);
 
     }
 

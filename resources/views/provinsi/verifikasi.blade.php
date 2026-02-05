@@ -1,4 +1,4 @@
-<x-layout_verifikasi
+<x-layout-verifikasi
 :permohonanBelum="$permohonanBelum" 
 :permohonanDiproses="$permohonanDiproses">
     <x-slot:title>Verifikasi Permohonan</x-slot:title>
@@ -64,13 +64,13 @@
             <h3 class="text-lg font-semibold text-gray-800">Antrian Verifikasi</h3>
             <p class="text-sm text-gray-500 mb-6">Permohonan yang menunggu untuk diverifikasi</p>
 
-            <x-search_input 
+            <x-search-input 
                 id="searchBelum" 
                 targetTable="tableBelum" 
                 placeholder="Cari nama, asal, atau nomor surat..." 
             />
 
-            <x-filter_bulan 
+            <x-filter-bulan 
                 id="filterBulanBelum" 
                 targetTable="tableBelum" 
             />
@@ -154,13 +154,13 @@
             <h3 class="text-lg font-semibold text-gray-800">Riwayat Verifikasi</h3>
             <p class="text-sm text-gray-500 mb-6">Permohonan yang sudah diverifikasi</p>
 
-            <x-search_input 
+            <x-search-input 
                 id="searchDiproses" 
                 targetTable="tableDiproses" 
                 placeholder="Cari nama, asal, atau nomor surat..." 
             />
             
-            <x-status_filter 
+            <x-status-filter 
                 :statuses="[
                     'all' => 'Semua',
                     'diproses' => 'Diproses',
@@ -170,7 +170,7 @@
                 targetTable="tableDiproses"
             />
 
-            <x-filter_bulan 
+            <x-filter-bulan 
                 id="filterBulanDiproses" 
                 targetTable="tableDiproses" 
             />
@@ -364,4 +364,4 @@
             if (e.target === this) closeModalTolak();
         });
     </script>
-</x-layout_verifikasi>
+</x-layout-verifikasi>

@@ -9,7 +9,7 @@ class BalasanProvinsi extends Model
 {
     use HasFactory;
 
-    protected $table = 'balasan_provinsi';
+    protected $table = 'balasan-provinsi';
 
     protected $fillable = [
         'permohonan_id',

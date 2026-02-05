@@ -33,7 +33,7 @@ class PenerbitanController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        return view('kota.penerbitan_kakot', compact('permohonanPerlu', 'permohonanSelesai'));
+        return view('kota.penerbitan-kakot', compact('permohonanPerlu', 'permohonanSelesai'));
     }
 
     /**
@@ -56,7 +56,7 @@ class PenerbitanController extends Controller
         }
         // ----------------------------
 
-        return view('kota.unggah_penerbitan_kakot', [
+        return view('kota.unggah-penerbitan-kakot', [
             'title' => 'Proses Penerbitan',
             'permohonan' => $permohonan
         ]);
@@ -74,7 +74,7 @@ class PenerbitanController extends Controller
             'tanggal_surat_selesai' => 'required|date',
             'hasil'                 => 'required|in:TERCATAT,TIDAK TERCATAT,DISETUJUI,DITOLAK,LAINNYA',
             'alasan'                => 'nullable|string',
-            'file_balasan'          => 'nullable|file|mimes:pdf|max:10240',
+            'file-balasan'          => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $permohonan = Permohonan::findOrFail($request->permohonan_id);
@@ -87,9 +87,9 @@ class PenerbitanController extends Controller
 
         // 2. Proses Upload File (hanya jika ada file yang diupload)
         $filePath = null;
-        if ($request->hasFile('file_balasan')) {
-            $file = $request->file('file_balasan');
-            $fileName = time() . '_balasan_' . Str::random(5) . '.pdf';
+        if ($request->hasFile('file-balasan')) {
+            $file = $request->file('file-balasan');
+            $fileName = time() . '-balasan_' . Str::random(5) . '.pdf';
             $file->storeAs('public/penerbitan', $fileName);
             $filePath = '/storage/penerbitan/' . $fileName;
         } 
@@ -126,7 +126,7 @@ class PenerbitanController extends Controller
             abort(403, 'Permohonan ini bukan untuk daerah Anda.');
         }
 
-        return view('kota.detail_permohonan_kakot', [
+        return view('kota.detail-permohonan-kakot', [
             'title' => 'Detail Permohonan (Penerbitan)',
             'permohonan' => $permohonan
         ]);
@@ -144,7 +144,7 @@ class PenerbitanController extends Controller
             abort(403, 'Anda tidak memiliki akses ke data ini.');
         }
 
-        return view('kota.detail_penerbitan_kakot', [
+        return view('kota.detail-penerbitan-kakot', [
             'title' => 'Detail Penerbitan',
             'permohonan' => $permohonan
         ]);

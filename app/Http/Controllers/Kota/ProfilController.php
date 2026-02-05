@@ -9,7 +9,7 @@ class ProfilController extends Controller
 {
     public function index()
     {
-        return view('kota.profil_kakot', [
+        return view('kota.profil-kakot', [
             'title' => 'Profil Instansi',
             'user' => Auth::user(), // Ambil data user yang login
         ]);

@@ -28,7 +28,7 @@ class PermohonanProvController extends Controller
                         ->orderBy('created_at', 'desc')
                         ->get();
 
-        return view('provinsi.permohonan_prov', [
+        return view('provinsi.permohonan-prov', [
             'title' => 'Permohonan',
             'permohonans' => $permohonans
         ]);
@@ -45,7 +45,7 @@ class PermohonanProvController extends Controller
         //     abort(403, 'Anda tidak memiliki akses ke data ini.');
         // }
 
-        return view('provinsi.detail_permohonan_prov', [
+        return view('provinsi.detail-permohonan-prov', [
             'title' => 'Detail Permohonan',
             'permohonan' => $permohonan
         ]);
@@ -112,7 +112,7 @@ class PermohonanProvController extends Controller
             'jenis_dokumen' => $validated['jenis_dokumen'],
         ]);
 
-        return redirect('/dashboard_provinsi')->with('success', 'Permohonan berhasil dikirim!');
+        return redirect('/dashboard-provinsi')->with('success', 'Permohonan berhasil dikirim!');
 
     }
 }

@@ -44,7 +44,7 @@ class DashboardKotaController extends Controller
             'selesai' => $permohonans->where('status', 'SELESAI')->count(),
             'tolak'   => $permohonans->where('status', 'DITOLAK')->count(),
         ];
-        return view('kota.dashboard_kakot', [
+        return view('kota.dashboard-kakot', [
                 'title' => 'Dashboard Kota',
                 'permohonans' => $permohonans,
                 'stat' => $stat

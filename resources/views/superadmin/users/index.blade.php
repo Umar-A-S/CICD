@@ -1,4 +1,4 @@
-<x-layout_superadmin>
+<x-layout-superadmin>
     <x-slot:title>{{ $title }}</x-slot:title>
 
     <!-- Flash Messages -->
@@ -104,4 +104,4 @@
         </div>
     </div>
 
-</x-layout_superadmin>
+</x-layout-superadmin>

@@ -33,7 +33,7 @@ class PenerbitanProv extends Controller
             ->orderByRaw("FIELD(penerbitan.hasil, 'TERCATAT', 'TIDAK TERCATAT', 'DISETUJUI', 'DITOLAK', 'LAINNYA') ASC")
             ->orderBy('permohonan.updated_at', 'desc')
             ->get();
-            return view('provinsi.penerbitan_prov', compact('permohonanPerlu', 'permohonanSelesai'));
+            return view('provinsi.penerbitan-prov', compact('permohonanPerlu', 'permohonanSelesai'));
             }
 
             
@@ -58,7 +58,7 @@ class PenerbitanProv extends Controller
         }
         // ----------------------------
 
-        return view('provinsi.unggah_penerbitan_prov', [
+        return view('provinsi.unggah-penerbitan-prov', [
             'title' => 'Penerbitan',
             'permohonan' => $permohonan
         ]);
@@ -74,7 +74,7 @@ class PenerbitanProv extends Controller
             'permohonan_id' => 'required|exists:permohonan,id',
             'hasil'         => 'required|in:TERCATAT,TIDAK TERCATAT,DISETUJUI,DITOLAK,LAINNYA',
             'alasan'        => 'nullable|string',
-            'file_balasan'  => 'nullable|file|mimes:pdf|max:10240',
+            'file-balasan'  => 'nullable|file|mimes:pdf|max:10240',
         ]);
 
         $permohonan = Permohonan::findOrFail($request->permohonan_id);
@@ -87,9 +87,9 @@ class PenerbitanProv extends Controller
 
         // 2. Proses Upload File (hanya jika ada file yang diupload)
         $filePath = null;
-        if ($request->hasFile('file_balasan')) {
-            $file = $request->file('file_balasan');
-            $fileName = time() . '_balasan_' . Str::random(5) . '.pdf';
+        if ($request->hasFile('file-balasan')) {
+            $file = $request->file('file-balasan');
+            $fileName = time() . '-balasan_' . Str::random(5) . '.pdf';
             $file->storeAs('public/penerbitan', $fileName);
             $filePath = '/storage/penerbitan/' . $fileName;
         } 
@@ -134,7 +134,7 @@ class PenerbitanProv extends Controller
             }
         }
 
-        return view('provinsi.detail_penerbitan_prov', [
+        return view('provinsi.detail-penerbitan-prov', [
             'title' => 'Detail Penerbitan',
             'permohonan' => $permohonan
         ]);
